@@ -215,6 +215,7 @@ public handler OnPaint()
 	end if
 	put tBlackKey["path"] into tPath
 	scale tPath by [(my width /10) / (the width of the bounding box of tPath)*1.04, (my height / the height of the bounding box of tPath)*0.656]
+	put tPath into tBlackKey["path"]
 	fill tPath on this canvas
 	put tBlackKey into element 1 of mBlackKeysList
 	------------------------------------------------------------------------------------------------------------------ D#Eb
@@ -226,6 +227,7 @@ public handler OnPaint()
 	end if
 	put tBlackKey["path"] into tPath
 	scale tPath by [(my width /10) / (the width of the bounding box of tPath)*1.05, (my height / the height of the bounding box of tPath)*0.656]
+	put tPath into tBlackKey["path"]
 	fill tPath on this canvas
 	put tBlackKey into element 2 of mBlackKeysList
 	------------------------------------------------------------------------------------------------------------------ F#Gb
@@ -237,6 +239,7 @@ public handler OnPaint()
 	end if
 	put tBlackKey["path"] into tPath
 	scale tPath by [(my width /10) / (the width of the bounding box of tPath)*1.04, (my height / the height of the bounding box of tPath)*0.656]
+	put tPath into tBlackKey["path"]
 	fill tPath on this canvas
 	put tBlackKey into element 3 of mBlackKeysList
 	------------------------------------------------------------------------------------------------------------------ G#Ab
@@ -248,6 +251,7 @@ public handler OnPaint()
 	end if
 	put tBlackKey["path"] into tPath
 	scale tPath by [(my width /10) / (the width of the bounding box of tPath)*1.04, (my height / the height of the bounding box of tPath)*0.656]
+	put tPath into tBlackKey["path"]
 	fill tPath on this canvas
 	put tBlackKey into element 4 of mBlackKeysList
 	------------------------------------------------------------------------------------------------------------------ A#Bb
@@ -259,6 +263,7 @@ public handler OnPaint()
 	end if
 	put tBlackKey["path"] into tPath
 	scale tPath by [(my width /10) / (the width of the bounding box of tPath)*1.04, (my height / the height of the bounding box of tPath)*0.656]
+	put tPath into tBlackKey["path"]
 	fill tPath on this canvas
 	put tBlackKey into element 5 of mBlackKeysList
 
