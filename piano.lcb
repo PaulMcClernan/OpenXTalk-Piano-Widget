@@ -194,45 +194,69 @@ public handler OnPaint()
 	put tWhiteKey into element 6 of mWhiteKeysList
 	fill tPath on this canvas
 	------------------------------------------------------------------------------------------------------------------ B
+	put element 7 of mWhiteKeysList into tWhiteKey
 	if tWhiteKey["hilighted"] then
 		set the paint of this canvas to solid paint with mHiliteColor
 	else
 		set the paint of this canvas to solid paint with color [1,1,1,1]
 	end if
-	put element 7 of mWhiteKeysList into tWhiteKey
 	put tWhiteKey["path"] into tPath
 	scale tPath by [(my width /7.51) / (the width of the bounding box of tPath)*0.982, (my height / the height of the bounding box of tPath)*0.975]
 	put tPath into tWhiteKey["path"]
 	put tWhiteKey into element 7 of mWhiteKeysList
 	fill tPath on this canvas
 	------------------------------------------------------------------------------------------ Black Keys ------------------------------------------------------------------------------------------
-	set the paint of this canvas to solid paint with color [0,0,0]
 	------------------------------------------------------------------------------------------------------------------ C#Db
 	put element 1 of mBlackKeysList into tBlackKey
+	if tBlackKey["hilighted"] then
+		set the paint of this canvas to solid paint with mHiliteColor
+	else
+		set the paint of this canvas to solid paint with color [0,0,0,1]
+	end if
 	put tBlackKey["path"] into tPath
 	scale tPath by [(my width /10) / (the width of the bounding box of tPath)*1.04, (my height / the height of the bounding box of tPath)*0.656]
 	fill tPath on this canvas
 	put tBlackKey into element 1 of mBlackKeysList
 	------------------------------------------------------------------------------------------------------------------ D#Eb
 	put element 2 of mBlackKeysList into tBlackKey
+	if tBlackKey["hilighted"] then
+		set the paint of this canvas to solid paint with mHiliteColor
+	else
+		set the paint of this canvas to solid paint with color [0,0,0,1]
+	end if
 	put tBlackKey["path"] into tPath
 	scale tPath by [(my width /10) / (the width of the bounding box of tPath)*1.05, (my height / the height of the bounding box of tPath)*0.656]
 	fill tPath on this canvas
 	put tBlackKey into element 2 of mBlackKeysList
 	------------------------------------------------------------------------------------------------------------------ F#Gb
 	put element 3 of mBlackKeysList into tBlackKey
+	if tBlackKey["hilighted"] then
+		set the paint of this canvas to solid paint with mHiliteColor
+	else
+		set the paint of this canvas to solid paint with color [0,0,0,1]
+	end if
 	put tBlackKey["path"] into tPath
 	scale tPath by [(my width /10) / (the width of the bounding box of tPath)*1.04, (my height / the height of the bounding box of tPath)*0.656]
 	fill tPath on this canvas
 	put tBlackKey into element 3 of mBlackKeysList
 	------------------------------------------------------------------------------------------------------------------ G#Ab
 	put element 4 of mBlackKeysList into tBlackKey
+	if tBlackKey["hilighted"] then
+		set the paint of this canvas to solid paint with mHiliteColor
+	else
+		set the paint of this canvas to solid paint with color [0,0,0,1]
+	end if
 	put tBlackKey["path"] into tPath
 	scale tPath by [(my width /10) / (the width of the bounding box of tPath)*1.04, (my height / the height of the bounding box of tPath)*0.656]
 	fill tPath on this canvas
 	put tBlackKey into element 4 of mBlackKeysList
 	------------------------------------------------------------------------------------------------------------------ A#Bb
 	put element 5 of mBlackKeysList into tBlackKey
+	if tBlackKey["hilighted"] then
+		set the paint of this canvas to solid paint with mHiliteColor
+	else
+		set the paint of this canvas to solid paint with color [0,0,0,1]
+	end if
 	put tBlackKey["path"] into tPath
 	scale tPath by [(my width /10) / (the width of the bounding box of tPath)*1.04, (my height / the height of the bounding box of tPath)*0.656]
 	fill tPath on this canvas
@@ -289,16 +313,34 @@ public handler OnMouseDown()
 	variable tBlackKey as Array
 	variable tWhiteKey as Array
 	variable tPath as Path
-	-- variable tCanvas as Canvas
-	-- variable tColor as Color
-	put element 1 of mWhiteKeysList into tWhiteKey
-	put tWhiteKey["path"] into tPath
-	if hitTestPath( the mouse position, tPath, 0, true) then
-		put true into tWhiteKey["hilighted"]
-   	put tWhiteKey into element 1 of mWhiteKeysList
-		post "noteOn" to my script object with [ 0 ,tWhiteKey["name"]]
-		redraw all
-	end if
+	variable tIndex as Integer
+
+	repeat with tIndex from 1 up to 5
+		put element tIndex of mBlackKeysList into tBlackKey
+		put tBlackKey["path"] into tPath
+		if hitTestPath( the mouse position, tPath, 0, true) then
+			put true into tBlackKey["hilighted"]
+			put tBlackKey into element tIndex of mBlackKeysList
+			post "noteOn" to my script object with [ 0 ,tBlackKey["name"]]
+		else
+			put false into tBlackKey["hilighted"]
+			put tBlackKey into element tIndex of mBlackKeysList
+		end if
+	end repeat
+	repeat with tIndex from 1 up to 7
+		put element tIndex of mWhiteKeysList into tWhiteKey
+		put tWhiteKey["path"] into tPath
+		if hitTestPath( the mouse position, tPath, 0, true) then
+			put true into tWhiteKey["hilighted"]
+   		put tWhiteKey into element tIndex of mWhiteKeysList
+			post "noteOn" to my script object with [ 0 ,tWhiteKey["name"]]
+		else
+			put false into tWhiteKey["hilighted"]
+			put tWhiteKey into element tIndex of mWhiteKeysList
+		end if
+	end repeat
+	redraw all
+
 	--put the x of the mouse position into tXMousePos
 	--put the y of the mouse position into tYMousePos
 	--if tYMousePos < 0 then
