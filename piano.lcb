@@ -75,7 +75,8 @@ metadata iconPath.editor is "com.livecode.pi.text"
 
 property maintainAspectRatio  get mMaintainAspectRatio   set mMaintainAspectRatio
 
-public variable gPianoMouseButtonDown as Boolean
+public variable mPianoMouseButtonDown as Boolean
+property "PianoMouseButtonDown" get mPianoMouseButtonDown set mPianoMouseButtonDown
 
 private handler setOctave(in pOctaveStr as String) returns nothing
    put pOctaveStr into mOctaveStr
@@ -88,6 +89,7 @@ public handler OnCreate()
 	put color [0,0,0] into mColor
 	put stringToColor("0,255,0") into mHiliteColor
 	put false into mMaintainAspectRatio
+   put false into mPianoMouseButtonDown
 
    -- put the empty array into mSelectedKey
 
@@ -340,14 +342,15 @@ end handler
 
 ----------------------------------------------------------------------------------------------------
 public handler OnMouseUp()
-   put false into gPianoMouseButtonDown
+   put false into  mPianoMouseButtonDown
    --- execute script "global gPianoMouseButtonDown ; put false into gPianoMouseButtonDown"
    if mSelectedKey is not nothing then
      variable tPath as Path
      variable tWhiteKey as Array
      variable tBlackKey as Array
      put mSelectedKey["path"] into tPath
-     post "noteOff" to my script object with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
+     post "noteOff" with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
+    --  post "noteOff" to my script object with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
      if mSelectedKey["keycolor"] is "black" then
         put element (mSelectedKey["index"]) of mBlackKeysList into tBlackKey
         put false into tBlackKey["hilighted"]
@@ -360,11 +363,12 @@ public handler OnMouseUp()
      put nothing into mSelectedKey
   end if
   redraw all
-  post "mouseUp" to my script object with [the click button]
+  post "mouseUp" with [the click button]
+ -- post "mouseUp" to my script object with [the click button]
 end handler
 
 public handler OnMouseCancel()
-      put false into gPianoMouseButtonDown
+      -- put false into gPianoMouseButtonDown
       --- execute script "global gPianoMouseButtonDown ; put false into gPianoMouseButtonDown"
 	--redraw all
 end handler
@@ -381,12 +385,13 @@ public handler OnMouseDown()
 	variable tWhiteKey as Array
 	variable tPath as Path
 	variable tIndex as Integer
-   put true into gPianoMouseButtonDown
+   put true into mPianoMouseButtonDown
    -- execute script "global gPianoMouseButtonDown ; put true into gPianoMouseButtonDown"
    if mSelectedKey is not nothing then
       put mSelectedKey["path"] into tPath
       if hitTestPath( the mouse position, tPath, 0, true) is false then
-         post "noteOff" to my script object with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
+         post "noteOff" with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
+         -- post "noteOff" to my script object with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
          if mSelectedKey["keycolor"] is "black" then
             put element (mSelectedKey["index"]) of mBlackKeysList into tBlackKey
             put false into tBlackKey["hilighted"]
@@ -405,7 +410,8 @@ public handler OnMouseDown()
          if hitTestPath( the mouse position, tPath, 0, true) then
              put true into tBlackKey["hilighted"]
              put tBlackKey into element tIndex of mBlackKeysList
-             post "noteOn" to my script object with [ tBlackKey["octaveoffset"] + mOctave ,tBlackKey["name"]]
+             post "noteOn" with [ tBlackKey["octaveoffset"] + mOctave ,tBlackKey["name"]]
+            -- post "noteOn" to my script object with [ tBlackKey["octaveoffset"] + mOctave ,tBlackKey["name"]]
              put tBlackKey into mSelectedKey
              put tIndex into mSelectedKey["index"]
              put "black" into mSelectedKey["keycolor"]
@@ -420,7 +426,8 @@ public handler OnMouseDown()
          if hitTestPath( the mouse position, tPath, 0, true) then
             put true into tWhiteKey["hilighted"]
             put tWhiteKey into element tIndex of mWhiteKeysList
-            post "noteOn" to my script object with [ tWhiteKey["octaveoffset"] + mOctave ,tWhiteKey["name"]]
+            post "noteOn" with [ tWhiteKey["octaveoffset"] + mOctave ,tWhiteKey["name"]]
+            -- post "noteOn" to my script object with [ tWhiteKey["octaveoffset"] + mOctave ,tWhiteKey["name"]]
             put tWhiteKey into mSelectedKey
             put tIndex into mSelectedKey["index"]
             put "white" into mSelectedKey["keycolor"]
@@ -430,10 +437,12 @@ public handler OnMouseDown()
          end if
       end repeat
 	redraw all
-	post "mouseDown" to my script object with [the click button]
+   post "mouseDown" with [the click button]
+	-- post "mouseDown" to my script object with [the click button]
 end handler
 
 public handler OnMouseMove() returns optional any
+   variable tMouseDown as Boolean
 	-- variable tXMousePos as Real
 	-- variable tYMousePos as Real
 	-- variable tReturnStr as String
@@ -444,7 +453,7 @@ public handler OnMouseMove() returns optional any
 	-- end if
 	--put tXMousePos formatted as string & "," & tYMousePos formatted as string into tReturnStr
 	--post "mouseMove" && tReturnStr
-   if gPianoMouseButtonDown then
+   if mPianoMouseButtonDown then
 
    variable tBlackKey as Array
    variable tWhiteKey as Array
@@ -454,7 +463,8 @@ public handler OnMouseMove() returns optional any
    if mSelectedKey is not nothing then
       put mSelectedKey["path"] into tPath
       if hitTestPath( the mouse position, tPath, 0, true) is false then
-         post "noteOff" to my script object with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
+         post "noteOff" with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
+         -- post "noteOff" to my script object with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
          if mSelectedKey["keycolor"] is "black" then
             put element (mSelectedKey["index"]) of mBlackKeysList into tBlackKey
             put false into tBlackKey["hilighted"]
@@ -473,7 +483,8 @@ public handler OnMouseMove() returns optional any
          if hitTestPath( the mouse position, tPath, 0, true) then
              put true into tBlackKey["hilighted"]
              put tBlackKey into element tIndex of mBlackKeysList
-             post "noteOn" to my script object with [ tBlackKey["octaveoffset"] + mOctave ,tBlackKey["name"]]
+             post "noteOn" with [ tBlackKey["octaveoffset"] + mOctave ,tBlackKey["name"]]
+            --  post "noteOn" to my script object with [ tBlackKey["octaveoffset"] + mOctave ,tBlackKey["name"]]
              put tBlackKey into mSelectedKey
              put tIndex into mSelectedKey["index"]
              put "black" into mSelectedKey["keycolor"]
@@ -488,7 +499,8 @@ public handler OnMouseMove() returns optional any
          if hitTestPath( the mouse position, tPath, 0, true) then
             put true into tWhiteKey["hilighted"]
             put tWhiteKey into element tIndex of mWhiteKeysList
-            post "noteOn" to my script object with [ tWhiteKey["octaveoffset"] + mOctave ,tWhiteKey["name"]]
+            post "noteOn" with [ tWhiteKey["octaveoffset"] + mOctave ,tWhiteKey["name"]]
+            -- post "noteOn" to my script object with [ tWhiteKey["octaveoffset"] + mOctave ,tWhiteKey["name"]]
             put tWhiteKey into mSelectedKey
             put tIndex into mSelectedKey["index"]
             put "white" into mSelectedKey["keycolor"]
