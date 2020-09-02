@@ -171,7 +171,6 @@ end handler
 -- called whenever LiveCode needs to redraw the widget
 public handler OnPaint()
 	variable tPath as Path
- 	variable tPathC as Path
 	variable tWhiteKey as Array
 	variable tBlackKey as Array
    variable tOct as Integer
@@ -179,35 +178,67 @@ public handler OnPaint()
    variable tOctHeight as Integer
    variable tOctPosX as Integer
    variable tOctPosY as Integer
-   variable t1OctRect
+   variable tRect
+   variable tNum as number
+   variable tSplits as number
+   variable tRectList as List
    put 0 into tOctPosX  --- Horzontal
    put 0 into tOctPosY --- Vertical
-   put my width / kOctaveCount into tOctWidth
-   put my height / kOctaveCount into tOctHeight
-	--transform tPath by scaleAndMaintainAspectRatioTransform(the bounding box of tPath, my bounds)
-	------------------------------------------------------------------------------------------ Background -----------------------------------------------------------------------------------------
-   put mBackgroundPath into tPath
-    -- scale tPath by [my width / the width of the bounding box of tPath, my height / the height of the bounding box of tPath]
-    put tOctWidth / the width of the bounding box of tPath into tOctWidth
-    put tOctHeight / the height of the bounding box of tPath into tOctHeight
-    scale tPath by [tOctWidth / kOctaveCount, tOctHeight / the height of the bounding box of tPath]
-	 set the paint of this canvas to solid paint with color [0,0,0,.5]
-   repeat with tOct from 1 up to kOctaveCount
-	      -- scale tPath by [my width / the width of the bounding box of tPath, my height / the height of the bounding box of tPath]
-         -- scale tPath by [tOctWidth / the width of the bounding box of tPath, tOctHeight / the height of the bounding box of tPath]
-         -- move to point [tOctPosX,tOctPosY]
-         translate tPath by [tOctPosX,0]
-	      fill tPath on this canvas
-           --get the bounding box of tPath
-           -- put the result into t1OctRect
-           -- log t1OctRect
-           --log the top of t1OctRect
-           --log the bottom of t1OctRect
-           --log the left of t1OctRect
-           --log the right of t1OctRect
-           put tOctPosX+tOctWidth into tOctPosX
-           log tOctPosX
+   put my width into tOctWidth
+   put my height into tOctHeight
+   put rectangle [tOctPosY,tOctPosX,tOctWidth,tOctHeight] into tRect
+
+   put 4 into tSplits
+   put getRectSplitVert(tRect,tSplits) into tRectList
+   log tRectList
+	set the paint of this canvas to solid paint with color [0,0,0,.5]
+   set the stroke width of this canvas to 10
+   repeat tNum from 1 to tSplits
+      put rectangle path of (element tNum of tRectList) into tPath
+      stroke tPath on this canvas
    end repeat
+   fill this canvas
+end handler
+
+public handler getRectSplitHorz(in pRect) returns List
+   variable tWidth as Integer
+   variable tHeight as Integer
+   variable tLeft as Integer
+   variable tTop as Integer
+   variable tRectLeft
+   variable tRectRight
+   variable tRectList as List
+   put the top of pRect into tTop
+   put the left of pRect into tLeft
+   put the bottom of pRect into tHeight
+   put the right of pRect into tWidth
+   put rectangle [tLeft,tTop,tWidth/2,tHeight] into tRectLeft
+   push tRectLeft onto tRectList
+   put rectangle [tLeft+(tWidth/2),tTop,tWidth,tHeight] into tRectRight
+   push tRectRight onto tRectList
+   return tRectList
+end handler
+
+public handler getRectSplitVert(in pRect, in pDiv as Integer) returns List
+   variable tWidth as Integer
+   variable tHeight as Integer
+   variable tLeft as Integer
+   variable tTop as Integer
+   variable tRect
+   variable tRectList as List
+   put the top of pRect into tTop
+   put the left of pRect into tLeft
+   put the bottom of pRect into tHeight
+   put the right of pRect into tWidth
+   put tHeight/pDiv into tHeight
+   -- log pDiv
+   repeat pDiv times
+      put rectangle [tLeft,tTop,tWidth,tHeight] into tRect
+      push tRect onto tRectList
+      put tTop+tHeight into tTop
+      put tHeight+tHeight into tHeight
+   end repeat
+   return tRectList
 end handler
 
 end widget
