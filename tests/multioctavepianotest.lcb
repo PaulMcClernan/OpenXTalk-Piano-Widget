@@ -33,7 +33,7 @@ Handle the noteOff message in the widget's object script to respond to
 */
 
 -- declaring extension as widget, followed by identifier
-widget community.livecode.widget.piano
+widget community.livecode.widget.tests
 
 -- dependancy declarations
 use com.livecode.canvas
@@ -43,7 +43,7 @@ use com.livecode.engine
 use com.livecode.library.widgetutils
 
 -- adding metadata to ensure the extension displays correctly in livecode
-metadata title is "1OctavePiano"
+metadata title is "Tests"
 metadata author is "Paul McClernan"
 metadata version is "0.1"
 metadata preferredSize is "96,72"
@@ -179,8 +179,8 @@ public handler OnPaint()
    variable tOctPosX as Integer
    variable tOctPosY as Integer
    variable tRect
-   variable tNum as number
-   variable tSplits as number
+   variable tNum as Number
+   variable tSplits as Number
    variable tRectList as List
    put 0 into tOctPosX  --- Horzontal
    put 0 into tOctPosY --- Vertical
@@ -188,55 +188,66 @@ public handler OnPaint()
    put my height into tOctHeight
    put rectangle [tOctPosY,tOctPosX,tOctWidth,tOctHeight] into tRect
 
-   put 4 into tSplits
-   put getRectSplitVert(tRect,tSplits) into tRectList
-   log tRectList
-	set the paint of this canvas to solid paint with color [0,0,0,.5]
-   set the stroke width of this canvas to 10
-   repeat tNum from 1 to tSplits
+   put 8 into tSplits
+   put getRectListSplitHorz(tRect,tSplits) into tRectList
+   -- log tRectList
+	set the paint of this canvas to solid paint with color [0,0,0,1]
+   set the stroke width of this canvas to 2
+   repeat with tNum from 1 up to tSplits
       put rectangle path of (element tNum of tRectList) into tPath
       stroke tPath on this canvas
    end repeat
-   fill this canvas
+   -- fill this canvas
 end handler
 
-public handler getRectSplitHorz(in pRect) returns List
-   variable tWidth as Integer
-   variable tHeight as Integer
-   variable tLeft as Integer
-   variable tTop as Integer
-   variable tRectLeft
-   variable tRectRight
-   variable tRectList as List
-   put the top of pRect into tTop
-   put the left of pRect into tLeft
-   put the bottom of pRect into tHeight
-   put the right of pRect into tWidth
-   put rectangle [tLeft,tTop,tWidth/2,tHeight] into tRectLeft
-   push tRectLeft onto tRectList
-   put rectangle [tLeft+(tWidth/2),tTop,tWidth,tHeight] into tRectRight
-   push tRectRight onto tRectList
-   return tRectList
-end handler
-
-public handler getRectSplitVert(in pRect, in pDiv as Integer) returns List
+public handler getRectListSplitHorz(in pRect, in pDiv as Integer) returns List
    variable tWidth as Integer
    variable tHeight as Integer
    variable tLeft as Integer
    variable tTop as Integer
    variable tRect
    variable tRectList as List
+   variable tSplitWidth as Integer
+   variable tCounter as Integer
+   if pDiv < 2 then
+      put 2 into pDiv
+   end if
    put the top of pRect into tTop
    put the left of pRect into tLeft
    put the bottom of pRect into tHeight
    put the right of pRect into tWidth
-   put tHeight/pDiv into tHeight
-   -- log pDiv
-   repeat pDiv times
-      put rectangle [tLeft,tTop,tWidth,tHeight] into tRect
+   put tWidth/pDiv into tSplitWidth
+   put rectangle [tLeft,tTop,tSplitWidth,tHeight] into tRect
+   push tRect onto tRectList
+   repeat with tCounter from 2 up to pDiv
+      put rectangle [tSplitWidth*tCounter,tTop,tSplitWidth,tHeight] into tRect
       push tRect onto tRectList
-      put tTop+tHeight into tTop
-      put tHeight+tHeight into tHeight
+   end repeat
+   return tRectList
+end handler
+
+public handler getRectListSplitVert(in pRect, in pDiv as Integer) returns List
+   variable tWidth as Integer
+   variable tHeight as Integer
+   variable tLeft as Integer
+   variable tTop as Integer
+   variable tRect
+   variable tRectList as List
+   variable tSplitHeight as Integer
+   variable tCounter as Integer
+   if pDiv < 2 then
+      put 2 into pDiv
+   end if
+   put the top of pRect into tTop
+   put the left of pRect into tLeft
+   put the bottom of pRect into tHeight
+   put the right of pRect into tWidth
+   put tHeight/pDiv into tSplitHeight
+   put rectangle [tLeft,tTop,tWidth,tSplitHeight] into tRect
+   push tRect onto tRectList
+   repeat with tCounter from 2 up to pDiv
+      put rectangle [tLeft,tSplitHeight*tCounter,tWidth,tSplitHeight] into tRect
+      push tRect onto tRectList
    end repeat
    return tRectList
 end handler
