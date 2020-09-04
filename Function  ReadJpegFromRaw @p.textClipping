@@ -1,345 +1,0 @@
-bplist00ÑXUTI-DataÙ	
-_public.utf8-plain-text_$com.apple.traditional-mac-plain-text_com.apple.webarchive_com.adobe.indesign-import-styl_com.adobe.indesign-import-ustl[public.htmlZpublic.rtf_public.utf16-plain-text_ public.utf16-external-plain-text_EFunction  ReadJpegFromRaw @pImage
-   --put empty into field "debug"
-   --put ReadImageOrientation (pImage) into tOrintation
-   
-   --local tFilePointer = 0, tFileLength
-   local tJpegStart= -1, tJpegEnd = -1
-   local tJpegData
-   Constant FF = 255
-   Constant D8 = 216
-   Constant DB = 219
-   Constant D9 = 217
-   
-   
-   --   repeat with n = 1 to length(pImage)
-   --      if byteToNum(Byte n of pImage) is FF then
-   --         --test following byte
-   --         if byteToNum(Byte n+1 of pImage) is D8 then
-   --            --test following byte
-   --            if byteToNum(Byte n+2 of pImage) is FF then
-   --               --test following byte
-   --               if byteToNum(Byte n+3 of pImage) is DB then
-   --                  --put "Found FFD8 FFDB at address : "  & n & cr after fld "debug"
-   --                  put n into tJpegStart
-   --                  exit repeat
-   --               end if
-   --            end if
-   --         end if
-   --      end if
-   --   end repeat
-   
-   put numToByte(FF) & numToByte(D8)  & numToByte(FF) & numToByte(DB) into tStartJPG
-   put byteOffset(tStartJPG, pImage) into tJpegStart
-   
-   --put "JpegStart is set to " & tJpegStart & cr after fld "debug"
-   
-   if tJpegStart is 0 then return "-1"
-   
-   -- Start code found so now locate the end
-   --   repeat with n = tJpegStart+3 to length(pImage)
-   --      if byteToNum(Byte n of pImage) is FF then
-   --         --test following byte
-   --         if byteToNum(Byte n+1 of pImage) is D9 then
-   --            put n into tJpegEnd
-   --            --put "Found FFD9 at address : " & tJpegEnd & cr after fld "debug"
-   --            exit repeat
-   --         end if
-   --      end if
-   --   end repeat
-   
-   put numToByte(FF) & numToByte(D9) into tEndJPG
-   add 3 to tJpegStart
-   
-   put byteOffset(tEndJPG, pImage, tJpegStart) into tJpegEnd
-   
-   if tJpegEnd  > 0 then
-      add tJpegStart to tJpegEnd
-   else
-      put -1  into tJpegEnd
-   end  if
-   
-   If tJpegEnd is -1 then return "-1"
-   
-   put Byte tJpegStart to tJpegEnd+1 of pImage into tJpegData
-   
-   return tJpegData
-   
-end ReadJpegFromRaw
-OEFunction  ReadJpegFromRaw @pImage   --put empty into field "debug"   --put ReadImageOrientation (pImage) into tOrintation      --local tFilePointer = 0, tFileLength   local tJpegStart= -1, tJpegEnd = -1   local tJpegData   Constant FF = 255   Constant D8 = 216   Constant DB = 219   Constant D9 = 217         --   repeat with n = 1 to length(pImage)   --      if byteToNum(Byte n of pImage) is FF then   --         --test following byte   --         if byteToNum(Byte n+1 of pImage) is D8 then   --            --test following byte   --            if byteToNum(Byte n+2 of pImage) is FF then   --               --test following byte   --               if byteToNum(Byte n+3 of pImage) is DB then   --                  --put "Found FFD8 FFDB at address : "  & n & cr after fld "debug"   --                  put n into tJpegStart   --                  exit repeat   --               end if   --            end if   --         end if   --      end if   --   end repeat      put numToByte(FF) & numToByte(D8)  & numToByte(FF) & numToByte(DB) into tStartJPG   put byteOffset(tStartJPG, pImage) into tJpegStart      --put "JpegStart is set to " & tJpegStart & cr after fld "debug"      if tJpegStart is 0 then return "-1"      -- Start code found so now locate the end   --   repeat with n = tJpegStart+3 to length(pImage)   --      if byteToNum(Byte n of pImage) is FF then   --         --test following byte   --         if byteToNum(Byte n+1 of pImage) is D9 then   --            put n into tJpegEnd   --            --put "Found FFD9 at address : " & tJpegEnd & cr after fld "debug"   --            exit repeat   --         end if   --      end if   --   end repeat      put numToByte(FF) & numToByte(D9) into tEndJPG   add 3 to tJpegStart      put byteOffset(tEndJPG, pImage, tJpegStart) into tJpegEnd      if tJpegEnd  > 0 then      add tJpegStart to tJpegEnd   else      put -1  into tJpegEnd   end  if      If tJpegEnd is -1 then return "-1"      put Byte tJpegStart to tJpegEnd+1 of pImage into tJpegData      return tJpegData   end ReadJpegFromRawORbplist00Ñ_WebMainResourceÕ	
-_WebResourceMIMEType_WebResourceTextEncodingName^WebResourceURL_WebResourceFrameName_WebResourceDataYtext/htmlUUTF-8_Fhttps://forums.livecode.com/viewtopic.php?f=9&t=34592&p=195846#p195846PO&<!DOCTYPE html><div class="codebox" style="border: 1px solid rgb(201, 210, 216); font-size: 13px; margin: 1em 0px 1.2em; word-wrap: normal; background-color: rgb(255, 255, 255); caret-color: rgb(51, 51, 51); color: rgb(51, 51, 51); font-family: &quot;Lucida Grande&quot;, &quot;Trebuchet MS&quot;, Verdana, Helvetica, Arial, sans-serif; font-style: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; text-decoration: none;"><pre style="overflow: auto; font-family: monospace, monospace; font-size: 1em; margin: 0px;"><code style="font-family: Monaco, &quot;Andale Mono&quot;, &quot;Courier New&quot;, Courier, monospace; font-size: 0.9em; overflow: auto; display: block; height: auto; max-height: 200px; padding: 5px 3px; font-style: normal; font-variant-caps: normal; font-weight: normal; font-stretch: normal; line-height: 1.3em; color: rgb(46, 139, 87);">Function  ReadJpegFromRaw @pImage
-   --put empty into field "debug"
-   --put ReadImageOrientation (pImage) into tOrintation
-   
-   --local tFilePointer = 0, tFileLength
-   local tJpegStart= -1, tJpegEnd = -1
-   local tJpegData
-   Constant FF = 255
-   Constant D8 = 216
-   Constant DB = 219
-   Constant D9 = 217
-   
-   
-   --   repeat with n = 1 to length(pImage)
-   --      if byteToNum(Byte n of pImage) is FF then
-   --         --test following byte
-   --         if byteToNum(Byte n+1 of pImage) is D8 then
-   --            --test following byte
-   --            if byteToNum(Byte n+2 of pImage) is FF then
-   --               --test following byte
-   --               if byteToNum(Byte n+3 of pImage) is DB then
-   --                  --put "Found FFD8 FFDB at address : "  &amp; n &amp; cr after fld "debug"
-   --                  put n into tJpegStart
-   --                  exit repeat
-   --               end if
-   --            end if
-   --         end if
-   --      end if
-   --   end repeat
-   
-   put numToByte(FF) &amp; numToByte(D8)  &amp; numToByte(FF) &amp; numToByte(DB) into tStartJPG
-   put byteOffset(tStartJPG, pImage) into tJpegStart
-   
-   --put "JpegStart is set to " &amp; tJpegStart &amp; cr after fld "debug"
-   
-   if tJpegStart is 0 then return "-1"
-   
-   -- Start code found so now locate the end
-   --   repeat with n = tJpegStart+3 to length(pImage)
-   --      if byteToNum(Byte n of pImage) is FF then
-   --         --test following byte
-   --         if byteToNum(Byte n+1 of pImage) is D9 then
-   --            put n into tJpegEnd
-   --            --put "Found FFD9 at address : " &amp; tJpegEnd &amp; cr after fld "debug"
-   --            exit repeat
-   --         end if
-   --      end if
-   --   end repeat
-   
-   put numToByte(FF) &amp; numToByte(D9) into tEndJPG
-   add 3 to tJpegStart
-   
-   put byteOffset(tEndJPG, pImage, tJpegStart) into tJpegEnd
-   
-   if tJpegEnd  &gt; 0 then
-      add tJpegStart to tJpegEnd
-   else
-      put -1  into tJpegEnd
-   end  if
-   
-   If tJpegEnd is -1 then return "-1"
-   
-   put Byte tJpegStart to tJpegEnd+1 of pImage into tJpegData
-   
-   return tJpegData
-   
-end ReadJpegFromRaw</code></pre></div><span style="caret-color: rgb(51, 51, 51); color: rgb(51, 51, 51); font-family: &quot;Lucida Grande&quot;, &quot;Trebuchet MS&quot;, Verdana, Helvetica, Arial, sans-serif; font-size: 13px; font-style: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(236, 243, 247); text-decoration: none; display: inline !important; float: none;"></span><br class="Apple-interchange-newline">    ( > \ k ‚ ” ž ¤ í î                           O*         r È&E{iED      r È&E{iEOü   ü          (      D               h                         (   dman                        Monaco       3³      -.‹‹WW  h                         (   dman                        Monaco       3³      -.‹‹WW  O<div class="codebox" style="border: 1px solid rgb(201, 210, 216); font-size: 13px; margin: 1em 0px 1.2em; word-wrap: normal; background-color: rgb(255, 255, 255); caret-color: rgb(51, 51, 51); color: rgb(51, 51, 51); font-family: &quot;Lucida Grande&quot;, &quot;Trebuchet MS&quot;, Verdana, Helvetica, Arial, sans-serif; font-style: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; text-decoration: none;"><pre style="overflow: auto; font-family: monospace, monospace; font-size: 1em; margin: 0px;"><code style="font-family: Monaco, &quot;Andale Mono&quot;, &quot;Courier New&quot;, Courier, monospace; font-size: 0.9em; overflow: auto; display: block; height: auto; max-height: 200px; padding: 5px 3px; font-style: normal; font-variant-caps: normal; font-weight: normal; font-stretch: normal; line-height: 1.3em; color: rgb(46, 139, 87);">Function  ReadJpegFromRaw @pImage
-   --put empty into field "debug"
-   --put ReadImageOrientation (pImage) into tOrintation
-   
-   --local tFilePointer = 0, tFileLength
-   local tJpegStart= -1, tJpegEnd = -1
-   local tJpegData
-   Constant FF = 255
-   Constant D8 = 216
-   Constant DB = 219
-   Constant D9 = 217
-   
-   
-   --   repeat with n = 1 to length(pImage)
-   --      if byteToNum(Byte n of pImage) is FF then
-   --         --test following byte
-   --         if byteToNum(Byte n+1 of pImage) is D8 then
-   --            --test following byte
-   --            if byteToNum(Byte n+2 of pImage) is FF then
-   --               --test following byte
-   --               if byteToNum(Byte n+3 of pImage) is DB then
-   --                  --put "Found FFD8 FFDB at address : "  &amp; n &amp; cr after fld "debug"
-   --                  put n into tJpegStart
-   --                  exit repeat
-   --               end if
-   --            end if
-   --         end if
-   --      end if
-   --   end repeat
-   
-   put numToByte(FF) &amp; numToByte(D8)  &amp; numToByte(FF) &amp; numToByte(DB) into tStartJPG
-   put byteOffset(tStartJPG, pImage) into tJpegStart
-   
-   --put "JpegStart is set to " &amp; tJpegStart &amp; cr after fld "debug"
-   
-   if tJpegStart is 0 then return "-1"
-   
-   -- Start code found so now locate the end
-   --   repeat with n = tJpegStart+3 to length(pImage)
-   --      if byteToNum(Byte n of pImage) is FF then
-   --         --test following byte
-   --         if byteToNum(Byte n+1 of pImage) is D9 then
-   --            put n into tJpegEnd
-   --            --put "Found FFD9 at address : " &amp; tJpegEnd &amp; cr after fld "debug"
-   --            exit repeat
-   --         end if
-   --      end if
-   --   end repeat
-   
-   put numToByte(FF) &amp; numToByte(D9) into tEndJPG
-   add 3 to tJpegStart
-   
-   put byteOffset(tEndJPG, pImage, tJpegStart) into tJpegEnd
-   
-   if tJpegEnd  &gt; 0 then
-      add tJpegStart to tJpegEnd
-   else
-      put -1  into tJpegEnd
-   end  if
-   
-   If tJpegEnd is -1 then return "-1"
-   
-   put Byte tJpegStart to tJpegEnd+1 of pImage into tJpegData
-   
-   return tJpegData
-   
-end ReadJpegFromRaw</code></pre></div><span style="caret-color: rgb(51, 51, 51); color: rgb(51, 51, 51); font-family: &quot;Lucida Grande&quot;, &quot;Trebuchet MS&quot;, Verdana, Helvetica, Arial, sans-serif; font-size: 13px; font-style: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(236, 243, 247); text-decoration: none; display: inline !important; float: none;"></span><br class="Apple-interchange-newline">_
-{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
-{\fonttbl\f0\fnil\fcharset0 Monaco;}
-{\colortbl;\red255\green255\blue255;\red39\green123\blue69;\red255\green255\blue255;}
-{\*\expandedcolortbl;;\cssrgb\c18039\c54510\c34118;\cssrgb\c100000\c100000\c100000;}
-\deftab720
-\pard\pardeftab720\partightenfactor0
-
-\f0\fs23\fsmilli11700 \cf2 \cb3 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 Function  ReadJpegFromRaw @pImage\
-   --put empty into field "debug"\
-   --put ReadImageOrientation (pImage) into tOrintation\
-   \
-   --local tFilePointer = 0, tFileLength\
-   local tJpegStart= -1, tJpegEnd = -1\
-   local tJpegData\
-   Constant FF = 255\
-   Constant D8 = 216\
-   Constant DB = 219\
-   Constant D9 = 217\
-   \
-   \
-   --   repeat with n = 1 to length(pImage)\
-   --      if byteToNum(Byte n of pImage) is FF then\
-   --         --test following byte\
-   --         if byteToNum(Byte n+1 of pImage) is D8 then\
-   --            --test following byte\
-   --            if byteToNum(Byte n+2 of pImage) is FF then\
-   --               --test following byte\
-   --               if byteToNum(Byte n+3 of pImage) is DB then\
-   --                  --put "Found FFD8 FFDB at address : "  & n & cr after fld "debug"\
-   --                  put n into tJpegStart\
-   --                  exit repeat\
-   --               end if\
-   --            end if\
-   --         end if\
-   --      end if\
-   --   end repeat\
-   \
-   put numToByte(FF) & numToByte(D8)  & numToByte(FF) & numToByte(DB) into tStartJPG\
-   put byteOffset(tStartJPG, pImage) into tJpegStart\
-   \
-   --put "JpegStart is set to " & tJpegStart & cr after fld "debug"\
-   \
-   if tJpegStart is 0 then return "-1"\
-   \
-   -- Start code found so now locate the end\
-   --   repeat with n = tJpegStart+3 to length(pImage)\
-   --      if byteToNum(Byte n of pImage) is FF then\
-   --         --test following byte\
-   --         if byteToNum(Byte n+1 of pImage) is D9 then\
-   --            put n into tJpegEnd\
-   --            --put "Found FFD9 at address : " & tJpegEnd & cr after fld "debug"\
-   --            exit repeat\
-   --         end if\
-   --      end if\
-   --   end repeat\
-   \
-   put numToByte(FF) & numToByte(D9) into tEndJPG\
-   add 3 to tJpegStart\
-   \
-   put byteOffset(tEndJPG, pImage, tJpegStart) into tJpegEnd\
-   \
-   if tJpegEnd  > 0 then\
-      add tJpegStart to tJpegEnd\
-   else\
-      put -1  into tJpegEnd\
-   end  if\
-   \
-   If tJpegEnd is -1 then return "-1"\
-   \
-   put Byte tJpegStart to tJpegEnd+1 of pImage into tJpegData\
-   \
-   return tJpegData\
-   \
-end ReadJpegFromRaw\cb1 \
-}OŠF u n c t i o n     R e a d J p e g F r o m R a w   @ p I m a g e        - - p u t   e m p t y   i n t o   f i e l d   " d e b u g "        - - p u t   R e a d I m a g e O r i e n t a t i o n   ( p I m a g e )   i n t o   t O r i n t a t i o n               - - l o c a l   t F i l e P o i n t e r   =   0 ,   t F i l e L e n g t h        l o c a l   t J p e g S t a r t =   - 1 ,   t J p e g E n d   =   - 1        l o c a l   t J p e g D a t a        C o n s t a n t   F F   =   2 5 5        C o n s t a n t   D 8   =   2 1 6        C o n s t a n t   D B   =   2 1 9        C o n s t a n t   D 9   =   2 1 7                      - -       r e p e a t   w i t h   n   =   1   t o   l e n g t h ( p I m a g e )        - -             i f   b y t e T o N u m ( B y t e   n   o f   p I m a g e )   i s   F F   t h e n        - -                   - - t e s t   f o l l o w i n g   b y t e        - -                   i f   b y t e T o N u m ( B y t e   n + 1   o f   p I m a g e )   i s   D 8   t h e n        - -                         - - t e s t   f o l l o w i n g   b y t e        - -                         i f   b y t e T o N u m ( B y t e   n + 2   o f   p I m a g e )   i s   F F   t h e n        - -                               - - t e s t   f o l l o w i n g   b y t e        - -                               i f   b y t e T o N u m ( B y t e   n + 3   o f   p I m a g e )   i s   D B   t h e n        - -                                     - - p u t   " F o u n d   F F D 8   F F D B   a t   a d d r e s s   :   "     &   n   &   c r   a f t e r   f l d   " d e b u g "        - -                                     p u t   n   i n t o   t J p e g S t a r t        - -                                     e x i t   r e p e a t        - -                               e n d   i f        - -                         e n d   i f        - -                   e n d   i f        - -             e n d   i f        - -       e n d   r e p e a t               p u t   n u m T o B y t e ( F F )   &   n u m T o B y t e ( D 8 )     &   n u m T o B y t e ( F F )   &   n u m T o B y t e ( D B )   i n t o   t S t a r t J P G        p u t   b y t e O f f s e t ( t S t a r t J P G ,   p I m a g e )   i n t o   t J p e g S t a r t               - - p u t   " J p e g S t a r t   i s   s e t   t o   "   &   t J p e g S t a r t   &   c r   a f t e r   f l d   " d e b u g "               i f   t J p e g S t a r t   i s   0   t h e n   r e t u r n   " - 1 "               - -   S t a r t   c o d e   f o u n d   s o   n o w   l o c a t e   t h e   e n d        - -       r e p e a t   w i t h   n   =   t J p e g S t a r t + 3   t o   l e n g t h ( p I m a g e )        - -             i f   b y t e T o N u m ( B y t e   n   o f   p I m a g e )   i s   F F   t h e n        - -                   - - t e s t   f o l l o w i n g   b y t e        - -                   i f   b y t e T o N u m ( B y t e   n + 1   o f   p I m a g e )   i s   D 9   t h e n        - -                         p u t   n   i n t o   t J p e g E n d        - -                         - - p u t   " F o u n d   F F D 9   a t   a d d r e s s   :   "   &   t J p e g E n d   &   c r   a f t e r   f l d   " d e b u g "        - -                         e x i t   r e p e a t        - -                   e n d   i f        - -             e n d   i f        - -       e n d   r e p e a t               p u t   n u m T o B y t e ( F F )   &   n u m T o B y t e ( D 9 )   i n t o   t E n d J P G        a d d   3   t o   t J p e g S t a r t               p u t   b y t e O f f s e t ( t E n d J P G ,   p I m a g e ,   t J p e g S t a r t )   i n t o   t J p e g E n d               i f   t J p e g E n d     >   0   t h e n              a d d   t J p e g S t a r t   t o   t J p e g E n d        e l s e              p u t   - 1     i n t o   t J p e g E n d        e n d     i f               I f   t J p e g E n d   i s   - 1   t h e n   r e t u r n   " - 1 "               p u t   B y t e   t J p e g S t a r t   t o   t J p e g E n d + 1   o f   p I m a g e   i n t o   t J p e g D a t a               r e t u r n   t J p e g D a t a         e n d   R e a d J p e g F r o m R a w  OŒÿþF u n c t i o n     R e a d J p e g F r o m R a w   @ p I m a g e 
-       - - p u t   e m p t y   i n t o   f i e l d   " d e b u g " 
-       - - p u t   R e a d I m a g e O r i e n t a t i o n   ( p I m a g e )   i n t o   t O r i n t a t i o n 
-       
-       - - l o c a l   t F i l e P o i n t e r   =   0 ,   t F i l e L e n g t h 
-       l o c a l   t J p e g S t a r t =   - 1 ,   t J p e g E n d   =   - 1 
-       l o c a l   t J p e g D a t a 
-       C o n s t a n t   F F   =   2 5 5 
-       C o n s t a n t   D 8   =   2 1 6 
-       C o n s t a n t   D B   =   2 1 9 
-       C o n s t a n t   D 9   =   2 1 7 
-       
-       
-       - -       r e p e a t   w i t h   n   =   1   t o   l e n g t h ( p I m a g e ) 
-       - -             i f   b y t e T o N u m ( B y t e   n   o f   p I m a g e )   i s   F F   t h e n 
-       - -                   - - t e s t   f o l l o w i n g   b y t e 
-       - -                   i f   b y t e T o N u m ( B y t e   n + 1   o f   p I m a g e )   i s   D 8   t h e n 
-       - -                         - - t e s t   f o l l o w i n g   b y t e 
-       - -                         i f   b y t e T o N u m ( B y t e   n + 2   o f   p I m a g e )   i s   F F   t h e n 
-       - -                               - - t e s t   f o l l o w i n g   b y t e 
-       - -                               i f   b y t e T o N u m ( B y t e   n + 3   o f   p I m a g e )   i s   D B   t h e n 
-       - -                                     - - p u t   " F o u n d   F F D 8   F F D B   a t   a d d r e s s   :   "     &   n   &   c r   a f t e r   f l d   " d e b u g " 
-       - -                                     p u t   n   i n t o   t J p e g S t a r t 
-       - -                                     e x i t   r e p e a t 
-       - -                               e n d   i f 
-       - -                         e n d   i f 
-       - -                   e n d   i f 
-       - -             e n d   i f 
-       - -       e n d   r e p e a t 
-       
-       p u t   n u m T o B y t e ( F F )   &   n u m T o B y t e ( D 8 )     &   n u m T o B y t e ( F F )   &   n u m T o B y t e ( D B )   i n t o   t S t a r t J P G 
-       p u t   b y t e O f f s e t ( t S t a r t J P G ,   p I m a g e )   i n t o   t J p e g S t a r t 
-       
-       - - p u t   " J p e g S t a r t   i s   s e t   t o   "   &   t J p e g S t a r t   &   c r   a f t e r   f l d   " d e b u g " 
-       
-       i f   t J p e g S t a r t   i s   0   t h e n   r e t u r n   " - 1 " 
-       
-       - -   S t a r t   c o d e   f o u n d   s o   n o w   l o c a t e   t h e   e n d 
-       - -       r e p e a t   w i t h   n   =   t J p e g S t a r t + 3   t o   l e n g t h ( p I m a g e ) 
-       - -             i f   b y t e T o N u m ( B y t e   n   o f   p I m a g e )   i s   F F   t h e n 
-       - -                   - - t e s t   f o l l o w i n g   b y t e 
-       - -                   i f   b y t e T o N u m ( B y t e   n + 1   o f   p I m a g e )   i s   D 9   t h e n 
-       - -                         p u t   n   i n t o   t J p e g E n d 
-       - -                         - - p u t   " F o u n d   F F D 9   a t   a d d r e s s   :   "   &   t J p e g E n d   &   c r   a f t e r   f l d   " d e b u g " 
-       - -                         e x i t   r e p e a t 
-       - -                   e n d   i f 
-       - -             e n d   i f 
-       - -       e n d   r e p e a t 
-       
-       p u t   n u m T o B y t e ( F F )   &   n u m T o B y t e ( D 9 )   i n t o   t E n d J P G 
-       a d d   3   t o   t J p e g S t a r t 
-       
-       p u t   b y t e O f f s e t ( t E n d J P G ,   p I m a g e ,   t J p e g S t a r t )   i n t o   t J p e g E n d 
-       
-       i f   t J p e g E n d     >   0   t h e n 
-             a d d   t J p e g S t a r t   t o   t J p e g E n d 
-       e l s e 
-             p u t   - 1     i n t o   t J p e g E n d 
-       e n d     i f 
-       
-       I f   t J p e g E n d   i s   - 1   t h e n   r e t u r n   " - 1 " 
-       
-       p u t   B y t e   t J p e g S t a r t   t o   t J p e g E n d + 1   o f   p I m a g e   i n t o   t J p e g D a t a 
-       
-       r e t u r n   t J p e g D a t a 
-       
- e n d   R e a d J p e g F r o m R a w 
-     ' @ g ~ Ÿ À Ì × ñ	]¦!ü")#(2C<bLð                           ]€
