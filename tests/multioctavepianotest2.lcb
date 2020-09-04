@@ -179,6 +179,7 @@ end handler
 -- called whenever LiveCode needs to redraw the widget
 public handler OnPaint()
 	variable tPath as Path
+
 	variable tWhiteKey as Array
 	variable tBlackKey as Array
    variable tOct as Integer
@@ -190,37 +191,30 @@ public handler OnPaint()
    variable tNum as Number
    variable tSplits as Number
    variable tRectList as List
-   put my bounds into tRect
 
-   put 8 into tSplits
+   put my bounds into tRect
+   put 11 into tSplits
    put getRectListSplitHorz(tRect,tSplits) into tRectList
    -- log tRectList
-	set the paint of this canvas to solid paint with color [0,0,0,1]
-   set the stroke width of this canvas to 4
 
-   --put rectangle path of (element 1 of tRectList) into tPath
-   --stroke tPath on this canvas
-   --put rectangle path of (element 4 of tRectList) into tPath
-   --stroke tPath on this canvas
-   --put rectangle path of (element 8 of tRectList) into tPath
-   --stroke tPath on this canvas
+	set the paint of this canvas to solid paint with color [0,0,0,1]
+   set the stroke width of this canvas to 1
    repeat with tNum from 1 up to tSplits
-    put rectangle path of (element tNum of tRectList) into tPath
-   -- stroke tPath on this canvas
-   -- scale mPianoIcon by [the right of tPath, the bottom of tPath]
-   -- put mPianoIcon into tPath
-   constrainPathToRect(element tNum of tRectList, mPianoIcon)
-   fill mPianoIcon on this canvas
+     -- put rectangle path of (element tNum of tRectList) into tPath
+     -- stroke tPath on this canvas
+     -- scale mPianoIcon by [the right of tPath, the bottom of tPath]
+      put mPianoIcon into tPath
+      -- constrainPathToRect(element tNum of tRectList, mPianoIcon)
+      --- for Horz Splits:
+      scale tPath by [(my width / tSplits) / (the width of the bounding box of tPath), (my height) / (the height of the bounding box of tPath)]
+      translate tPath by [the left of (element tNum of tRectList), the top of (element tNum of tRectList)]
+
+      --- for Vert Splits:
+      -- scale tPath by [(my width / tSplits) / (the width of the bounding box of tPath), (my height) / (the height of the bounding box of tPath)]
+      -- translate tPath by [the left of (element tNum of tRectList), the top of (element tNum of tRectList)]
+      fill tPath on this canvas
    end repeat
 
-   -- put mPianoIcon into tPath
-   -- repeat with tNum from 1 up to tSplits
-   --   put mPianoIcon into tPath
-      -- scale mPianoIcon by [the right of tPath, the bottom of tPath]
-   --   constrainPathToRect(element tNum of tRectList, tPath)
-   --   fill tPath on this canvas
-   -- end repeat
-   -- fill this canvas
 end handler
 
 public handler getRectListSplitHorz(in pRect, in pDiv as Integer) returns List
