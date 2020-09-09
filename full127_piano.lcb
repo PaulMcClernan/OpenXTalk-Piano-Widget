@@ -450,7 +450,7 @@ public handler OnCreate()
    translate tPath by [1.333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 0 + 24 into tArray["KeyNumber"]
+   put 0 + 36 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "D" into tArray["KeyName"]
@@ -458,7 +458,7 @@ public handler OnCreate()
    translate tPath by [-3.1666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 2 + 24 into tArray["KeyNumber"]
+   put 2 + 36 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "E" into tArray["KeyName"]
@@ -466,7 +466,7 @@ public handler OnCreate()
    translate tPath by [-1,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 36 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "F" into tArray["KeyName"]
@@ -474,7 +474,7 @@ public handler OnCreate()
    translate tPath by [-0.8666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 36 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "G" into tArray["KeyName"]
@@ -482,7 +482,7 @@ public handler OnCreate()
    translate tPath by [-.8666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 7 + 24 into tArray["KeyNumber"]
+   put 7 + 36 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "A" into tArray["KeyName"]
@@ -490,7 +490,7 @@ public handler OnCreate()
    translate tPath by [-.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 9 + 24 into tArray["KeyNumber"]
+   put 9 + 36 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "B" into tArray["KeyName"]
@@ -498,7 +498,7 @@ public handler OnCreate()
    translate tPath by [-.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 11 + 24 into tArray["KeyNumber"]
+   put 11 + 36 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
    --------------------------------------------Black Keys--------------------------------------------
    put the empty array into tArray
@@ -508,7 +508,7 @@ public handler OnCreate()
    translate tPath by [-1.333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 1 + 24 into tArray["KeyNumber"]
+   put 1 + 36 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "D#Eb" into tArray["KeyName"]
@@ -516,7 +516,7 @@ public handler OnCreate()
    translate tPath by [-1.333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 3 + 24 into tArray["KeyNumber"]
+   put 3 + 36 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "F#Gb" into tArray["KeyName"]
@@ -524,7 +524,7 @@ public handler OnCreate()
    translate tPath by [-1.2666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 6 + 24 into tArray["KeyNumber"]
+   put 6 + 36 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "G#Ab" into tArray["KeyName"]
@@ -532,7 +532,7 @@ public handler OnCreate()
    translate tPath by [-1.3,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 8 + 24 into tArray["KeyNumber"]
+   put 8 + 36 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "A#Bb" into tArray["KeyName"]
@@ -561,7 +561,7 @@ public handler OnCreate()
    translate tPath by [2,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 0 + 24 into tArray["KeyNumber"]
+   put 0 + 48 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "D" into tArray["KeyName"]
@@ -569,7 +569,7 @@ public handler OnCreate()
    translate tPath by [-3.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 2 + 24 into tArray["KeyNumber"]
+   put 2 + 48 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "E" into tArray["KeyName"]
@@ -577,7 +577,7 @@ public handler OnCreate()
    translate tPath by [-0.9333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 48 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "F" into tArray["KeyName"]
@@ -585,7 +585,7 @@ public handler OnCreate()
    translate tPath by [-.8666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 48 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "G" into tArray["KeyName"]
@@ -593,7 +593,7 @@ public handler OnCreate()
    translate tPath by [-.8666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 7 + 24 into tArray["KeyNumber"]
+   put 7 + 48 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "A" into tArray["KeyName"]
@@ -601,7 +601,7 @@ public handler OnCreate()
    translate tPath by [-.9333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 9 + 24 into tArray["KeyNumber"]
+   put 9 + 48 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "B" into tArray["KeyName"]
@@ -609,7 +609,7 @@ public handler OnCreate()
    translate tPath by [-.9666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 11 + 24 into tArray["KeyNumber"]
+   put 11 + 48 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
    --------------------------------------------Black Keys--------------------------------------------
    put the empty array into tArray
@@ -619,7 +619,7 @@ public handler OnCreate()
    translate tPath by [-1.333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 1 + 24 into tArray["KeyNumber"]
+   put 1 + 48 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "D#Eb" into tArray["KeyName"]
@@ -627,7 +627,7 @@ public handler OnCreate()
    translate tPath by [-1.333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 3 + 24 into tArray["KeyNumber"]
+   put 3 + 48 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "F#Gb" into tArray["KeyName"]
@@ -643,7 +643,7 @@ public handler OnCreate()
    translate tPath by [-1.333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 8 + 24 into tArray["KeyNumber"]
+   put 8 + 48 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "A#Bb" into tArray["KeyName"]
@@ -651,7 +651,7 @@ public handler OnCreate()
    translate tPath by [-1.4333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 10 + 24 into tArray["KeyNumber"]
+   put 10 + 48 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
@@ -672,7 +672,7 @@ public handler OnCreate()
    translate tPath by [2.5333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 0 + 24 into tArray["KeyNumber"]
+   put 0 + 60 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "D" into tArray["KeyName"]
@@ -680,7 +680,7 @@ public handler OnCreate()
    translate tPath by [-4.7666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 2 + 24 into tArray["KeyNumber"]
+   put 2 + 60 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "E" into tArray["KeyName"]
@@ -688,7 +688,7 @@ public handler OnCreate()
    translate tPath by [-1.2333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 60 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "F" into tArray["KeyName"]
@@ -696,7 +696,7 @@ public handler OnCreate()
    translate tPath by [-1.1666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 60 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "G" into tArray["KeyName"]
@@ -712,7 +712,7 @@ public handler OnCreate()
    translate tPath by [-1.2333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 9 + 24 into tArray["KeyNumber"]
+   put 9 + 60 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "B" into tArray["KeyName"]
@@ -720,7 +720,7 @@ public handler OnCreate()
    translate tPath by [-1.2333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 11 + 24 into tArray["KeyNumber"]
+   put 11 + 60 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
    --------------------------------------------Black Keys--------------------------------------------
    put the empty array into tArray
@@ -743,7 +743,7 @@ public handler OnCreate()
 
    put "F#Gb" into tArray["KeyName"]
    put path "M404.7,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H404.7z" into tPath
-   translate tPath by [-1.7333,0]
+   translate tPath by [-1.782,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 6 + 24 into tArray["KeyNumber"]
@@ -751,7 +751,7 @@ public handler OnCreate()
 
    put "G#Ab" into tArray["KeyName"]
    put path "M415,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H415z" into tPath
-   translate tPath by [-1.666,0]
+   translate tPath by [-1.782,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 8 + 24 into tArray["KeyNumber"]
@@ -759,10 +759,10 @@ public handler OnCreate()
 
    put "A#Bb" into tArray["KeyName"]
    put path "M425.2,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H425.2z" into tPath
-   translate tPath by [-1.7333,0]
+   translate tPath by [-1.76,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 10 + 24 into tArray["KeyNumber"]
+   put 10 + 60 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
@@ -779,101 +779,101 @@ public handler OnCreate()
    put the empty list into tWhiteKeysList
    --------------------------------------------White Keys--------------------------------------------
    put "C" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [0.9,0]
+   put path "M441.2,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V0h6.6v33.8c0,0.8,0.8,1.5,1.5,1.5h2.1v17.6C442.4,53.5,441.8,54,441.2,54z" into tPath
+   translate tPath by [2.8666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 0 + 24 into tArray["KeyNumber"]
+   put 0 + 72 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "D" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-2.166,0]
+   put path "M442.3,52.9V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3v33.7l0,0v0.1c0,0.8,0.8,1.5,1.5,1.5h2.1v17.5c0,0.6-0.3,1.2-1.1,1.2h-8.1C442.6,54,442.3,53.5,442.3,52.9z" into tPath
+   translate tPath by [-5.7666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 2 + 24 into tArray["KeyNumber"]
+   put 2 + 72 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "E" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.666,0]
+   put path "M452.6,52.9V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h6.7v52.9c0,0.6-0.6,1.1-1.2,1.1h-8C453.1,54,452.6,53.5,452.6,52.9z" into tPath
+   translate tPath by [-1.525,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 72 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "F" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.666,0]
+   put path "M472,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V0h6.6v33.8c0,0.8,0.8,1.5,1.6,1.5h2.1v17.6C473,53.5,472.5,54,472,54z" into tPath
+   translate tPath by [-1.4666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 72 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "G" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.666,0]
+   put path "M474.2,54c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3.1v33.8c0,0.8,0.8,1.5,1.5,1.5h2.1v17.5c0,0.6-0.5,1.2-1.2,1.2H474.2z" into tPath
+   translate tPath by [-1.4666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 7 + 24 into tArray["KeyNumber"]
+   put 7 + 72 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "A" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.6666,0]
+   put path "M492.6,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3v33.8c0,0.8,0.8,1.5,1.6,1.5h2.1v17.5C493.7,53.5,493.3,54,492.6,54z" into tPath
+   translate tPath by [-1.4666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 9 + 24 into tArray["KeyNumber"]
+   put 9 + 72 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "B" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.6666,0]
+   put path "M504,52.9c0,0.6-0.5,1.1-1.2,1.1h-8c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.8,0,1.5-0.7,1.5-1.5V0h6.7V52.9z" into tPath
+   translate tPath by [-1.4666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 11 + 24 into tArray["KeyNumber"]
+   put 11 + 72 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
    --------------------------------------------Black Keys--------------------------------------------
    put the empty array into tArray
 
    put "C#Db" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.7333,0]
+   put path "M445.9,0v33.8c0,0.8-0.7,1.5-1.3,1.5H440c-0.8,0-1.3-0.7-1.3-1.5V0H445.9z" into tPath
+   translate tPath by [-2.0333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 1 + 24 into tArray["KeyNumber"]
+   put 1 + 72 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "D#Eb" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.7333,0]
+   put path "M456.1,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H456.1z" into tPath
+   translate tPath by [-2.0333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 3 + 24 into tArray["KeyNumber"]
+   put 3 + 72 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "F#Gb" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.999,0]
+   put path "M476.7,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H476.7z" into tPath
+   translate tPath by [-2.1666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 6 + 24 into tArray["KeyNumber"]
+   put 6 + 72 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "G#Ab" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.8666,0]
+   put path "M487,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H487z" into tPath
+   translate tPath by [-2.1333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 8 + 24 into tArray["KeyNumber"]
+   put 8 + 72 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "A#Bb" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.9,0]
+   put path "M497.2,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H497.2z" into tPath
+   translate tPath by [-2.1,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 10 + 24 into tArray["KeyNumber"]
+   put 10 + 72 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
@@ -890,101 +890,101 @@ public handler OnCreate()
    put the empty list into tWhiteKeysList
    --------------------------------------------White Keys--------------------------------------------
    put "C" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [0.9,0]
+   put path "M513.2,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V0h6.6v33.8c0,0.8,0.8,1.5,1.5,1.5h2.1v17.6C514.4,53.5,513.8,54,513.2,54z" into tPath
+   translate tPath by [3.333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 0 + 24 into tArray["KeyNumber"]
+   put 0 + 84 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "D" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-2.166,0]
+   put path "M514.3,52.9V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3v33.7l0,0v0.1c0,0.8,0.8,1.5,1.5,1.5h2.1v17.5c0,0.6-0.3,1.2-1.1,1.2h-8.1C514.6,54,514.3,53.5,514.3,52.9z" into tPath
+   translate tPath by [-6.7562,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 2 + 24 into tArray["KeyNumber"]
+   put 2 + 84 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "E" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.666,0]
+   put path "M524.6,52.9V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h6.7v52.9c0,0.6-0.6,1.1-1.2,1.1h-8C525.1,54,524.6,53.5,524.6,52.9z" into tPath
+   translate tPath by [-1.7666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 84 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "F" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.666,0]
+   put path "M544,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V0h6.6v33.8c0,0.8,0.8,1.5,1.6,1.5h2.1v17.6C545,53.5,544.5,54,544,54z" into tPath
+   translate tPath by [-1.666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 84 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "G" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.666,0]
+   put path "M546.2,54c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3.1v33.8c0,0.8,0.8,1.5,1.5,1.5h2.1v17.5c0,0.6-0.5,1.2-1.2,1.2H546.2z" into tPath
+   translate tPath by [-1.666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 7 + 24 into tArray["KeyNumber"]
+   put 7 + 84 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "A" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.6666,0]
+   put path "M564.6,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3v33.8c0,0.8,0.8,1.5,1.6,1.5h2.1v17.5C565.7,53.5,565.3,54,564.6,54z" into tPath
+   translate tPath by [-1.666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 9 + 24 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "B" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.6666,0]
+   put path "M576,52.9c0,0.6-0.5,1.1-1.2,1.1h-8c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.8,0,1.5-0.7,1.5-1.5V0h6.7V52.9z" into tPath
+   translate tPath by [-1.666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 11 + 24 into tArray["KeyNumber"]
+   put 11 + 84 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
    --------------------------------------------Black Keys--------------------------------------------
    put the empty array into tArray
 
    put "C#Db" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.7333,0]
+   put path "M517.9,0v33.8c0,0.8-0.7,1.5-1.3,1.5H512c-0.8,0-1.3-0.7-1.3-1.5V0H517.9z" into tPath
+   translate tPath by [-2.5333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 1 + 24 into tArray["KeyNumber"]
+   put 1 + 84 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "D#Eb" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.7333,0]
+   put path "M528.1,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H528.1z" into tPath
+   translate tPath by [-2.4333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 3 + 24 into tArray["KeyNumber"]
+   put 3 + 84 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "F#Gb" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.999,0]
+   put path "M548.7,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H548.7z" into tPath
+   translate tPath by [-2.4333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 6 + 24 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "G#Ab" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.8666,0]
+   put path "M559,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H559z" into tPath
+   translate tPath by [-2.4333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 8 + 24 into tArray["KeyNumber"]
+   put 8 + 84 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "A#Bb" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.9,0]
+   put path "M569.2,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H569.2z" into tPath
+   translate tPath by [-2.4,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 10 + 24 into tArray["KeyNumber"]
+   put 10 + 84 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
@@ -1001,101 +1001,101 @@ public handler OnCreate()
    put the empty list into tWhiteKeysList
    --------------------------------------------White Keys--------------------------------------------
    put "C" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [0.9,0]
+   put path "M585.2,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V0h6.6v33.8c0,0.8,0.8,1.5,1.5,1.5h2.1v17.6C586.4,53.5,585.8,54,585.2,54z" into tPath
+   translate tPath by [3.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 0 + 24 into tArray["KeyNumber"]
+   put 0 + 96 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "D" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-2.166,0]
+   put path "M586.3,52.9V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3v33.7l0,0v0.1c0,0.8,0.8,1.5,1.5,1.5h2.1v17.5c0,0.6-0.3,1.2-1.1,1.2h-8.1C586.6,54,586.3,53.5,586.3,52.9z" into tPath
+   translate tPath by [-7.6333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 2 + 24 into tArray["KeyNumber"]
+   put 2 + 96 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "E" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.666,0]
+   put path "M596.6,52.9V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h6.7v52.9c0,0.6-0.6,1.1-1.2,1.1h-8C597.1,54,596.6,53.5,596.6,52.9z" into tPath
+   translate tPath by [-1.9333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 96 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "F" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.666,0]
+   put path "M616,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V0h6.6v33.8c0,0.8,0.8,1.5,1.6,1.5h2.1v17.6C617,53.5,616.5,54,616,54z" into tPath
+   translate tPath by [-1.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 4 + 24 into tArray["KeyNumber"]
+   put 4 + 96 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "G" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.666,0]
+   put path "M618.2,54c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3.1v33.8c0,0.8,0.8,1.5,1.5,1.5h2.1v17.5c0,0.6-0.5,1.2-1.2,1.2H618.2z" into tPath
+   translate tPath by [-1.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 7 + 24 into tArray["KeyNumber"]
+   put 7 + 96 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "A" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.6666,0]
+   put path "M636.6,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3v33.8c0,0.8,0.8,1.5,1.6,1.5h2.1v17.5C637.7,53.5,637.3,54,636.6,54z" into tPath
+   translate tPath by [-1.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 9 + 24 into tArray["KeyNumber"]
+   put 9 + 96 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "B" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.6666,0]
+   put path "M648,52.9c0,0.6-0.5,1.1-1.2,1.1h-8c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.8,0,1.5-0.7,1.5-1.5V0h6.7V52.9z" into tPath
+   translate tPath by [-1.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 11 + 24 into tArray["KeyNumber"]
+   put 11 + 96 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
    --------------------------------------------Black Keys--------------------------------------------
    put the empty array into tArray
 
    put "C#Db" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.7333,0]
+   put path "M589.9,0v33.8c0,0.8-0.7,1.5-1.3,1.5H584c-0.8,0-1.3-0.7-1.3-1.5V0H589.9z" into tPath
+   translate tPath by [-2.6333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 1 + 24 into tArray["KeyNumber"]
+   put 1 + 96 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "D#Eb" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.7333,0]
+   put path "M600.1,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H600.1z" into tPath
+   translate tPath by [-2.7333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 3 + 24 into tArray["KeyNumber"]
+   put 3 + 96 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "F#Gb" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.999,0]
+   put path "M620.7,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H620.7z" into tPath
+   translate tPath by [-2.7333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 6 + 24 into tArray["KeyNumber"]
+   put 6 + 96 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "G#Ab" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.8666,0]
+   put path "M631,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H631z" into tPath
+   translate tPath by [-2.7333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 8 + 24 into tArray["KeyNumber"]
+   put 8 + 96 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "A#Bb" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.9,0]
+   put path "M641.2,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H641.2z" into tPath
+   translate tPath by [-2.666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 10 + 24 into tArray["KeyNumber"]
+   put 10 + 96 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
@@ -1112,56 +1112,56 @@ public handler OnCreate()
    put the empty list into tWhiteKeysList
    --------------------------------------------White Keys--------------------------------------------
    put "C" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [0.9,0]
+   put path "M657.2,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V0h6.6v33.8c0,0.8,0.8,1.5,1.5,1.5h2.1v17.6C658.4,53.5,657.8,54,657.2,54z" into tPath
+   translate tPath by [4.4333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 0 + 24 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "D" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-2.166,0]
+   put path "M658.3,52.9V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3v33.7l0,0v0.1c0,0.8,0.8,1.5,1.5,1.5h2.1v17.5c0,0.6-0.3,1.2-1.1,1.2h-8.1C658.6,54,658.3,53.5,658.3,52.9z" into tPath
+   translate tPath by [-8.3666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 2 + 24 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "E" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-0.666,0]
+   put path "M668.6,52.9V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h6.7v52.9c0,0.6-0.6,1.1-1.2,1.1h-8C669.1,54,668.6,53.5,668.6,52.9z" into tPath
+   translate tPath by [-1.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 4 + 24 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "F" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.666,0]
+   put path "M688,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V0h6.6v33.8c0,0.8,0.8,1.5,1.6,1.5h2.1v17.6C689,53.5,688.5,54,688,54z" into tPath
+   translate tPath by [-1.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 4 + 24 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "G" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.666,0]
+   put path "M690.2,54c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3.1v33.8c0,0.8,0.8,1.5,1.5,1.5h2.1v17.5c0,0.6-0.5,1.2-1.2,1.2H690.2z" into tPath
+   translate tPath by [-1.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 7 + 24 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "A" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.6666,0]
+   put path "M708.6,54h-8.1c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.9,0,1.5-0.7,1.5-1.5V0h3v33.8c0,0.8,0.8,1.5,1.6,1.5h2.1v17.5C709.7,53.5,709.3,54,708.6,54z" into tPath
+   translate tPath by [-1.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 9 + 24 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "B" into tArray["KeyName"]
-   put path "" into tPath
-   translate tPath by [-.6666,0]
+   put path "M720,52.9c0,0.6-0.5,1.1-1.2,1.1h-8c-0.7,0-1.1-0.5-1.1-1.1V35.3h2.1c0.8,0,1.5-0.7,1.5-1.5V0h6.7V52.9z" into tPath
+   translate tPath by [-1.8333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
    put 11 + 24 into tArray["KeyNumber"]
@@ -1170,7 +1170,7 @@ public handler OnCreate()
    put the empty array into tArray
 
    put "C#Db" into tArray["KeyName"]
-   put path "" into tPath
+   put path "M661.9,0v33.8c0,0.8-0.7,1.5-1.3,1.5H656c-0.8,0-1.3-0.7-1.3-1.5V0H661.9z" into tPath
    translate tPath by [-0.7333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
@@ -1178,7 +1178,7 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
 
    put "D#Eb" into tArray["KeyName"]
-   put path "" into tPath
+   put path "M672.1,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H672.1z" into tPath
    translate tPath by [-0.7333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
@@ -1186,7 +1186,7 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
 
    put "F#Gb" into tArray["KeyName"]
-   put path "" into tPath
+   put path "M692.7,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H692.7z" into tPath
    translate tPath by [-0.999,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
@@ -1194,7 +1194,7 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
 
    put "G#Ab" into tArray["KeyName"]
-   put path "" into tPath
+   put path "M703,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H703z" into tPath
    translate tPath by [-0.8666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
@@ -1202,7 +1202,7 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
 
    put "A#Bb" into tArray["KeyName"]
-   put path "" into tPath
+   put path "M713.2,0v33.8c0,0.8-0.7,1.5-1.4,1.5h-4.4c-0.8,0-1.4-0.7-1.4-1.5V0H713.2z" into tPath
    translate tPath by [-0.9,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
@@ -1342,7 +1342,7 @@ public handler OnPaint()
    variable tOctaveIteration as Number
    variable tOctaveCount as Number
 
-   put 6 into tOctaveCount
+   put 10 into tOctaveCount
    repeat with tOctaveIteration from 1 up to tOctaveCount
       put element (tOctaveIteration) of mOctaveList into tOctave
       -- log the keys of tOctave
