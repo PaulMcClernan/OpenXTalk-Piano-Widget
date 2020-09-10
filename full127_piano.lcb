@@ -288,26 +288,40 @@ end handler
 
 ----------------------------------------------------------------------------------------------------
 public handler OnMouseUp()
+   variable tOctave as Array
+   variable tBlackKeysList as List
+   variable tBlackKey as Array
+   variable tWhiteKeysList as List
+   variable tWhiteKey as Array
+   variable tPath as Path
+   variable tIndex as Number
    put false into  mPianoMouseButtonDown
    --- execute script "global gPianoMouseButtonDown ; put false into gPianoMouseButtonDown"
    if mSelectedKey is not nothing then
-     variable tPath as Path
-     variable tWhiteKey as Array
-     variable tBlackKey as Array
-     put mSelectedKey["KeyPath"] into tPath
-     post "noteOff" with [ mSelectedKey["KeyNumber"] , mSelectedKey["KeyName"]]
-    --  post "noteOff" to my script object with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
-     if mSelectedKey["keycolor"] is "black" then
-       -- put element (mSelectedKey["index"]) of mBlackKeysList into tBlackKey
-       --  put false into tBlackKey["KeyHighlighted"]
-       --  put tBlackKey into element (mSelectedKey["index"]) of mBlackKeysList
-     else
-       --  put element mSelectedKey["index"] of mWhiteKeysList into tWhiteKey
-      --   put false into tWhiteKey["KeyHighlighted"]
-      --   put tWhiteKey into element (mSelectedKey["index"]) of mWhiteKeysList
-     end if
-     put nothing into mSelectedKey
-  end if
+      put mSelectedKey["KeyPath"] into tPath
+      if hitTestPath( the mouse position, tPath, 0, true) is false then
+         post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]]
+         if mSelectedKey["keycolor"] is "black" then
+            put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
+            put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+            put element (mSelectedKey["index"]) of tBlackKeysList into tBlackKey
+            put false into tBlackKey["KeyHighlighted"]
+            put tBlackKey into element mSelectedKey["index"] of tBlackKeysList
+            put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+            put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
+         else
+            --log (mSelectedKey["OctaveNumber"])
+            put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
+            put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+            put element mSelectedKey["index"] of tWhiteKeysList into tWhiteKey
+            put false into tWhiteKey["KeyHighlighted"]
+            put tWhiteKey into element mSelectedKey["index"] of tWhiteKeysList
+            put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+            put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
+         end if
+         put nothing into mSelectedKey
+      end if
+   end if
   redraw all
   post "mouseUp" with [the click button]
  -- post "mouseUp" to my script object with [the click button]
@@ -345,74 +359,87 @@ end handler
 --       KeyHighlighted
 
 public handler OnMouseDown()
-   variable tOctaveCounter as Integer
+   variable tOctaveCounter as Number
    variable tOctave as Array
    variable tBlackKeysList as List
    variable tBlackKey as Array
    variable tWhiteKeysList as List
    variable tWhiteKey as Array
    variable tPath as Path
-   variable tIndex as Integer
+   variable tIndex as Number
 
    put true into mPianoMouseButtonDown
    -- execute script "global gPianoMouseButtonDown ; put true into gPianoMouseButtonDown"
    if mSelectedKey is not nothing then
       put mSelectedKey["KeyPath"] into tPath
       if hitTestPath( the mouse position, tPath, 0, true) is false then
-         post "noteOff" with [ mSelectedKey["KeyNumber"] , mSelectedKey["KeyName"]]
+         post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]]
          if mSelectedKey["keycolor"] is "black" then
-            put element (mSelectedKey["index"]) of mBlackKeysList into tBlackKey
+            put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
+            put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+            put element mSelectedKey["index"] of tBlackKeysList into tBlackKey
             put false into tBlackKey["KeyHighlighted"]
-            put tBlackKey into element (mSelectedKey["index"]) of mBlackKeysList
+            put tBlackKey into element mSelectedKey["index"] of tBlackKeysList
+            put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+            put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
          else
-            put element mSelectedKey["index"] of mWhiteKeysList into tWhiteKey
-            put false into tBlackKey["KeyHighlighted"]
-            put tWhiteKey into element (mSelectedKey["index"]) of mWhiteKeysList
+            -- log mSelectedKey["OctaveNumber"]
+            put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
+            log [the elements of tOctave]
+            put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+            put element mSelectedKey["index"] of tWhiteKeysList into tWhiteKey
+            put false into tWhiteKey["KeyHighlighted"]
+            put tWhiteKey into element mSelectedKey["index"] of tWhiteKeysList
+            put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+            put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
          end if
          put nothing into mSelectedKey
       end if
    end if
+
    repeat with tOctaveCounter from 1 up to mOctaves
       put element tOctaveCounter of mOctaveList into tOctave
+
       put tOctave["OctaveBlackKeysList"] into tBlackKeysList
       repeat with tIndex from 1 up to 5
          put element tIndex of tBlackKeysList into tBlackKey
          put tBlackKey["KeyPath"] into tPath
          if hitTestPath( the mouse position, tPath, 0, true) then
-             put true into tBlackKey["KeyHighlighted"]
-             put tBlackKey into element tIndex of tBlackKeysList
              post "noteOn" with [ tBlackKey["KeyNumber"] ,tBlackKey["KeyName"]]
             --  post "noteOn" to my script object with [ tBlackKey["octaveoffset"] + mOctave ,tBlackKey["name"]]
+            put true into tBlackKey["KeyHighlighted"]
+            put tBlackKey into element tIndex of tBlackKeysList
              put tBlackKey into mSelectedKey
              put tIndex into mSelectedKey["index"]
              put "black" into mSelectedKey["keycolor"]
+             put tOctaveCounter into mSelectedKey["OctaveNumber"]
          else
            put false into tBlackKey["KeyHighlighted"]
            put tBlackKey into element tIndex of tBlackKeysList
          end if
       end repeat
       put tBlackKeysList into tOctave["OctaveBlackKeysList"]
-      put tOctave into element tOctaveCounter of mOctaveList
 
-      put element tOctaveCounter of mOctaveList into tOctave
       put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
       repeat with tIndex from 1 up to 7
          put element tIndex of tWhiteKeysList into tWhiteKey
          put tWhiteKey["KeyPath"] into tPath
          if hitTestPath( the mouse position, tPath, 0, true) then
-            put true into tWhiteKey["KeyHighlighted"]
-            put tWhiteKey into element tIndex of tWhiteKeysList
             post "noteOn" with [ tWhiteKey["KeyNumber"],tWhiteKey["KeyName"]]
             -- post "noteOn" to my script object with [ tWhiteKey["octaveoffset"] + mOctave ,tWhiteKey["name"]]
+            put true into tWhiteKey["KeyHighlighted"]
+            put tWhiteKey into element tIndex of tWhiteKeysList
             put tWhiteKey into mSelectedKey
             put tIndex into mSelectedKey["index"]
             put "white" into mSelectedKey["keycolor"]
+            put tOctaveCounter into mSelectedKey["OctaveNumber"]
          else
             put false into tWhiteKey["KeyHighlighted"]
             put tWhiteKey into element tIndex of tWhiteKeysList
          end if
       end repeat
       put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+
       put tOctave into element tOctaveCounter of mOctaveList
    end repeat
 	redraw all
@@ -420,7 +447,7 @@ public handler OnMouseDown()
 	-- post "mouseDown" to my script object with [the click button]
 end handler
 
-public handler OnMouseMove() returns optional any
+public handler OnMouseMove()
    variable tMouseDown as Boolean
 	-- variable tXMousePos as Real
 	-- variable tYMousePos as Real
@@ -434,76 +461,90 @@ public handler OnMouseMove() returns optional any
 	--post "mouseMove" && tReturnStr
    if mPianoMouseButtonDown then
 
-   variable tOctaveCounter as Integer
-   variable tOctave as Array
-   variable tBlackKeysList as List
-   variable tBlackKey as Array
-   variable tWhiteKeysList as List
-   variable tWhiteKey as Array
-   variable tPath as Path
-   variable tIndex as Integer
+      variable tOctaveCounter as Number
+      variable tOctave as Array
+      variable tBlackKeysList as List
+      variable tBlackKey as Array
+      variable tWhiteKeysList as List
+      variable tWhiteKey as Array
+      variable tPath as Path
+      variable tIndex as Number
+      variable tNum as Number
+      if mSelectedKey is not nothing then
+         put mSelectedKey["KeyPath"] into tPath
+         if hitTestPath( the mouse position, tPath, 0, true) is false then
+            post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]]
+            if mSelectedKey["keycolor"] is "black" then
+               put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
+               put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+               put element mSelectedKey["index"] of tBlackKeysList into tBlackKey
 
-   if mSelectedKey is not nothing then
-      put mSelectedKey["KeyPath"] into tPath
-      if hitTestPath( the mouse position, tPath, 0, true) is false then
-         post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]]
-         -- post "noteOff" to my script object with [ mSelectedKey["octaveoffset"] + mOctave , mSelectedKey["name"]]
-         if mSelectedKey["keycolor"] is "black" then
-            -- put element (mSelectedKey["index"]) of mBlackKeysList into tBlackKey
-            put false into tBlackKey["KeyHighlighted"]
-            -- put tBlackKey into element (mSelectedKey["index"]) of mBlackKeysList
-         else
-            --put element mSelectedKey["index"] of mWhiteKeysList into tWhiteKey
-            put false into tBlackKey["KeyHighlighted"]
-            -- put tWhiteKey into element (mSelectedKey["index"]) of mWhiteKeysList
+               put false into tBlackKey["KeyHighlighted"]
+
+               put tBlackKey into element mSelectedKey["index"] of tBlackKeysList
+               put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+               put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
+            else
+               put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
+               put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+               put element mSelectedKey["index"] of tWhiteKeysList into tWhiteKey
+
+               put false into tWhiteKey["KeyHighlighted"]
+               put tWhiteKey into element mSelectedKey["index"] of tWhiteKeysList
+               put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+               put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
+            end if
+            put nothing into mSelectedKey
          end if
-         put nothing into mSelectedKey
       end if
-   end if
-   repeat with tOctaveCounter from 1 up to mOctaves
-      put element tOctaveCounter of mOctaveList into tOctave
-      put tOctave["OctaveBlackKeysList"] into tBlackKeysList
-      repeat with tIndex from 1 up to 5
-         put element tIndex of tBlackKeysList into tBlackKey
-         put tBlackKey["KeyPath"] into tPath
-         if hitTestPath( the mouse position, tPath, 0, true) then
-             put true into tBlackKey["KeyHighlighted"]
-             put tBlackKey into element tIndex of tBlackKeysList
-             post "noteOn" with [ tBlackKey["KeyNumber"] ,tBlackKey["KeyName"]]
-            --  post "noteOn" to my script object with [ tBlackKey["octaveoffset"] + mOctave ,tBlackKey["name"]]
-             put tBlackKey into mSelectedKey
-             put tIndex into mSelectedKey["index"]
-             put "black" into mSelectedKey["keycolor"]
-         else
-           put false into tBlackKey["KeyHighlighted"]
-           put tBlackKey into element tIndex of tBlackKeysList
-         end if
-      end repeat
-      put tBlackKeysList into tOctave["OctaveBlackKeysList"]
-      put tOctave into element tOctaveCounter of mOctaveList
 
-      put element tOctaveCounter of mOctaveList into tOctave
-      put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
-      repeat with tIndex from 1 up to 7
-         put element tIndex of tWhiteKeysList into tWhiteKey
-         put tWhiteKey["KeyPath"] into tPath
-         if hitTestPath( the mouse position, tPath, 0, true) then
-            put true into tWhiteKey["KeyHighlighted"]
-            put tWhiteKey into element tIndex of tWhiteKeysList
-            post "noteOn" with [ tWhiteKey["KeyNumber"],tWhiteKey["KeyName"]]
-            -- post "noteOn" to my script object with [ tWhiteKey["octaveoffset"] + mOctave ,tWhiteKey["name"]]
-            put tWhiteKey into mSelectedKey
-            put tIndex into mSelectedKey["index"]
-            put "white" into mSelectedKey["keycolor"]
-         else
-            put false into tWhiteKey["KeyHighlighted"]
-            put tWhiteKey into element tIndex of tWhiteKeysList
-         end if
+      repeat with tOctaveCounter from 1 up to mOctaves
+         put element tOctaveCounter of mOctaveList into tOctave
+
+         put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+         repeat with tIndex from 1 up to 5
+            put element tIndex of tBlackKeysList into tBlackKey
+            put tBlackKey["KeyPath"] into tPath
+            if hitTestPath( the mouse position, tPath, 0, true) then
+                put true into tBlackKey["KeyHighlighted"]
+                put tBlackKey into element tIndex of tBlackKeysList
+                post "noteOn" with [ tBlackKey["KeyNumber"] ,tBlackKey["KeyName"]]
+               --  post "noteOn" to my script object with [ tBlackKey["octaveoffset"] + mOctave ,tBlackKey["name"]]
+                put tBlackKey into mSelectedKey
+                put tIndex into mSelectedKey["index"]
+                put "black" into mSelectedKey["keycolor"]
+                put tOctaveCounter into mSelectedKey["OctaveNumber"]
+            else
+              put false into tBlackKey["KeyHighlighted"]
+              put tBlackKey into element tIndex of tBlackKeysList
+            end if
+         end repeat
+         put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+
+         put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+         repeat with tIndex from 1 up to 7
+            put element tIndex of tWhiteKeysList into tWhiteKey
+            put tWhiteKey["KeyPath"] into tPath
+            if hitTestPath( the mouse position, tPath, 0, true) then
+               put true into tWhiteKey["KeyHighlighted"]
+               put tWhiteKey into element tIndex of tWhiteKeysList
+               post "noteOn" with [ tWhiteKey["KeyNumber"],tWhiteKey["KeyName"]]
+               -- post "noteOn" to my script object with [ tWhiteKey["octaveoffset"] + mOctave ,tWhiteKey["name"]]
+               put tWhiteKey into mSelectedKey
+               put tIndex into mSelectedKey["index"]
+               put "white" into mSelectedKey["keycolor"]
+               put tOctaveCounter into mSelectedKey["OctaveNumber"]
+            else
+               put false into tWhiteKey["KeyHighlighted"]
+               put tWhiteKey into element tIndex of tWhiteKeysList
+            end if
+         end repeat
+         put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+
+         put tOctave into element tOctaveCounter of mOctaveList
       end repeat
-      put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
-      put tOctave into element tOctaveCounter of mOctaveList
-   end repeat
-   redraw all
+
+      redraw all
    end if
 end handler
 ----------------------------------------------------------------------------------------------------
@@ -579,6 +620,7 @@ public handler OnCreate()
 	put color [0,0,0] into mColor
 	put stringToColor("0,255,0") into mHiliteColor
    put 11 into mOctaves
+   put nothing into mSelectedKey
    put false into mPianoMouseButtonDown
    variable tBlackKeysList as List
    variable tWhiteKeysList as List
@@ -809,7 +851,6 @@ public handler OnCreate()
    put tWhiteKeysList into tArray["OctaveWhiteKeysList"]
    push tArray onto mOctaveList
 
-
    ----------------------------------------------------------------------------------------------------------------Octave 2----------------------------------------------------------------------------------------
    put the empty array into tArray
    put the empty list into tBlackKeysList
@@ -1025,8 +1066,8 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
-   put "1" into tArray["OctaveName"]
-   put 2 into tArray["OctaveNumber"]
+   put "3" into tArray["OctaveName"]
+   put 4 into tArray["OctaveNumber"]
    put path "" into tArray["OctaveBackgroundPath"]
    put tBlackKeysList into tArray["OctaveBlackKeysList"]
    put tWhiteKeysList into tArray["OctaveWhiteKeysList"]
@@ -1136,8 +1177,8 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
-   put "1" into tArray["OctaveName"]
-   put 2 into tArray["OctaveNumber"]
+   put "4" into tArray["OctaveName"]
+   put 5 into tArray["OctaveNumber"]
    put path "" into tArray["OctaveBackgroundPath"]
    put tBlackKeysList into tArray["OctaveBlackKeysList"]
    put tWhiteKeysList into tArray["OctaveWhiteKeysList"]
@@ -1247,8 +1288,8 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
-   put "1" into tArray["OctaveName"]
-   put 2 into tArray["OctaveNumber"]
+   put "5" into tArray["OctaveName"]
+   put 6 into tArray["OctaveNumber"]
    put path "" into tArray["OctaveBackgroundPath"]
    put tBlackKeysList into tArray["OctaveBlackKeysList"]
    put tWhiteKeysList into tArray["OctaveWhiteKeysList"]
@@ -1358,8 +1399,8 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
-   put "1" into tArray["OctaveName"]
-   put 2 into tArray["OctaveNumber"]
+   put "6" into tArray["OctaveName"]
+   put 7 into tArray["OctaveNumber"]
    put path "" into tArray["OctaveBackgroundPath"]
    put tBlackKeysList into tArray["OctaveBlackKeysList"]
    put tWhiteKeysList into tArray["OctaveWhiteKeysList"]
@@ -1469,8 +1510,8 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
-   put "1" into tArray["OctaveName"]
-   put 2 into tArray["OctaveNumber"]
+   put "7" into tArray["OctaveName"]
+   put 8 into tArray["OctaveNumber"]
    put path "" into tArray["OctaveBackgroundPath"]
    put tBlackKeysList into tArray["OctaveBlackKeysList"]
    put tWhiteKeysList into tArray["OctaveWhiteKeysList"]
@@ -1580,8 +1621,8 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
-   put "1" into tArray["OctaveName"]
-   put 2 into tArray["OctaveNumber"]
+   put "8" into tArray["OctaveName"]
+   put 9 into tArray["OctaveNumber"]
    put path "" into tArray["OctaveBackgroundPath"]
    put tBlackKeysList into tArray["OctaveBlackKeysList"]
    put tWhiteKeysList into tArray["OctaveWhiteKeysList"]
@@ -1691,8 +1732,8 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
-   put "1" into tArray["OctaveName"]
-   put 2 into tArray["OctaveNumber"]
+   put "9" into tArray["OctaveName"]
+   put 10 into tArray["OctaveNumber"]
    put path "" into tArray["OctaveBackgroundPath"]
    put tBlackKeysList into tArray["OctaveBlackKeysList"]
    put tWhiteKeysList into tArray["OctaveWhiteKeysList"]
@@ -1802,8 +1843,8 @@ public handler OnCreate()
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
-   put "1" into tArray["OctaveName"]
-   put 2 into tArray["OctaveNumber"]
+   put "10" into tArray["OctaveName"]
+   put 11 into tArray["OctaveNumber"]
    put path "" into tArray["OctaveBackgroundPath"]
    put tBlackKeysList into tArray["OctaveBlackKeysList"]
    put tWhiteKeysList into tArray["OctaveWhiteKeysList"]
