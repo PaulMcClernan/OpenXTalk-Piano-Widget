@@ -1,10 +1,20 @@
-
 /**
-This widget is a one octave virtual piano.
+Widget is a viutual mouse piano
+
+Description:
+This widget allows for creation of scalable piano controls
+
 
 Name: noteOn
+
 Type: message
-Syntax: noteOn
+
+Syntax: noteOn <pNoteNum>, <pNoteName>
+
+OS: mac,ios,android,win
+
+Platforms: desktop,mobile
+
 Summary: Sent when a key on the piano set to it's 'on' state.
 
 Example:
@@ -12,14 +22,27 @@ on noteOn pNoteNum,pNoteName
 	put "noteOn " & pNoteNum && pNoteName
 end noteOn
 
+Parameters:
+
+pNoteNum: The MIDI note number of the note key (exp. 63)
+
+pNoteName: The Name of the note key (exp. D#Eb)
+
 Description:
-Handle the noteOn message in the widget's object script to respond to
+Handle the <noteOn> message in the widget's object script to respond to
 'note down' clicks on the piano's individual note keys.
-*/
-/**
+
+
 Name: noteOff
+
 Type: message
-Syntax: noteOff
+
+Syntax: noteOff <pNoteNum>, <pNoteName>
+
+OS: mac,ios,android,win
+
+Platforms: desktop,mobile
+
 Summary: Sent when a key on the piano released from it's 'on' state.
 
 Example:
@@ -27,9 +50,16 @@ on noteOff pNoteNum,pNoteName
 	put "noteOff " & pNoteNum && pNoteName
 end noteOff
 
+Parameters:
+
+pNoteNum: The MIDI note number of the note key (exp. 63)
+
+pNoteName: The Name of the note key (exp. D#Eb)
+
 Description:
-Handle the noteOff message in the widget's object script to respond to
+Handle the <noteOff> message in the widget's object script to respond to
 'note release' messages from the piano's individual note keys.
+
 */
 
 -- declaring extension as widget, followed by identifier
@@ -300,6 +330,11 @@ public handler OnPaint()
        ------------------------------------------
     end repeat
     -- redraw all
+end handler
+
+public handler OnOpen()
+   OnGeometryChanged()
+   redraw all
 end handler
 
 public handler OnGeometryChanged()
@@ -573,19 +608,7 @@ public handler OnMouseDown()
 end handler
 
 public handler OnMouseMove()
-   variable tMouseDown as Boolean
-	-- variable tXMousePos as Real
-	-- variable tYMousePos as Real
-	-- variable tReturnStr as String
-	-- put the x of the mouse position into tXMousePos
-	-- put the y of the mouse position into tYMousePos
-	-- if tYMousePos < 0 then
-   -- put 0 into tYMousePos
-	-- end if
-	--put tXMousePos formatted as string & "," & tYMousePos formatted as string into tReturnStr
-	--post "mouseMove" && tReturnStr
    if mPianoMouseButtonDown then
-
       variable tOctaveCounter as Number
       variable tOctave as Array
       variable tBlackKeysList as List
@@ -595,7 +618,12 @@ public handler OnMouseMove()
       variable tPath as Path
       variable tIndex as Number
       variable tNum as Number
+      variable tSameSelectedKey as Boolean -- Bernd (BN) added contidtional check to cut down on redraws
       if mSelectedKey is not nothing then
+         put mSelectedKey["KeyPath"] into tPath
+       put hitTestPath( the mouse position, tPath, 0, true) into tSameSelectedKey
+      end if
+      if mSelectedKey is not nothing and not tSameSelectedKey then -- added tSameSelectedKey
          put mSelectedKey["KeyPath"] into tPath
          if hitTestPath( the mouse position, tPath, 0, true) is false then
             post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]]
@@ -622,56 +650,53 @@ public handler OnMouseMove()
             put nothing into mSelectedKey
          end if
       end if
+      if not tSameSelectedKey then -- added
+         repeat with tOctaveCounter from 1 up to mOctaves
+            put element tOctaveCounter of mOctaveList into tOctave
+            put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+            repeat with tIndex from 1 up to 5
+               put element tIndex of tBlackKeysList into tBlackKey
+               put tBlackKey["KeyPath"] into tPath
+               if hitTestPath( the mouse position, tPath, 0, true) then
+                   post "noteOn" with [ tBlackKey["KeyNumber"] ,tBlackKey["KeyName"]]
+                   put true into tBlackKey["KeyHighlighted"]
+                   put tBlackKey into element tIndex of tBlackKeysList
+                   put tBlackKey into mSelectedKey
+                   put tIndex into mSelectedKey["index"]
+                   put "black" into mSelectedKey["keycolor"]
+                   put tOctaveCounter into mSelectedKey["OctaveNumber"]
+               else
+                 put false into tBlackKey["KeyHighlighted"]
+                 put tBlackKey into element tIndex of tBlackKeysList
+               end if
+            end repeat
+            put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+            put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+            repeat with tIndex from 1 up to 7
+               put element tIndex of tWhiteKeysList into tWhiteKey
+               put tWhiteKey["KeyPath"] into tPath
+               if hitTestPath( the mouse position, tPath, 0, true) then
+                  post "noteOn" with [ tWhiteKey["KeyNumber"],tWhiteKey["KeyName"]]
+                  put true into tWhiteKey["KeyHighlighted"]
+                  put tWhiteKey into element tIndex of tWhiteKeysList
 
-      repeat with tOctaveCounter from 1 up to mOctaves
-         put element tOctaveCounter of mOctaveList into tOctave
-
-         put tOctave["OctaveBlackKeysList"] into tBlackKeysList
-         repeat with tIndex from 1 up to 5
-            put element tIndex of tBlackKeysList into tBlackKey
-            put tBlackKey["KeyPath"] into tPath
-            if hitTestPath( the mouse position, tPath, 0, true) then
-                post "noteOn" with [ tBlackKey["KeyNumber"] ,tBlackKey["KeyName"]]
-                put true into tBlackKey["KeyHighlighted"]
-                put tBlackKey into element tIndex of tBlackKeysList
-
-                put tBlackKey into mSelectedKey
-                put tIndex into mSelectedKey["index"]
-                put "black" into mSelectedKey["keycolor"]
-                put tOctaveCounter into mSelectedKey["OctaveNumber"]
-            else
-              put false into tBlackKey["KeyHighlighted"]
-              put tBlackKey into element tIndex of tBlackKeysList
-            end if
+                  put tWhiteKey into mSelectedKey
+                  put tIndex into mSelectedKey["index"]
+                  put "white" into mSelectedKey["keycolor"]
+                  put tOctaveCounter into mSelectedKey["OctaveNumber"]
+               else
+                  put false into tWhiteKey["KeyHighlighted"]
+                  put tWhiteKey into element tIndex of tWhiteKeysList
+               end if
+            end repeat
+            put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+            put tOctave into element tOctaveCounter of mOctaveList
          end repeat
-         put tBlackKeysList into tOctave["OctaveBlackKeysList"]
-
-         put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
-         repeat with tIndex from 1 up to 7
-            put element tIndex of tWhiteKeysList into tWhiteKey
-            put tWhiteKey["KeyPath"] into tPath
-            if hitTestPath( the mouse position, tPath, 0, true) then
-               post "noteOn" with [ tWhiteKey["KeyNumber"],tWhiteKey["KeyName"]]
-               put true into tWhiteKey["KeyHighlighted"]
-               put tWhiteKey into element tIndex of tWhiteKeysList
-
-               put tWhiteKey into mSelectedKey
-               put tIndex into mSelectedKey["index"]
-               put "white" into mSelectedKey["keycolor"]
-               put tOctaveCounter into mSelectedKey["OctaveNumber"]
-            else
-               put false into tWhiteKey["KeyHighlighted"]
-               put tWhiteKey into element tIndex of tWhiteKeysList
-            end if
-         end repeat
-         put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
-
-         put tOctave into element tOctaveCounter of mOctaveList
-      end repeat
-
-      redraw all
+         redraw all
+      end if
    end if
 end handler
+
 ----------------------------------------------------------------------------------------------------
 --- Monte's point-within-path handler:
 public handler hitTestPath(in pPoint as Point, in pPath as Path, in pStrokeWidth as Number, in pWithin as Boolean) returns Boolean
@@ -707,7 +732,6 @@ end handler
 
 --- called when widget is created
 public handler OnCreate()
-
    -- OctaveList
    --    OctaveName
    --    OctaveNumber
@@ -1168,7 +1192,7 @@ public handler OnCreate()
    translate tPath by [-1.1666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 10 + 24 into tArray["KeyNumber"]
+   put 10 + 36 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
    --------------------------------------------- Octave --------------------------------------------
    put the empty array into tArray
@@ -1263,7 +1287,7 @@ public handler OnCreate()
    translate tPath by [-1.3666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 6 + 24 into tArray["KeyNumber"]
+   put 6 + 48 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "G#Ab" into tArray["KeyName"]
@@ -1332,7 +1356,7 @@ public handler OnCreate()
    translate tPath by [-1.1666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 7 + 24 into tArray["KeyNumber"]
+   put 7 + 60 into tArray["KeyNumber"]
    push tArray onto tWhiteKeysList
 
    put "A" into tArray["KeyName"]
@@ -1358,7 +1382,7 @@ public handler OnCreate()
    translate tPath by [-1.666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 1 + 24 into tArray["KeyNumber"]
+   put 1 + 60 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "D#Eb" into tArray["KeyName"]
@@ -1366,7 +1390,7 @@ public handler OnCreate()
    translate tPath by [-1.666,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 3 + 24 into tArray["KeyNumber"]
+   put 3 + 60 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "F#Gb" into tArray["KeyName"]
@@ -1374,7 +1398,7 @@ public handler OnCreate()
    translate tPath by [-1.782,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 6 + 24 into tArray["KeyNumber"]
+   put 6 + 60 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "G#Ab" into tArray["KeyName"]
@@ -1382,7 +1406,7 @@ public handler OnCreate()
    translate tPath by [-1.782,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 8 + 24 into tArray["KeyNumber"]
+   put 8 + 60 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "A#Bb" into tArray["KeyName"]
@@ -1596,7 +1620,7 @@ public handler OnCreate()
    translate tPath by [-2.4333,0]
    put tPath into tArray["KeyPath"]
    put false into tArray["KeyHighlighted"]
-   put 6 + 24 into tArray["KeyNumber"]
+   put 6 + 84 into tArray["KeyNumber"]
    push tArray onto tBlackKeysList
 
    put "G#Ab" into tArray["KeyName"]
