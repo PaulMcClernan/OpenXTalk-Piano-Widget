@@ -8,7 +8,9 @@ https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 This is a work in progress at the moment.
 
 Planned features include:
+
 • Auto-hilighting chords via a chord-formula property.
+
 • Setting highlights for individual keys on the piano via LCS script.
 
 Once the above features are added I will consider this at Version 1.0
