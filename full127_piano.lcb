@@ -91,8 +91,8 @@ private variable mOctaves as Integer
 
 property "chrordformula" get getChordFormula set setChordFormula
 metadata chrordformula.editor is "com.livecode.pi.text"
-metadata chrordformula.options is "-12,12,24"
-metadata chrordformula.default is "-12,12,24"
+metadata chrordformula.options is "4,7,11"
+metadata chrordformula.default is "4,7,11"
 metadata chrordformula.label is "Chord Formula"
 private variable mChordFormula as String
 
@@ -108,7 +108,7 @@ private variable mSelectedKeyList as optional List
 private variable mSelectedKey as optional Array
 private variable mOctaveList as List
 
-private handler setChordFormula(in mChordFormula as String) returns nothing
+private handler setChordFormula(in pChordFormula as String) returns nothing
    put pChordFormula into mChordFormula
 end handler
 
@@ -458,7 +458,7 @@ public handler OnMouseUp()
          put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
          put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
       end if
-      --unhighlightChordFormula(mSelectedKey["KeyNumber"])
+      unhighlightChordFormula(mSelectedKey["KeyNumber"])
       put nothing into mSelectedKey
    end if
   redraw all
@@ -713,7 +713,56 @@ end handler
 
 
 public handler unhighlightChordFormula(in pKeyNum as Integer)
+   variable tListOfString as List
+   variable tListOfNum as List
+   variable tChordNoteNums as List
+   variable tKeysList as List
+   variable tKey as Array
+   variable tNum as Number
+   variable tOctNum as Number
+   variable tOctave as Array
+   variable tCounter as Number
 
+   split mChordFormula by "," into tListOfString
+   put tListOfString parsed as list of number into tListOfNum
+   repeat for each element tNum in tListOfNum
+      if pKeyNum + tNum < 128 and pKeyNum + tNum > -1 then
+         push pKeyNum + tNum onto tChordNoteNums
+      end if
+   end repeat
+   repeat for each element tNum in tChordNoteNums
+      put getOctaveFromNoteNumber(tNum) into tOctNum
+      put element tOctNum of mOctaveList into tOctave
+      if tNum is in tOctave["OctaveBlackKeysIndex"] then
+         put tOctave["OctaveBlackKeysList"] into tKeysList
+         repeat with tCounter from 1 up to 5
+            put element tCounter of tKeysList into tKey
+            if tKey["KeyNumber"] is tNum then
+               -- log tKey["KeyNumber"]
+               put false into tKey["KeyHighlighted"]
+               put tKey into element tCounter of tKeysList
+            end if
+         end repeat
+         put tKeysList into tOctave["OctaveBlackKeysList"]
+         put tOctave into element tOctNum of mOctaveList
+         redraw all
+      else
+         if tNum is in tOctave["OctaveWhiteKeysIndex"] then
+            put tOctave["OctaveWhiteKeysList"] into tKeysList
+            repeat with tCounter from 1 up to 7
+               put tKeysList[tCounter] into tKey
+               if tKey["KeyNumber"] is tNum then
+                  -- log tKey["KeyNumber"]
+                  put false into tKey["KeyHighlighted"]
+                  put tKey into tKeysList[tCounter]
+               end if
+            end repeat
+            put tKeysList into tOctave["OctaveWhiteKeysList"]
+            put tOctave into element tOctNum of mOctaveList
+            -- redraw all
+         end if
+      end if
+   end repeat
 end handler
 
 public handler highlightChordFormula(in pKeyNum as Integer)
