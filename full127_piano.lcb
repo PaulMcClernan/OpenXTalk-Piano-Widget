@@ -92,7 +92,7 @@ private variable mOctaves as Integer
 property "chrordformula" get getChordFormula set setChordFormula
 metadata chrordformula.editor is "com.livecode.pi.text"
 metadata chrordformula.options is "-12,12,24"
-metadata chrordformula.default is ""
+metadata chrordformula.default is "-12,12,24"
 metadata chrordformula.label is "Chord Formula"
 private variable mChordFormula as String
 
