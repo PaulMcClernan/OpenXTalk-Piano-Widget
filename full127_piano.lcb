@@ -492,14 +492,14 @@ public handler OnMouseUp()
    variable tWhiteKey as Array
    variable tPath as Path
    variable tIndex as Number
-   variable tNotesNumsOff as String
+   variable tNotesNumsOff as List
    put false into  mPianoMouseButtonDown
    --- execute script "global gPianoMouseButtonDown ; put false into gPianoMouseButtonDown"
    if mSelectedKey is not nothing then
-      
       if mSelectedKey["keycolor"] is "black" then
+         put unhighlightChordFormula(mSelectedKey["KeyNumber"]) into tNotesNumsOff
          put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
-         post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"] ]
+         post "noteOff" with [ mSelectedKey["KeyNumber"] formatted as string & element 1 of tNotesNumsOff, mSelectedKey["KeyName"]&tOctave["OctaveName"] & element 2 of tNotesNumsOff ]
          put tOctave["OctaveBlackKeysList"] into tBlackKeysList
          put element (mSelectedKey["index"]) of tBlackKeysList into tBlackKey
          put false into tBlackKey["KeyHighlighted"]
@@ -507,8 +507,9 @@ public handler OnMouseUp()
          put tBlackKeysList into tOctave["OctaveBlackKeysList"]
          put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
       else
+         put unhighlightChordFormula(mSelectedKey["KeyNumber"]) into tNotesNumsOff
          put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
-         post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"] ]
+         post "noteOff" with [ mSelectedKey["KeyNumber"] formatted as string & element 1 of tNotesNumsOff, mSelectedKey["KeyName"]&tOctave["OctaveName"] & element 2 of tNotesNumsOff ]
          put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
          put element mSelectedKey["index"] of tWhiteKeysList into tWhiteKey
          put false into tWhiteKey["KeyHighlighted"]
@@ -516,10 +517,10 @@ public handler OnMouseUp()
          put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
          put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
       end if
-      unhighlightChordFormula(mSelectedKey["KeyNumber"])
       put nothing into mSelectedKey
+      redraw all
    end if
-  redraw all
+   -- redraw all
   post "mouseUp" with [the click button]
  -- post "mouseUp" to my script object with [the click button]
 end handler
@@ -564,14 +565,16 @@ public handler OnMouseDown()
    variable tWhiteKey as Array
    variable tPath as Path
    variable tIndex as Number
+   variable tChordNotes as List
 
    put true into mPianoMouseButtonDown
    if mSelectedKey is not nothing then
       put mSelectedKey["KeyPath"] into tPath
       if hitTestPath( the mouse position, tPath, 0, true) is false then
          if mSelectedKey["keycolor"] is "black" then
+            put unhighlightChordFormula(mSelectedKey["KeyNumber"]) into tChordNotes
             put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
-            post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"]]
+            post "noteOff" with [ mSelectedKey["KeyNumber"] formatted as string & element 1 of tChordNotes, mSelectedKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes ]
             put tOctave["OctaveBlackKeysList"] into tBlackKeysList
             put element mSelectedKey["index"] of tBlackKeysList into tBlackKey
             put false into tBlackKey["KeyHighlighted"]
@@ -579,8 +582,9 @@ public handler OnMouseDown()
             put tBlackKeysList into tOctave["OctaveBlackKeysList"]
             put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
          else
+            put unhighlightChordFormula(mSelectedKey["KeyNumber"]) into tChordNotes
             put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
-            post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"]]
+            post "noteOff" with [ mSelectedKey["KeyNumber"] formatted as string & element 1 of tChordNotes, mSelectedKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes ]
             put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
             put element mSelectedKey["index"] of tWhiteKeysList into tWhiteKey
             put false into tWhiteKey["KeyHighlighted"]
@@ -591,7 +595,6 @@ public handler OnMouseDown()
          put nothing into mSelectedKey
       end if
    end if
-
    repeat with tOctaveCounter from 1 up to mOctaves
       put element tOctaveCounter of mOctaveList into tOctave
 
@@ -600,14 +603,14 @@ public handler OnMouseDown()
          put element tIndex of tBlackKeysList into tBlackKey
          put tBlackKey["KeyPath"] into tPath
          if hitTestPath( the mouse position, tPath, 0, true) then
-            post "noteOn" with [ tBlackKey["KeyNumber"],tBlackKey["KeyName"]&tOctave["OctaveName"]]
+            put highlightChordFormula(tBlackKey["KeyNumber"]) into tChordNotes
+            post "noteOn" with [ tBlackKey["KeyNumber"] formatted as string & element 1 of tChordNotes,tBlackKey["KeyName"]&tOctave["OctaveName"]& element 2 of tChordNotes]
             put true into tBlackKey["KeyHighlighted"]
             put tBlackKey into element tIndex of tBlackKeysList
             put tBlackKey into mSelectedKey
             put tIndex into mSelectedKey["index"]
             put "black" into mSelectedKey["keycolor"]
             put tOctaveCounter into mSelectedKey["OctaveNumber"]
-            highlightChordFormula(tBlackKey["KeyNumber"])
          else
            put false into tBlackKey["KeyHighlighted"]
            put tBlackKey into element tIndex of tBlackKeysList
@@ -620,15 +623,14 @@ public handler OnMouseDown()
          put element tIndex of tWhiteKeysList into tWhiteKey
          put tWhiteKey["KeyPath"] into tPath
          if hitTestPath( the mouse position, tPath, 0, true) then
-            post "noteOn" with [ tWhiteKey["KeyNumber"],tWhiteKey["KeyName"]&tOctave["OctaveName"]]
+            put highlightChordFormula(tWhiteKey["KeyNumber"]) into tChordNotes
+            post "noteOn" with [ tWhiteKey["KeyNumber"] formatted as string & element 1 of tChordNotes,tWhiteKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes]
             put true into tWhiteKey["KeyHighlighted"]
             put tWhiteKey into element tIndex of tWhiteKeysList
-
             put tWhiteKey into mSelectedKey
             put tIndex into mSelectedKey["index"]
             put "white" into mSelectedKey["keycolor"]
             put tOctaveCounter into mSelectedKey["OctaveNumber"]
-            highlightChordFormula(tWhiteKey["KeyNumber"])
          else
             put false into tWhiteKey["KeyHighlighted"]
             put tWhiteKey into element tIndex of tWhiteKeysList
@@ -657,6 +659,8 @@ public handler OnMouseMove()
       variable tPath as Path
       variable tIndex as Number
       variable tNum as Number
+      variable tChordNotes as List
+
       variable tSameSelectedKey as Boolean -- Bernd (BN) added contidtional check to cut down on redraws
       if mSelectedKey is not nothing then
          put mSelectedKey["KeyPath"] into tPath
@@ -667,7 +671,9 @@ public handler OnMouseMove()
          if hitTestPath( the mouse position, tPath, 0, true) is false then
             if mSelectedKey["keycolor"] is "black" then
                put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
-               post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"]]
+               put unhighlightChordFormula(mSelectedKey["KeyNumber"]) into tChordNotes
+               post "noteOff" with [ mSelectedKey["KeyNumber"] formatted as string & element 1 of tChordNotes,mSelectedKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes]
+               --post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"]]
                put tOctave["OctaveBlackKeysList"] into tBlackKeysList
                put element mSelectedKey["index"] of tBlackKeysList into tBlackKey
                put false into tBlackKey["KeyHighlighted"]
@@ -676,7 +682,9 @@ public handler OnMouseMove()
                put tOctave into element mSelectedKey["OctaveNumber"] of mOctaveList
             else
                put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
-               post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"]]
+               put unhighlightChordFormula(mSelectedKey["KeyNumber"]) into tChordNotes
+               post "noteOff" with [ mSelectedKey["KeyNumber"] formatted as string & element 1 of tChordNotes,mSelectedKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes]
+               --post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"]]
                put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
                put element mSelectedKey["index"] of tWhiteKeysList into tWhiteKey
                put false into tWhiteKey["KeyHighlighted"]
@@ -695,7 +703,9 @@ public handler OnMouseMove()
                put element tIndex of tBlackKeysList into tBlackKey
                put tBlackKey["KeyPath"] into tPath
                if hitTestPath( the mouse position, tPath, 0, true) then
-                   post "noteOn" with [ tBlackKey["KeyNumber"],tBlackKey["KeyName"]&tOctave["OctaveName"]]
+                  put highlightChordFormula(tBlackKey["KeyNumber"]) into tChordNotes
+                  post "noteOn" with [ tBlackKey["KeyNumber"] formatted as string & element 1 of tChordNotes,tBlackKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes]
+                  -- post "noteOn" with [ tBlackKey["KeyNumber"],tBlackKey["KeyName"]&tOctave["OctaveName"]]
                    put true into tBlackKey["KeyHighlighted"]
                    put tBlackKey into element tIndex of tBlackKeysList
                    put tBlackKey into mSelectedKey
@@ -708,12 +718,15 @@ public handler OnMouseMove()
                end if
             end repeat
             put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+
             put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
             repeat with tIndex from 1 up to 7
                put element tIndex of tWhiteKeysList into tWhiteKey
                put tWhiteKey["KeyPath"] into tPath
                if hitTestPath( the mouse position, tPath, 0, true) then
-                  post "noteOn" with [ tWhiteKey["KeyNumber"],tWhiteKey["KeyName"]&tOctave["OctaveName"]]
+                  put highlightChordFormula(tWhiteKey["KeyNumber"]) into tChordNotes
+                  post "noteOn" with [ tWhiteKey["KeyNumber"] formatted as string & element 1 of tChordNotes,tBlackKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes]
+                -- post "noteOn" with [ tWhiteKey["KeyNumber"],tWhiteKey["KeyName"]&tOctave["OctaveName"]]
                   put true into tWhiteKey["KeyHighlighted"]
                   put tWhiteKey into element tIndex of tWhiteKeysList
                   put tWhiteKey into mSelectedKey
@@ -729,7 +742,7 @@ public handler OnMouseMove()
             put tOctave into element tOctaveCounter of mOctaveList
          end repeat
          if mSelectedKey is not nothing then
-            highlightChordFormula(mSelectedKey["KeyNumber"])
+           highlightChordFormula(mSelectedKey["KeyNumber"])
          end if
          redraw all
       end if
@@ -769,8 +782,7 @@ public handler hitTestPath(in pPoint as Point, in pPath as Path, in pStrokeWidth
 	return the first byte of tData is the byte with code 255
 end handler
 
-
-public handler unhighlightChordFormula(in pKeyNum as Integer)
+public handler unhighlightChordFormula(in pKeyNum as Integer) returns optional any
    variable tListOfString as List
    variable tListOfNum as List
    variable tChordNoteNums as List
@@ -780,6 +792,9 @@ public handler unhighlightChordFormula(in pKeyNum as Integer)
    variable tOctNum as Number
    variable tOctave as Array
    variable tCounter as Number
+   variable tNoteNumsOff as String
+   variable tNoteNamesOff as String
+   variable tNotesOff as List
    split mChordFormula by "," into tListOfString
    put tListOfString parsed as list of number into tListOfNum
    repeat for each element tNum in tListOfNum
@@ -795,7 +810,8 @@ public handler unhighlightChordFormula(in pKeyNum as Integer)
          repeat with tCounter from 1 up to 5
             put element tCounter of tKeysList into tKey
             if tKey["KeyNumber"] is tNum then
-               -- log tKey["KeyNumber"]
+               put "," &  tKey["KeyName"] & tOctave["OctaveName"] after tNoteNamesOff
+               put "," & tKey["KeyNumber"] formatted as string after tNoteNumsOff
                put false into tKey["KeyHighlighted"]
                put tKey into element tCounter of tKeysList
             end if
@@ -809,20 +825,23 @@ public handler unhighlightChordFormula(in pKeyNum as Integer)
             repeat with tCounter from 1 up to 7
                put tKeysList[tCounter] into tKey
                if tKey["KeyNumber"] is tNum then
-                  -- log tKey["KeyNumber"]
+                  put "," &  tKey["KeyName"] & tOctave["OctaveName"] after tNoteNamesOff
+                  put "," & tKey["KeyNumber"] formatted as string after tNoteNumsOff
                   put false into tKey["KeyHighlighted"]
                   put tKey into tKeysList[tCounter]
                end if
             end repeat
             put tKeysList into tOctave["OctaveWhiteKeysList"]
             put tOctave into element tOctNum of mOctaveList
-            -- redraw all
          end if
       end if
    end repeat
+   push tNoteNumsOff onto tNotesOff
+   push tNoteNamesOff onto tNotesOff
+   return tNotesOff
 end handler
 
-public handler highlightChordFormula(in pKeyNum as Integer) returns String
+public handler highlightChordFormula(in pKeyNum as Integer) returns optional any
    variable tListOfString as List
    variable tListOfNum as List
    variable tChordNoteNums as List
@@ -833,7 +852,8 @@ public handler highlightChordFormula(in pKeyNum as Integer) returns String
    variable tOctave as Array
    variable tCounter as Number
    variable tNoteNumsOn as String
-   variable tNoteNamesOn as tNoteNamesOn
+   variable tNoteNamesOn as String
+   variable tNotesOn as List
    split mChordFormula by "," into tListOfString
    put tListOfString parsed as list of number into tListOfNum
    repeat for each element tNum in tListOfNum
@@ -849,8 +869,8 @@ public handler highlightChordFormula(in pKeyNum as Integer) returns String
          repeat with tCounter from 1 up to 5
             put element tCounter of tKeysList into tKey
             if tKey["KeyNumber"] is tNum then
-               put tKey["KeyName"] & tOctave["OctaveName"] & "," after tNoteNamesOn
-               put tKey["KeyNumber"] & "," after tNoteNumsOn
+               put "," &  tKey["KeyName"] & tOctave["OctaveName"] after tNoteNamesOn
+               put "," & tKey["KeyNumber"] formatted as string after tNoteNumsOn
                put true into tKey["KeyHighlighted"]
                put tKey into element tCounter of tKeysList
             end if
@@ -863,8 +883,8 @@ public handler highlightChordFormula(in pKeyNum as Integer) returns String
             repeat with tCounter from 1 up to 7
                put tKeysList[tCounter] into tKey
                if tKey["KeyNumber"] is tNum then
-                  put tKey["KeyName"] & tOctave["OctaveName"] & "," after tNoteNamesOn
-                  put tKey["KeyNumber"] & "," after tNoteNumsOn
+                  put "," & tKey["KeyName"] & tOctave["OctaveName"] after tNoteNamesOn
+                  put "," & tKey["KeyNumber"] formatted as string after tNoteNumsOn
                   put true into tKey["KeyHighlighted"]
                   put tKey into tKeysList[tCounter]
                end if
@@ -874,6 +894,13 @@ public handler highlightChordFormula(in pKeyNum as Integer) returns String
          end if
       end if
    end repeat
+   -- delete the last char of tNoteNumsOn
+   -- delete the last char of tNoteNamesOn
+   -- log tNoteNumsOn
+   -- log tNoteNamesOn
+   push tNoteNumsOn onto tNotesOn
+   push tNoteNamesOn onto tNotesOn
+   return tNotesOn
 end handler
 
 public handler getOctaveFromNoteNumber(in pNoteNum as Integer) returns optional any
