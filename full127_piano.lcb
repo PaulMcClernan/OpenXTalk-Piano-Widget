@@ -24,9 +24,9 @@ end noteOn
 
 Parameters:
 
-pNoteNum: The MIDI note number of the note key (exp. 63)
+pNoteNum: The MIDI note number(s) of the note key (exp. 63), this can be an item delimited list of multiple key numbers (chords)
 
-pNoteName: The Name of the note key (exp. D#Eb)
+pNoteName: The Name of the note key (exp. D#Eb), this can be an item delimited list of multiple key numbers (chords)
 
 Description:
 Handle the <noteOn> message in the widget's object script to respond to
@@ -52,9 +52,9 @@ end noteOff
 
 Parameters:
 
-pNoteNum: The MIDI note number of the note key (exp. 63)
+pNoteNum:The MIDI note number(s) of the note key (exp. 63), this can be an item delimited list of multiple key numbers (chords)
 
-pNoteName: The Name of the note key (exp. D#Eb)
+pNoteName: The Name of the note key (exp. D#Eb), this can be an item delimited list of multiple key names (chords)
 
 Description:
 Handle the <noteOff> message in the widget's object script to respond to
