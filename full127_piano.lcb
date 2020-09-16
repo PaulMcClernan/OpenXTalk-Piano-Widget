@@ -492,9 +492,11 @@ public handler OnMouseUp()
    variable tWhiteKey as Array
    variable tPath as Path
    variable tIndex as Number
+   variable tNotesNumsOff as String
    put false into  mPianoMouseButtonDown
    --- execute script "global gPianoMouseButtonDown ; put false into gPianoMouseButtonDown"
    if mSelectedKey is not nothing then
+      
       if mSelectedKey["keycolor"] is "black" then
          put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
          post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"] ]
@@ -778,7 +780,6 @@ public handler unhighlightChordFormula(in pKeyNum as Integer)
    variable tOctNum as Number
    variable tOctave as Array
    variable tCounter as Number
-
    split mChordFormula by "," into tListOfString
    put tListOfString parsed as list of number into tListOfNum
    repeat for each element tNum in tListOfNum
@@ -821,7 +822,7 @@ public handler unhighlightChordFormula(in pKeyNum as Integer)
    end repeat
 end handler
 
-public handler highlightChordFormula(in pKeyNum as Integer)
+public handler highlightChordFormula(in pKeyNum as Integer) returns String
    variable tListOfString as List
    variable tListOfNum as List
    variable tChordNoteNums as List
@@ -831,7 +832,8 @@ public handler highlightChordFormula(in pKeyNum as Integer)
    variable tOctNum as Number
    variable tOctave as Array
    variable tCounter as Number
-
+   variable tNoteNumsOn as String
+   variable tNoteNamesOn as tNoteNamesOn
    split mChordFormula by "," into tListOfString
    put tListOfString parsed as list of number into tListOfNum
    repeat for each element tNum in tListOfNum
@@ -847,77 +849,65 @@ public handler highlightChordFormula(in pKeyNum as Integer)
          repeat with tCounter from 1 up to 5
             put element tCounter of tKeysList into tKey
             if tKey["KeyNumber"] is tNum then
-               -- log tKey["KeyNumber"]
+               put tKey["KeyName"] & tOctave["OctaveName"] & "," after tNoteNamesOn
+               put tKey["KeyNumber"] & "," after tNoteNumsOn
                put true into tKey["KeyHighlighted"]
                put tKey into element tCounter of tKeysList
             end if
          end repeat
          put tKeysList into tOctave["OctaveBlackKeysList"]
          put tOctave into element tOctNum of mOctaveList
-         redraw all
       else
          if tNum is in tOctave["OctaveWhiteKeysIndex"] then
             put tOctave["OctaveWhiteKeysList"] into tKeysList
             repeat with tCounter from 1 up to 7
                put tKeysList[tCounter] into tKey
                if tKey["KeyNumber"] is tNum then
-                  -- log tKey["KeyNumber"]
+                  put tKey["KeyName"] & tOctave["OctaveName"] & "," after tNoteNamesOn
+                  put tKey["KeyNumber"] & "," after tNoteNumsOn
                   put true into tKey["KeyHighlighted"]
                   put tKey into tKeysList[tCounter]
                end if
             end repeat
             put tKeysList into tOctave["OctaveWhiteKeysList"]
             put tOctave into element tOctNum of mOctaveList
-            -- redraw all
          end if
       end if
    end repeat
 end handler
 
 public handler getOctaveFromNoteNumber(in pNoteNum as Integer) returns optional any
-   -- log pNoteNum
    if pNoteNum < 12 then
-      -- log "octave 1"
       return 1
    end if
    if pNoteNum>11 and pNoteNum<24 then
-      -- log "octave 2"
       return 2
    end if
    if pNoteNum>23 and pNoteNum<36 then
-      -- log "octave 3"
       return 3
    end if
    if pNoteNum>35 and pNoteNum<48 then
-      -- log "octave 4"
       return 4
    end if
    if pNoteNum>47 and pNoteNum<60 then
-      -- log "octave 5"
       return 5
    end if
    if pNoteNum>59 and pNoteNum<72 then
-      -- log "octave 6"
       return 6
    end if
    if pNoteNum>71 and pNoteNum<84 then
-      -- log "octave 7"
       return 7
    end if
    if pNoteNum>83 and pNoteNum<96 then
-      -- log "octave 8"
       return 8
    end if
    if pNoteNum>95 and pNoteNum<108 then
-      -- log "octave 9"
       return 9
    end if
    if pNoteNum>107 and pNoteNum<120 then
-      -- log "octave 10"
       return 10
    end if
    if pNoteNum>119 and pNoteNum<128 then
-      -- log "octave 11"
       return 11
    end if
 end handler
