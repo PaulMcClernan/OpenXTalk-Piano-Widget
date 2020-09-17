@@ -79,6 +79,135 @@ metadata version is "0.4"
 metadata preferredSize is "1000,100"
 metadata svgicon is "M0,0v69.6c0,1.4,1.1,2.5,2.4,2.5h9.7c0.8,0,1.5-0.4,2-1.1c0.4,0.7,1.1,1.1,2,1.1h9.8c0.8,0,1.5-0.4,1.9-1.1 c0.4,0.6,1.1,1.1,1.9,1.1h9.8c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1h9.8c0.8,0,1.5-0.4,2-1.1c0.4,0.7,1.1,1.1,2,1.1h9.7 c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1h9.7c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1H94c1.3,0,2.4-1.1,2.4-2.5V0H0z M95.4,69.6c0,0.8-0.6,1.5-1.4,1.5h-9.8c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h8.1L95.4,69.6z M80.4,71.1h-9.7 c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h3.6v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C81.8,70.4,81.2,71.1,80.4,71.1z M57,71.1c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h3.7v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7c0,0.8-0.6,1.5-1.4,1.5 L57,71.1z M53.1,71.1h-9.8c-0.8,0-1.4-0.7-1.4-1.5V1H50v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C54.5,70.4,53.8,71.1,53.1,71.1z M28.3,69.6V46.9h2.5c1,0,1.9-0.9,1.9-2V1h8.1v68.6c0,0.8-0.6,1.5-1.4,1.5h-9.8C28.9,71.1,28.3,70.4,28.3,69.6z M14.7,69.6V46.9 h2.5c1,0,1.9-0.9,1.9-2V1h3.7v43.6l0,0v0.3c0,1.1,0.9,2,1.9,2h2.5v22.7c0,0.8-0.6,1.5-1.4,1.5H16C15.3,71.1,14.7,70.4,14.7,69.6z M12.1,71.1H2.4c-0.8,0-1.4-0.7-1.4-1.5V1h8.1v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C13.5,70.4,12.9,71.1,12.1,71.1z"
 
+property hilightedNotes get getHilightedNotes set setHilightedNotes
+metadata hilightedNotes.user_visible is "false"
+private variable mhilightedNotes as String
+
+private handler setHilightedNotes(pHilightNotes) returns nothing
+   variable tOctave as Array
+   variable tBlackKeysList as List
+   variable tBlackKey as Array
+   variable tWhiteKeysList as List
+   variable tWhiteKey as Array
+
+   variable tKeysList as List
+   variable tKey as optional any
+   variable tKeyIteration as Number
+
+   variable tString as String
+   variable tOctaveIteration as Number
+
+   split pHilightNotes by "," into tKeysList
+   -- log tKeysList
+
+   repeat with tOctaveIteration from 1 up to 11 --- Clear All Hilights First
+      put element tOctaveIteration of mOctaveList into tOctave
+      put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+      repeat with tKeyIteration from 1 up to 5
+         put element tKeyIteration of tBlackKeysList into tBlackKey
+         put false into tBlackKey["KeyHighlighted"]
+         put tBlackKey into element tKeyIteration of tBlackKeysList
+      end repeat
+      put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+      put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+      repeat with tKeyIteration from 1 up to 7
+         put element tKeyIteration of tWhiteKeysList into tWhiteKey
+         put false into tWhiteKey["KeyHighlighted"]
+         put tWhiteKey into element tKeyIteration of tWhiteKeysList
+      end repeat
+      put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+      put tOctave into element tOctaveIteration of mOctaveList
+   end repeat
+
+   repeat for each element tKey in tKeysList
+      --log tKey
+      repeat with tOctaveIteration from 1 up to 11
+         put element tOctaveIteration of mOctaveList into tOctave
+         put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+         repeat with tKeyIteration from 1 up to 5
+            put element tKeyIteration of tBlackKeysList into tBlackKey
+            if tBlackKey["KeyName"] is tKey then
+               put true into tBlackKey["KeyHighlighted"]
+               put tBlackKey into element tKeyIteration of tBlackKeysList
+            else if tBlackKey["KeyName"] & tOctave["OctaveName"] is tKey then
+                  put true into tBlackKey["KeyHighlighted"]
+                  put tBlackKey into element tKeyIteration of tBlackKeysList
+            else if tBlackKey["KeyNumber"] is tKey parsed as number then
+               put true into tBlackKey["KeyHighlighted"]
+               put tBlackKey into element tKeyIteration of tBlackKeysList
+            end if
+         end repeat
+         put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+
+         put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+         repeat with tKeyIteration from 1 up to 7
+            put element tKeyIteration of tWhiteKeysList into tWhiteKey
+            if tWhiteKey["KeyName"] is tKey then
+               put true into tWhiteKey["KeyHighlighted"]
+               put tWhiteKey into element tKeyIteration of tWhiteKeysList
+            else if tWhiteKey["KeyName"] & tOctave["OctaveName"] is tKey then
+               put true into tWhiteKey["KeyHighlighted"]
+               put tWhiteKey into element tKeyIteration of tWhiteKeysList
+            else if tWhiteKey["KeyNumber"] is tKey parsed as number then
+               put true into tWhiteKey["KeyHighlighted"]
+               put tWhiteKey into element tKeyIteration of tWhiteKeysList
+            end if
+         end repeat
+         put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+
+         put tOctave into element tOctaveIteration of mOctaveList
+      end repeat
+   end repeat
+   redraw all
+end handler
+
+private handler getHilightedNotes() returns String
+   variable tOctave as Array
+   variable tBlackKeysList as List
+   variable tBlackKey as Array
+   variable tWhiteKeysList as List
+   variable tWhiteKey as Array
+   variable tPath as Path
+   variable tNamesString as String
+   variable tNoteNumsString as String
+   variable tOctaveIteration as Number
+   put "" into tNamesString
+   put "" into tNoteNumsString
+   repeat with tOctaveIteration from 1 up to 11
+      put element (tOctaveIteration) of mOctaveList into tOctave
+      --log tOctave["OctaveName"]
+      put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+      repeat for each element tBlackKey in tBlackKeysList
+         --log tBlackKey["KeyName"]
+         --log tBlackKey["KeyHighlighted"]
+         if tBlackKey["KeyHighlighted"] is true then
+            put tBlackKey["KeyNumber"] formatted as string & "," after tNoteNumsString
+            put tBlackKey["KeyName"] & tOctave["OctaveName"] & "," after tNamesString
+         end if
+      end repeat
+      put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+      repeat for each element tWhiteKey in tWhiteKeysList
+         --log tBlackKey["KeyName"]
+         --log tBlackKey["KeyHighlighted"]
+         if tWhiteKey["KeyHighlighted"] is true then
+            put tWhiteKey["KeyNumber"] formatted as string & "," after tNoteNumsString
+            put tWhiteKey["KeyName"] & tOctave["OctaveName"] & "," after tNamesString
+         end if
+      end repeat
+   end repeat
+   if tNamesString is not the empty string then
+      if the last char of tNamesString is "," then
+         delete the last char of tNamesString
+      end if
+   end if
+   if tNoteNumsString is not the empty string then
+      if the last char of tNoteNumsString is "," then
+         delete the last char of tNoteNumsString
+      end if
+   end if
+   return tNoteNumsString &"\n"& tNamesString
+end handler
+
 property octaves  get getOctaveAmount  set setOctaveAmount
 metadata octaves.editor is "com.livecode.pi.enum"
 metadata octaves.options is "1,2,3,4,5,6,7,8,9,10,11"
@@ -209,7 +338,7 @@ public handler OnPaint()
    variable tOctaveIteration as Number
 
    set the antialias of this canvas to true
-   set the stroke width of this canvas to 1.666
+   set the stroke width of this canvas to 1.5
    repeat with tOctaveIteration from 1 up to mOctaves
       put element (tOctaveIteration) of mOctaveList into tOctave
    	------------------------------------------------------------------------------------------ WhiteKeys ------------------------------------------------------------------------------------------
