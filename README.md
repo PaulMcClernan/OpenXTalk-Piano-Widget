@@ -9,13 +9,14 @@ This is a work in progress at the moment.
 
 Planned features include:
 
-• Setting highlights for individual keys on the piano via LCS script.
-
-Once the above features are added I will consider this at Version 1.0
-
-Version 2.0 will likely have improved graphics and be rebuilt as a smaller "Composed Widget", provided a particular bug in LCB gets fixed.
+Version 1.0 will likely have improved graphics.
+Version 2.0 Will be rebuilt as a smaller "Composed Widget", provided a particular bug in LCB gets fixed.
 
 
 Version 0.4
+
 • Auto-hilighting chords via a chord formula property
-• Auto-hilighting chords via a chord presets property.
+
+• Auto-hilighting chords via a chord presets property
+
+• Setting and getting the highlights for individual keys on the piano via a hilightedNotes property
