@@ -15,7 +15,7 @@ Version 0.7
 
 - Setting and getting the highlights for individual keys on the piano via a hilightedNotes property
 
-- Better graphics rendering with rounded rects instead of SVG Paths.
+- Better graphics rendering with rounded rects instead of SVG Paths -- Thanks Bernd!
 
 Planned features :
 
