@@ -1057,7 +1057,7 @@ private handler createDataRoundedRect() returns nothing
    variable tWhitePathTemp as Path
    variable tBlackPathTemp as Path
 
-   repeat with incOctaves from -1 up to tOctaves -2
+   repeat with incOctaves from -1 up to 11 -2
       repeat with incOneOctave from 1 up to 7
 
          -- white keys
