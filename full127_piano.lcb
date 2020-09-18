@@ -581,9 +581,9 @@ public handler OnMouseCancel()
       -- OnMouseUp()
 end handler
 public handler OnMouseEnter()
-   if mPianoMouseButtonDown then
-      OnMouseDown()
-   end if
+	--   if mPianoMouseButtonDown then
+	--      OnMouseDown()
+	--   end if
 end handler
 
 -- OctaveList
