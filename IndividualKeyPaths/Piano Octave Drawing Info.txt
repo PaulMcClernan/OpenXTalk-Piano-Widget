@@ -1,0 +1,53 @@
+70px W x 60px H
+
+WhiteKeys widths are 1/7 th Octave Width so 70 / 7 = 10px
+WhiteKeys are spaced so that the left is every 1/7th of Octave width so 0,10,20,30 etc.
+
+BlackKeys widths are 1/12th Octave Width so 70/12 = 5.83px
+Discard only the path copies needed for the 5 (of 12th spaces) BlackKeys per Octave
+
+BlackKeys Height are about 6/10th the Height of the WhiteKeys, so 60 * 0.6 = 36px
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Standards to use:
+Keyboard size is not officially standardized (there is no committee creating and enforcing standards), but in practice, there is very little variation.
+
+7/8" (0.875") appears to be the industry standard for WhiteKeys width (7 * 0.875 = 6.125)
+
+on www.pianoworld.com, people measured 88 key keyboards from anywhere between 48 inches to 48 1/2".
+
+Wikipedia (http://en.wikipedia.org/wiki/Musical_keyboard) describes the width of an octave on a modern keyboard as 164-165 mm, which leaves almost a centimeter variation in width over the entire keyboard.
+
+A Kawai studio model acoustic piano vintage 1980 or so that I have access to where I work has the following key dimensions
+
+White key width = exactly 7/8 inch.
+  Visible length = 6 in., including a 1/16" "lip" on the top surface that sticks out beyond the end of the key proper.
+
+Black key width at white key level = 15/32" (0.46875") (53.57142857142857% of WhiteKey Width)... tapering up to 7/16" (7/16 is half exactly the width of the WhiteKey width) at the top ******************************
+  Length at white key level 3 15/16" tapering back to 3 5/8" at the top -- 65.625% (roughly 66% of the WhiteKey Length
+
+Horizontally across the width of the keyboard there is approximately 1/16" gap between keys.
+
+measure my Panasonic 88-note electronic and see if it differs.
+The white keys are exactly 1/8 in. shorter in length than on the acoustic, but otherwise identical.
+The black keys are 1/16 in. wider (0.53125) but otherwise identical.  ( so the black keys should be roughly 1/12th 0.083333333 or 1/13th 0.076923077 the width of an octave, which sort of makes sense, 7 * 0.077 =)
+So all in all the two pianos are so extremely similar as to be almost identical.
+Certainly the 88 note keybed (where the notes are placed) is within 1/8" of being exactly the same length.
+
+
+Measuring several keys near middle C with a calibrated digital caliper:
+
+1915 Steinway Model M (New York) with original action:
+22.1 to 22. 9 mm (slight variance), +/- fractions of 0.86 inches
+
+2002 Yamaha Model S08 88-note weighted-action synthesizer:
+22.8 mm or 0.89 inches
+
+I suspect the variance of the width on the Steinway is due to the 1915 tooling vs. computer assisted manufacturing of the 2002 Yamaha.
+
+John Callahan of Callahan Piano in the San Francisco Bay Area, a Steinway restoration specialist. http://www.callahanpiano.com/
+"100 year old piano keys will vary slightly in width. Some of that is the original tooling and cutting (piano keys are sliced like bread from one piece of material) and some of the variance can be from wear.
+The keys at the far ends of the keyboard will be a good bit wider on an older, heavily played instrument than the keys in the middle of the keyboard, where the most playing occurs."
+"No standard width. You can measure many different pianos, and while they will all be within a fairly standard range, you will see differences. Same goes for the sharps.
+This also holds true for many other piano dimensions. Keytop thickness, head length (distance from the player's end of the natural key to the cutout for the sharp), tail length, height of the keytop off the floor, height of the pedals off the floor, etc."
