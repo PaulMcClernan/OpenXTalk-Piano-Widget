@@ -121,7 +121,7 @@ private handler setHilightedNotes(pHilightNotes) returns nothing
    repeat for each element tKey in tKeysList
       --- check if it's a sharp without flat or flat
       if the number of chars in tKey > 1 then
-         if (char 2 of tKey is "#" and the number of chars in tKey > 4)  or (char 2 of tKey is "b") then
+         if ((char 2 of tKey is "#") and (the number of chars in tKey < 4))  or (char 2 of tKey is "b") then
             if (char -1 of tKey) parsed as number is not nothing then
                repeat forever
                   if the last char of tKey is in "-012356789" then
