@@ -68,6 +68,7 @@ widget community.livecode.widget.piano
 -- dependancy declarations
 use com.livecode.canvas
 use com.livecode.string
+use com.livecode.char
 use com.livecode.widget
 use com.livecode.engine
 use com.livecode.library.widgetutils
@@ -79,28 +80,23 @@ metadata version is "0.8"
 metadata preferredSize is "1000,100"
 metadata svgicon is "M0,0v69.6c0,1.4,1.1,2.5,2.4,2.5h9.7c0.8,0,1.5-0.4,2-1.1c0.4,0.7,1.1,1.1,2,1.1h9.8c0.8,0,1.5-0.4,1.9-1.1 c0.4,0.6,1.1,1.1,1.9,1.1h9.8c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1h9.8c0.8,0,1.5-0.4,2-1.1c0.4,0.7,1.1,1.1,2,1.1h9.7 c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1h9.7c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1H94c1.3,0,2.4-1.1,2.4-2.5V0H0z M95.4,69.6c0,0.8-0.6,1.5-1.4,1.5h-9.8c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h8.1L95.4,69.6z M80.4,71.1h-9.7 c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h3.6v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C81.8,70.4,81.2,71.1,80.4,71.1z M57,71.1c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h3.7v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7c0,0.8-0.6,1.5-1.4,1.5 L57,71.1z M53.1,71.1h-9.8c-0.8,0-1.4-0.7-1.4-1.5V1H50v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C54.5,70.4,53.8,71.1,53.1,71.1z M28.3,69.6V46.9h2.5c1,0,1.9-0.9,1.9-2V1h8.1v68.6c0,0.8-0.6,1.5-1.4,1.5h-9.8C28.9,71.1,28.3,70.4,28.3,69.6z M14.7,69.6V46.9 h2.5c1,0,1.9-0.9,1.9-2V1h3.7v43.6l0,0v0.3c0,1.1,0.9,2,1.9,2h2.5v22.7c0,0.8-0.6,1.5-1.4,1.5H16C15.3,71.1,14.7,70.4,14.7,69.6z M12.1,71.1H2.4c-0.8,0-1.4-0.7-1.4-1.5V1h8.1v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C13.5,70.4,12.9,71.1,12.1,71.1z"
 
+-----------------------------------------------------------------------------------------------  Properties --------------------------------------------------------------------------------------
 property hilightedNotes get getHilightedNotes set setHilightedNotes
 metadata hilightedNotes.user_visible is "false"
 private variable mhilightedNotes as String
-
 private handler setHilightedNotes(pHilightNotes) returns nothing
    variable tOctave as Array
    variable tBlackKeysList as List
    variable tBlackKey as Array
    variable tWhiteKeysList as List
    variable tWhiteKey as Array
-
+   variable tNumStr as String
    variable tKeysList as List
    variable tKey as optional any
    variable tKeyIteration as Number
-
-   variable tString as String
    variable tOctaveIteration as Number
-
-   split pHilightNotes by "," into tKeysList
-   -- log tKeysList
-
-   repeat with tOctaveIteration from 1 up to 11 --- Clear All Hilights First
+   ------------------------------------------------------------------------ Clear All Hilights First ------------------------------------------------------------------------
+   repeat with tOctaveIteration from 1 up to 11
       put element tOctaveIteration of mOctaveList into tOctave
       put tOctave["OctaveBlackKeysList"] into tBlackKeysList
       repeat with tKeyIteration from 1 up to 5
@@ -119,8 +115,28 @@ private handler setHilightedNotes(pHilightNotes) returns nothing
       put tOctave into element tOctaveIteration of mOctaveList
    end repeat
 
+   split pHilightNotes by "," into tKeysList
+   -- log tKeysList
+
    repeat for each element tKey in tKeysList
-      --log tKey
+      --- check if it's a sharp without flat or flat
+      if the number of chars in tKey > 1 then
+         if (char 2 of tKey is "#" and char 2 of tKey is not "b")  or (char 2 of tKey is "b") then
+            if (char -1 of tKey) parsed as number is not nothing then
+               repeat forever
+                  if the last char of tKey is in "-012356789" then
+                     put the last char of tKey before tNumStr
+                     delete the last char of tKey
+                  else
+                     exit repeat
+                  end if
+               end repeat
+            end if
+            put getSharpOrFlatToSharpAndFlat(tKey) into tKey
+            put tKey & tNumStr into tKey
+            -- log tKey
+         end if
+      end if
       repeat with tOctaveIteration from 1 up to 11
          put element tOctaveIteration of mOctaveList into tOctave
          put tOctave["OctaveBlackKeysList"] into tBlackKeysList
@@ -161,6 +177,21 @@ private handler setHilightedNotes(pHilightNotes) returns nothing
    redraw all
 end handler
 
+public handler getSharpOrFlatToSharpAndFlat(in pKey as String) returns String
+   variable tVarListA as List
+   variable tVarListB as List
+   variable tOffset as Number
+	put ["C#",  "D#",  "F#",  "G#",  "A#",  "Db",  "Eb",  "Gb",  "Ab",  "Bb"] into tVarListA
+   put ["C#Db","D#Eb","F#Gb","G#Ab","A#Bb","C#Db","D#Eb","F#Gb","G#Ab","A#Bb"] into tVarListB
+   put the index of pKey in tVarListA into tOffset
+   -- log tOffset
+   if tOffset > 0 then
+      return element tOffset of tVarListB
+   else
+      return pKey
+   end if
+end handler
+
 private handler getHilightedNotes() returns String
    variable tOctave as Array
    variable tBlackKeysList as List
@@ -175,11 +206,8 @@ private handler getHilightedNotes() returns String
    put "" into tNoteNumsString
    repeat with tOctaveIteration from 1 up to 11
       put element (tOctaveIteration) of mOctaveList into tOctave
-      --log tOctave["OctaveName"]
       put tOctave["OctaveBlackKeysList"] into tBlackKeysList
       repeat for each element tBlackKey in tBlackKeysList
-         --log tBlackKey["KeyName"]
-         --log tBlackKey["KeyHighlighted"]
          if tBlackKey["KeyHighlighted"] is true then
             put tBlackKey["KeyNumber"] formatted as string & "," after tNoteNumsString
             put tBlackKey["KeyName"] & tOctave["OctaveName"] & "," after tNamesString
@@ -187,8 +215,6 @@ private handler getHilightedNotes() returns String
       end repeat
       put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
       repeat for each element tWhiteKey in tWhiteKeysList
-         --log tBlackKey["KeyName"]
-         --log tBlackKey["KeyHighlighted"]
          if tWhiteKey["KeyHighlighted"] is true then
             put tWhiteKey["KeyNumber"] formatted as string & "," after tNoteNumsString
             put tWhiteKey["KeyName"] & tOctave["OctaveName"] & "," after tNamesString
@@ -215,6 +241,15 @@ metadata octaves.default is "11"
 metadata octaves.label is "Octaves Amount"
 private variable mOctavesStr as String
 private variable mOctaves as Integer
+public handler setOctaveAmount(in pOctavesStr as String) returns nothing
+   put pOctavesStr into mOctavesStr
+	put (pOctavesStr parsed as number) into mOctaves
+   OnGeometryChanged()
+   redraw all
+end handler
+public handler getOctaveAmount() returns String
+   return mOctavesStr
+end handler
 
 property chordFormula get getChordFormula  set setChordFormula
 metadata chordFormula.editor is "com.livecode.pi.string"
@@ -229,20 +264,6 @@ metadata chordPreset.default is "None"
 metadata chordPreset.label is "Chord Presets"
 public variable mChordPreset as String
 
-property iconHiliteColor   get getHiliteColor   set setHiliteColor
-metadata iconHiliteColor.editor is "com.livecode.pi.color"
-private variable mHiliteColor as Color
-
-private variable mStrokeSize as Number
-
-public variable mPianoMouseButtonDown as Boolean
-
-private variable mBlackKeysList as List
-private variable mWhiteKeysList as List
-private variable mSelectedKeyList as optional List
-private variable mSelectedKey as optional Array
-private variable mOctaveList as List
-
 private handler setChordFormula(in pChordFormula as String) returns nothing
    put pChordFormula into mChordFormula
    if mChordPreset is not "..." then
@@ -251,7 +272,9 @@ private handler setChordFormula(in pChordFormula as String) returns nothing
    OnGeometryChanged()
    redraw all
 end handler
-
+public handler getChordFormula() returns String
+   return mChordFormula
+end handler
 private handler setChordPreset(in pChordPreset as String) returns nothing
    if pChordPreset is "..." then
       put pChordPreset into mChordPreset
@@ -292,34 +315,34 @@ private handler setChordPreset(in pChordPreset as String) returns nothing
    OnGeometryChanged()
    redraw all
 end handler
-
-public handler setOctaveAmount(in pOctavesStr as String) returns nothing
-   put pOctavesStr into mOctavesStr
-	put (pOctavesStr parsed as number) into mOctaves
-   OnGeometryChanged()
-   redraw all
+public handler getChordPreset() returns String
+   return mChordPreset
 end handler
 
+property hiliteColor   get getHiliteColor   set setHiliteColor
+metadata hiliteColor.editor is "com.livecode.pi.color"
+private variable mHiliteColor as Color
 public handler setHiliteColor(in pColor as String) returns nothing
 	put stringToColor(pColor) into mHiliteColor
    OnGeometryChanged()
    redraw all
 end handler
-
-public handler getChordPreset() returns String
-   return mChordPreset
-end handler
-
-public handler getChordFormula() returns String
-   return mChordFormula
-end handler
-
-public handler getOctaveAmount() returns String
-   return mOctavesStr
-end handler
-
 public handler getHiliteColor() returns String
 	return colorToString(mHiliteColor, false)
+end handler
+
+property strokeWidth   get getStroke   set setStroke
+metadata strokeWidth.editor is "com.livecode.pi.number"
+metadata strokeWidth.label is "Stroke Width"
+private variable mStrokeSizeStr as Number
+private variable mStrokeSize as Number
+public handler setStroke(in pStrokeSize as Number) returns nothing
+   put pStrokeSize into mStrokeSize
+   OnGeometryChanged()
+   redraw all
+end handler
+public handler getStroke() returns Number
+	return mStrokeSize
 end handler
 
 public handler OnStopEditing()
@@ -327,167 +350,6 @@ public handler OnStopEditing()
    OnGeometryChanged()
    redraw all
 end handler
---------------------------------------------------------------------------------------------------------------
--- called whenever LiveCode needs to redraw the widget
-public handler OnPaint()
-   variable tOctave as Array
-   variable tBlackKeysList as List
-   variable tBlackKey as Array
-   variable tWhiteKeysList as List
-	variable tWhiteKey as Array
-	variable tPath as Path
-   variable tString as String
-   variable tOctaveIteration as Number
-
-   set the antialias of this canvas to true
-   set the stroke width of this canvas to 1.5
-   repeat with tOctaveIteration from 1 up to mOctaves
-      put element (tOctaveIteration) of mOctaveList into tOctave
-   	------------------------------------------------------------------------------------------ WhiteKeys ------------------------------------------------------------------------------------------
-      put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
-      ------------------------------------------------------------------------------------------------------------------ C
-   	put element 1 of tWhiteKeysList into tWhiteKey
-   	if tWhiteKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [1,1,1,1]
-   	end if
-   	put tWhiteKey["KeyPath"] into tPath
-   	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-   	------------------------------------------------------------------------------------------------------------------ D
-   	put element 2 of tWhiteKeysList into tWhiteKey
-   	if tWhiteKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [1,1,1,1]
-   	end if
-   	put tWhiteKey["KeyPath"] into tPath
-   	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-   	------------------------------------------------------------------------------------------------------------------ E
-   	put element 3 of tWhiteKeysList into tWhiteKey
-   	if tWhiteKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [1,1,1,1]
-   	end if
-   	put tWhiteKey["KeyPath"] into tPath
-   	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-   	------------------------------------------------------------------------------------------------------------------ F
-   	put element 4 of tWhiteKeysList into tWhiteKey
-   	if tWhiteKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [1,1,1,1]
-   	end if
-   	put tWhiteKey["KeyPath"] into tPath
-      fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-   	------------------------------------------------------------------------------------------------------------------ G
-   	put element 5 of tWhiteKeysList into tWhiteKey
-   	if tWhiteKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [1,1,1,1]
-   	end if
-   	put tWhiteKey["KeyPath"] into tPath
-   	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-   	------------------------------------------------------------------------------------------------------------------ A
-   	put element 6 of tWhiteKeysList into tWhiteKey
-   	if tWhiteKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [1,1,1,1]
-   	end if
-   	put tWhiteKey["KeyPath"] into tPath
-   	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-   	------------------------------------------------------------------------------------------------------------------ B
-   	put element 7 of tWhiteKeysList into tWhiteKey
-   	if tWhiteKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [1,1,1,1]
-   	end if
-   	put tWhiteKey["KeyPath"] into tPath
-   	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-   	------------------------------------------------------------------------------------------ Black Keys ------------------------------------------------------------------------------------------
-      put tOctave["OctaveBlackKeysList"] into tBlackKeysList
-      ------------------------------------------------------------------------------------------------------------------ C#Db
-   	put element 1 of tBlackKeysList into tBlackKey
-   	if tBlackKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [0,0,0,1]
-   	end if
-   	put tBlackKey["KeyPath"] into tPath
-   	fill tPath on this canvas
-      --set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-      ------------------------------------------------------------------------------------------------------------------ D#Eb
-   	put element 2 of tBlackKeysList into tBlackKey
-   	if tBlackKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [0,0,0,1]
-   	end if
-   	put tBlackKey["KeyPath"] into tPath
-   	fill tPath on this canvas
-      --set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-   	------------------------------------------------------------------------------------------------------------------ F#Gb
-   	put element 3 of tBlackKeysList into tBlackKey
-   	if tBlackKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [0,0,0,1]
-   	end if
-   	put tBlackKey["KeyPath"] into tPath
-      fill tPath on this canvas
-      --set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-   	------------------------------------------------------------------------------------------------------------------ G#Ab
-   	put element 4 of tBlackKeysList into tBlackKey
-   	if tBlackKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [0,0,0,1]
-   	end if
-   	put tBlackKey["KeyPath"] into tPath
-   	fill tPath on this canvas
-      --set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-   	------------------------------------------------------------------------------------------------------------------ A#Bb
-   	put element 5 of tBlackKeysList into tBlackKey
-   	if tBlackKey["KeyHighlighted"] then
-   		set the paint of this canvas to solid paint with mHiliteColor
-   	else
-   		set the paint of this canvas to solid paint with color [0,0,0,1]
-   	end if
-   	put tBlackKey["KeyPath"] into tPath
-   	fill tPath on this canvas
-      --set the paint of this canvas to solid paint with color [0,0,0,1]
-      stroke tPath on this canvas
-
-   end repeat
-end handler
-
-public handler OnOpen()
-   OnGeometryChanged()
-   redraw all
-end handler
-
 -- this handler is called when the widget is saved
 public handler OnSave(out rProperties as Array)
 	-- put colorToString(mColor, true) into rProperties["color"]
@@ -498,7 +360,15 @@ public handler OnLoad(in pProperties as Array)
    -- put stringToColor(pProperties["hilite color"]) into mHiliteColor
 end handler
 
-----------------------------------------------------------------------------------------------------
+private variable mBlackKeysList as List
+private variable mWhiteKeysList as List
+private variable mSelectedKeyList as optional List
+private variable mSelectedKey as optional Array
+private variable mOctaveList as List
+
+-----------------------------------------------------------------------------------------------  Mouse Handlers --------------------------------------------------------------------------------------
+public variable mPianoMouseButtonDown as Boolean
+
 public handler OnMouseUp()
    variable tOctave as Array
    variable tBlackKeysList as List
@@ -509,7 +379,6 @@ public handler OnMouseUp()
    variable tIndex as Number
    variable tNotesNumsOff as List
    put false into  mPianoMouseButtonDown
-   --- execute script "global gPianoMouseButtonDown ; put false into gPianoMouseButtonDown"
    if mSelectedKey is not nothing then
       if mSelectedKey["keycolor"] is "black" then
          put unhighlightChordFormula(mSelectedKey["KeyNumber"]) into tNotesNumsOff
@@ -535,40 +404,8 @@ public handler OnMouseUp()
       put nothing into mSelectedKey
       redraw all
    end if
-   -- redraw all
-  post "mouseUp" with [the click button]
- -- post "mouseUp" to my script object with [the click button]
+  post "mouseUp" with [the click button] --  to my script object with [the click button]
 end handler
-
-----------------------------------------------------------------------------------------------------
-
-public handler OnMouseCancel()
-      -- put false into gPianoMouseButtonDown
-      --- execute script "global gPianoMouseButtonDown ; put false into gPianoMouseButtonDown"
-	--redraw all
-end handler
-
-public handler OnMouseEnter()
-   --put false into gPianoMouseButtonDown
-   --execute script "global gPianoMouseButtonDown ; return gPianoMouseButtonDown"
-   --put the result into gPianoMouseButtonDown
-   -- log gPianoMouseButtonDown
-end handler
-
--- OctaveList
---    OctaveName
---    OctaveNumber
---    OctaveBackgroundPath
---    BlackKeysList
---       KeyName
---       KeyNumber
---       KeyPath
---       KeyHighlighted
---    WhiteKeysList
---       KeyName
---       KeyNumber
---       KeyPath
---       KeyHighlighted
 
 public handler OnMouseDown()
    variable tOctaveCounter as Number
@@ -616,8 +453,8 @@ public handler OnMouseDown()
       repeat with tIndex from 1 up to 5
          put element tIndex of tBlackKeysList into tBlackKey
          put tBlackKey["KeyPath"] into tPath
-         -- if hitTestPath( the mouse position, tPath, 0, true) then
-         if (the mouse position is within the bounding box of tPath) then
+         if hitTestPath( the mouse position, tPath, 0, true) then
+         -- if (the mouse position is within the bounding box of tPath) then
             put highlightChordFormula(tBlackKey["KeyNumber"]) into tChordNotes
             post "noteOn" with [ tBlackKey["KeyNumber"] formatted as string & element 1 of tChordNotes,tBlackKey["KeyName"]&tOctave["OctaveName"]& element 2 of tChordNotes]
             put true into tBlackKey["KeyHighlighted"]
@@ -659,8 +496,7 @@ public handler OnMouseDown()
       highlightChordFormula(mSelectedKey["KeyNumber"])
    end if
 	redraw all
-   post "mouseDown" with [the click button]
-	-- post "mouseDown" to my script object with [the click button]
+   post "mouseDown" with [the click button] --- to my script object with [the click button]
 end handler
 
 public handler OnMouseMove()
@@ -688,7 +524,6 @@ public handler OnMouseMove()
                put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
                put unhighlightChordFormula(mSelectedKey["KeyNumber"]) into tChordNotes
                post "noteOff" with [ mSelectedKey["KeyNumber"] formatted as string & element 1 of tChordNotes,mSelectedKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes]
-               --post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"]]
                put tOctave["OctaveBlackKeysList"] into tBlackKeysList
                put element mSelectedKey["index"] of tBlackKeysList into tBlackKey
                put false into tBlackKey["KeyHighlighted"]
@@ -699,7 +534,6 @@ public handler OnMouseMove()
                put element mSelectedKey["OctaveNumber"] of mOctaveList into tOctave
                put unhighlightChordFormula(mSelectedKey["KeyNumber"]) into tChordNotes
                post "noteOff" with [ mSelectedKey["KeyNumber"] formatted as string & element 1 of tChordNotes,mSelectedKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes]
-               --post "noteOff" with [ mSelectedKey["KeyNumber"], mSelectedKey["KeyName"]&tOctave["OctaveName"]]
                put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
                put element mSelectedKey["index"] of tWhiteKeysList into tWhiteKey
                put false into tWhiteKey["KeyHighlighted"]
@@ -717,11 +551,10 @@ public handler OnMouseMove()
             repeat with tIndex from 1 up to 5
                put element tIndex of tBlackKeysList into tBlackKey
                put tBlackKey["KeyPath"] into tPath
-               -- if hitTestPath( the mouse position, tPath, 0, true) then
-               if (the mouse position is within the bounding box of tPath) then
+               if hitTestPath( the mouse position, tPath, 0, true) then
+               -- if (the mouse position is within the bounding box of tPath) then --- causes potentialy multiple positive results (hiliting multiple keys for one point)
                   put highlightChordFormula(tBlackKey["KeyNumber"]) into tChordNotes
                   post "noteOn" with [ tBlackKey["KeyNumber"] formatted as string & element 1 of tChordNotes,tBlackKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes]
-                  -- post "noteOn" with [ tBlackKey["KeyNumber"],tBlackKey["KeyName"]&tOctave["OctaveName"]]
                    put true into tBlackKey["KeyHighlighted"]
                    put tBlackKey into element tIndex of tBlackKeysList
                    put tBlackKey into mSelectedKey
@@ -742,7 +575,6 @@ public handler OnMouseMove()
                if hitTestPath( the mouse position, tPath, 0, true) then
                   put highlightChordFormula(tWhiteKey["KeyNumber"]) into tChordNotes
                   post "noteOn" with [ tWhiteKey["KeyNumber"] formatted as string & element 1 of tChordNotes,tWhiteKey["KeyName"]&tOctave["OctaveName"] & element 2 of tChordNotes]
-                 -- post "noteOn" with [ tWhiteKey["KeyNumber"],tWhiteKey["KeyName"]&tOctave["OctaveName"]]
                   put true into tWhiteKey["KeyHighlighted"]
                   put tWhiteKey into element tIndex of tWhiteKeysList
                   put tWhiteKey into mSelectedKey
@@ -765,7 +597,18 @@ public handler OnMouseMove()
    end if
 end handler
 
-----------------------------------------------------------------------------------------------------
+public handler OnMouseCancel()
+      -- put false into gPianoMouseButtonDown
+      --- execute script "global gPianoMouseButtonDown ; put false into gPianoMouseButtonDown"
+	--redraw all
+end handler
+
+public handler OnMouseEnter()
+   --put false into gPianoMouseButtonDown
+   --execute script "global gPianoMouseButtonDown ; return gPianoMouseButtonDown"
+   --put the result into gPianoMouseButtonDown
+end handler
+
 --- Monte's point-within-path handler:
 public handler hitTestPath(in pPoint as Point, in pPath as Path, in pStrokeWidth as Number, in pWithin as Boolean) returns Boolean
 	-- set pWithin true and pStrokeWidth to 0 if you want to hit-test the filled path
@@ -910,8 +753,6 @@ public handler highlightChordFormula(in pKeyNum as Integer) returns optional any
          end if
       end if
    end repeat
-   -- delete the last char of tNoteNumsOn
-   -- delete the last char of tNoteNamesOn
    -- log tNoteNumsOn
    -- log tNoteNamesOn
    push tNoteNumsOn onto tNotesOn
@@ -954,7 +795,7 @@ public handler getOctaveFromNoteNumber(in pNoteNum as Integer) returns optional 
       return 11
    end if
 end handler
-
+-----------------------------------------------------------------------------------------------  Creating & Drawing --------------------------------------------------------------------------------------
 --- called when widget is created
 public handler OnCreate()
    -- OctaveList
@@ -975,6 +816,7 @@ public handler OnCreate()
 
 	put stringToColor("0,255,0") into mHiliteColor
    put 11 into mOctaves
+   put 1 into mStrokeSize
    put nothing into mSelectedKey
    put false into mPianoMouseButtonDown
    variable tBlackKeysList as List
@@ -995,7 +837,7 @@ public handler OnCreate()
    variable tMyWidthMinusStroke as Number
    variable tMyHeightMinusStroke as Number
 
-   put 1 into mStrokeSize
+   -- put 1 into mStrokeSize
    put mStrokeSize / 2 into tHalfStrokeOffset
    put my width - (mStrokeSize) into tMyWidthMinusStroke
    put my height - (mStrokeSize) into tMyHeightMinusStroke
@@ -1133,22 +975,19 @@ public handler OnGeometryChanged()
 	variable tPath as Path
    variable tBlackKeyPath as Path
    put path "M0,0v81.841C0,81.841,0,84,2.679,84h8.642c0,0,2.679,0,2.679-2.159V0H0z" into tBlackKeyPath -- BlackKeys all have identical shape
-   variable tString as String
-   variable tOctaveIteration as Number
 
+   variable tOctaveIteration as Number
    variable tOctaveWidth as Number
    variable tWhiteKeySpacing as Number
    variable tBlackKeySpacing as Number
-
    variable tHalfStrokeOffset as Number
    variable tMyWidthMinusStroke as Number
    variable tMyHeightMinusStroke as Number
 
-   put 1 into mStrokeSize
+   -- put 1 into mStrokeSize
    put mStrokeSize / 2 into tHalfStrokeOffset
    put my width - (mStrokeSize) into tMyWidthMinusStroke
    put my height - (mStrokeSize) into tMyHeightMinusStroke
-
    put tMyWidthMinusStroke / mOctaves into tOctaveWidth
    put tMyWidthMinusStroke /7 / mOctaves into tWhiteKeySpacing
    put tMyWidthMinusStroke /12 / mOctaves into tBlackKeySpacing
@@ -1251,6 +1090,164 @@ public handler OnGeometryChanged()
        ------------------------------------------
     end repeat
     redraw all
+end handler
+--------------------------------------------------------------------------------------------------------------
+-- called whenever LiveCode needs to redraw the widget
+public handler OnPaint()
+   variable tOctave as Array
+   variable tBlackKeysList as List
+   variable tBlackKey as Array
+   variable tWhiteKeysList as List
+	variable tWhiteKey as Array
+	variable tPath as Path
+   variable tOctaveIteration as Number
+   set the antialias of this canvas to true
+   set the stroke width of this canvas to mStrokeSize
+   repeat with tOctaveIteration from 1 up to mOctaves
+      put element (tOctaveIteration) of mOctaveList into tOctave
+   	------------------------------------------------------------------------------------------ WhiteKeys ------------------------------------------------------------------------------------------
+      put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+      ------------------------------------------------------------------------------------------------------------------ C
+   	put element 1 of tWhiteKeysList into tWhiteKey
+   	if tWhiteKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [1,1,1,1]
+   	end if
+   	put tWhiteKey["KeyPath"] into tPath
+   	fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   	------------------------------------------------------------------------------------------------------------------ D
+   	put element 2 of tWhiteKeysList into tWhiteKey
+   	if tWhiteKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [1,1,1,1]
+   	end if
+   	put tWhiteKey["KeyPath"] into tPath
+   	fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   	------------------------------------------------------------------------------------------------------------------ E
+   	put element 3 of tWhiteKeysList into tWhiteKey
+   	if tWhiteKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [1,1,1,1]
+   	end if
+   	put tWhiteKey["KeyPath"] into tPath
+   	fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   	------------------------------------------------------------------------------------------------------------------ F
+   	put element 4 of tWhiteKeysList into tWhiteKey
+   	if tWhiteKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [1,1,1,1]
+   	end if
+   	put tWhiteKey["KeyPath"] into tPath
+      fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   	------------------------------------------------------------------------------------------------------------------ G
+   	put element 5 of tWhiteKeysList into tWhiteKey
+   	if tWhiteKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [1,1,1,1]
+   	end if
+   	put tWhiteKey["KeyPath"] into tPath
+   	fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   	------------------------------------------------------------------------------------------------------------------ A
+   	put element 6 of tWhiteKeysList into tWhiteKey
+   	if tWhiteKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [1,1,1,1]
+   	end if
+   	put tWhiteKey["KeyPath"] into tPath
+   	fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   	------------------------------------------------------------------------------------------------------------------ B
+   	put element 7 of tWhiteKeysList into tWhiteKey
+   	if tWhiteKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [1,1,1,1]
+   	end if
+   	put tWhiteKey["KeyPath"] into tPath
+   	fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   	------------------------------------------------------------------------------------------ Black Keys ------------------------------------------------------------------------------------------
+      put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+      ------------------------------------------------------------------------------------------------------------------ C#Db
+   	put element 1 of tBlackKeysList into tBlackKey
+   	if tBlackKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [0,0,0,1]
+   	end if
+   	put tBlackKey["KeyPath"] into tPath
+   	fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+      ------------------------------------------------------------------------------------------------------------------ D#Eb
+   	put element 2 of tBlackKeysList into tBlackKey
+   	if tBlackKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [0,0,0,1]
+   	end if
+   	put tBlackKey["KeyPath"] into tPath
+   	fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   	------------------------------------------------------------------------------------------------------------------ F#Gb
+   	put element 3 of tBlackKeysList into tBlackKey
+   	if tBlackKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [0,0,0,1]
+   	end if
+   	put tBlackKey["KeyPath"] into tPath
+      fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   	------------------------------------------------------------------------------------------------------------------ G#Ab
+   	put element 4 of tBlackKeysList into tBlackKey
+   	if tBlackKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [0,0,0,1]
+   	end if
+   	put tBlackKey["KeyPath"] into tPath
+   	fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   	------------------------------------------------------------------------------------------------------------------ A#Bb
+   	put element 5 of tBlackKeysList into tBlackKey
+   	if tBlackKey["KeyHighlighted"] then
+   		set the paint of this canvas to solid paint with mHiliteColor
+   	else
+   		set the paint of this canvas to solid paint with color [0,0,0,1]
+   	end if
+   	put tBlackKey["KeyPath"] into tPath
+   	fill tPath on this canvas
+      set the paint of this canvas to solid paint with color [0,0,0,1]
+      stroke tPath on this canvas
+   end repeat
+end handler
+
+-- this handler is called when a card containg the widget is opened
+public handler OnOpen()
+   OnGeometryChanged()
+   redraw all
 end handler
 
 end widget
