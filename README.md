@@ -1,25 +1,24 @@
-# LCB_PianoWidget
-A LiveCode Builder Graphical Piano Keyboard Widget 
+# LiveCode Builder Piano Widget
+A LCB Graphical Piano Keyboard Widget 
 
-NOTE: 
+##NOTE: 
 
 This Widget is a graphical GUI element only. It produces no sound on it's own and is meant to be attached to a MIDI play back engine.
-
 See my other Repo's for playback engine's for Apple devices.
  
-Video Demo Here:
+##Video Demo Here:
 
 https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 
 This is a work in progress at the moment.
 
-Version 0.9
+###Version 0.9
 
 - Changed rendering system (back to SVG paths but from more acurate drawing) and optimized method based on Bernd's code.
 
 - Added the ability to set the key range via new lowOctave and highOctave properties.
 
-Version 0.7
+###Version 0.7
 
 - Auto-hilighting chords via a chord formula property
 
@@ -30,7 +29,7 @@ Version 0.7
 - Better graphics rendering with rounded rects instead of SVG Paths -- Thanks Bernd!
 
 
-Planned features :
+##Planned features :
 
 Version 2.0
 
