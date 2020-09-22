@@ -1,5 +1,5 @@
 # LiveCode Builder Piano Widget
-A LCB Graphical Piano Keyboard Widget 
+A Graphical Piano Keyboard Widget written in LCB
 
 ## NOTE: 
 
@@ -14,9 +14,9 @@ This is a work in progress at the moment.
 
 ### Version 0.9
 
-- Changed rendering system (back to SVG paths but from more acurate drawing) and optimized method based on Bernd's code.
+- Changed rendering system (back to SVG paths but from more acurate drawing) and optimized method based on Bernd's code
 
-- Added the ability to set the key range via new lowOctave and highOctave properties.
+- Added the ability to set the key range via new lowOctave and highOctave properties
 
 ### Version 0.7
 
@@ -34,6 +34,4 @@ This is a work in progress at the moment.
 Version 2.0
 
 - Implement Multi-Touch for Mobile Devices
-
-
 
