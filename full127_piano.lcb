@@ -76,8 +76,8 @@ use com.livecode.library.widgetutils
 -- adding metadata to ensure the extension displays correctly in livecode
 metadata title is "Piano Widget"
 metadata author is "Paul McClernan, Bernd Niggemann"
-metadata version is "0.8"
-metadata preferredSize is "1000,100"
+metadata version is "0.9"
+metadata preferredSize is "600,100"
 metadata svgicon is "M0,0v69.6c0,1.4,1.1,2.5,2.4,2.5h9.7c0.8,0,1.5-0.4,2-1.1c0.4,0.7,1.1,1.1,2,1.1h9.8c0.8,0,1.5-0.4,1.9-1.1 c0.4,0.6,1.1,1.1,1.9,1.1h9.8c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1h9.8c0.8,0,1.5-0.4,2-1.1c0.4,0.7,1.1,1.1,2,1.1h9.7 c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1h9.7c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1H94c1.3,0,2.4-1.1,2.4-2.5V0H0z M95.4,69.6c0,0.8-0.6,1.5-1.4,1.5h-9.8c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h8.1L95.4,69.6z M80.4,71.1h-9.7 c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h3.6v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C81.8,70.4,81.2,71.1,80.4,71.1z M57,71.1c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h3.7v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7c0,0.8-0.6,1.5-1.4,1.5 L57,71.1z M53.1,71.1h-9.8c-0.8,0-1.4-0.7-1.4-1.5V1H50v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C54.5,70.4,53.8,71.1,53.1,71.1z M28.3,69.6V46.9h2.5c1,0,1.9-0.9,1.9-2V1h8.1v68.6c0,0.8-0.6,1.5-1.4,1.5h-9.8C28.9,71.1,28.3,70.4,28.3,69.6z M14.7,69.6V46.9 h2.5c1,0,1.9-0.9,1.9-2V1h3.7v43.6l0,0v0.3c0,1.1,0.9,2,1.9,2h2.5v22.7c0,0.8-0.6,1.5-1.4,1.5H16C15.3,71.1,14.7,70.4,14.7,69.6z M12.1,71.1H2.4c-0.8,0-1.4-0.7-1.4-1.5V1h8.1v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C13.5,70.4,12.9,71.1,12.1,71.1z"
 
 -----------------------------------------------------------------------------------------------  Properties --------------------------------------------------------------------------------------
@@ -117,7 +117,6 @@ private handler setHilightedNotes(pHilightNotes) returns nothing
 
    split pHilightNotes by "," into tKeysList
    -- log tKeysList
-
    repeat for each element tKey in tKeysList
       --- check if it's a sharp without flat or flat
       if the number of chars in tKey > 1 then
@@ -234,21 +233,64 @@ private handler getHilightedNotes() returns String
    return tNoteNumsString &"\n"& tNamesString
 end handler
 
-property octaves  get getOctaveAmount  set setOctaveAmount
-metadata octaves.editor is "com.livecode.pi.enum"
-metadata octaves.options is "1,2,3,4,5,6,7,8,9,10,11"
-metadata octaves.default is "11"
-metadata octaves.label is "Octaves Amount"
-private variable mOctavesStr as String
+property octaves  get getOctaveAmount  -- set setOctaveAmount
+--metadata octaves.editor is "com.livecode.pi.enum"
+--metadata octaves.options is "1,2,3,4,5,6,7,8,9,10,11"
+--metadata octaves.default is "4"
+--metadata octaves.label is "Octaves Amount"
+--private variable mOctavesStr as String
 private variable mOctaves as Integer
-public handler setOctaveAmount(in pOctavesStr as String) returns nothing
-   put pOctavesStr into mOctavesStr
-	put (pOctavesStr parsed as number) into mOctaves
+--public handler setOctaveAmount(in pOctavesStr as String) returns nothing
+--   put pOctavesStr into mOctavesStr
+--	put (pOctavesStr parsed as number) into mOctaves
+--   OnGeometryChanged()
+--   redraw all
+--end handler
+public handler getOctaveAmount() returns Integer -- String
+   -- return mOctavesStr
+   return mOctaves
+end handler
+
+property lowOctave  get getLowOctave  set setLowOctave
+metadata lowOctave.editor is "com.livecode.pi.enum"
+metadata lowOctave.options is "-1,0,1,2,3,4,5,6,7,8,9"
+metadata lowOctave.default is "3"
+metadata lowOctave.label is "Low Octave"
+private variable mLowOctaveStr as String
+private variable mLowOctave as Integer
+public handler setLowOctave(in pLowOctaveStr as String) returns nothing
+   put pLowOctaveStr into mLowOctaveStr
+	put (pLowOctaveStr parsed as number) + 2 into mLowOctave
+   if mLowOctave > mHighOctave then
+      setHighOctave((mLowOctave -2) formatted as string)
+   end if
+   put mHighOctave - mLowOctave + 1 into mOctaves
    OnGeometryChanged()
    redraw all
 end handler
-public handler getOctaveAmount() returns String
-   return mOctavesStr
+public handler getLowOctave() returns String
+   return mLowOctaveStr
+end handler
+
+property highOctave  get getHighOctave  set setHighOctave
+metadata highOctave.editor is "com.livecode.pi.enum"
+metadata highOctave.options is "-1,0,1,2,3,4,5,6,7,8,9"
+metadata highOctave.default is "6"
+metadata highOctave.label is "High Octave"
+private variable mHighOctaveStr as String
+private variable mHighOctave as Integer
+public handler setHighOctave(in pHighOctaveStr as String) returns nothing
+   put pHighOctaveStr into mHighOctaveStr
+	put (pHighOctaveStr parsed as number) + 2 into mHighOctave
+   if mLowOctave > mHighOctave then
+      setLowOctave((mHighOctave -2) formatted as string)
+   end if
+   put mHighOctave - mLowOctave + 1 into mOctaves
+   OnGeometryChanged()
+   redraw all
+end handler
+public handler getHighOctave() returns String
+   return mHighOctaveStr
 end handler
 
 property chordFormula get getChordFormula  set setChordFormula
@@ -446,12 +488,15 @@ public handler OnMouseDown()
          put nothing into mSelectedKey
       end if
    end if
-   repeat with tOctaveCounter from 1 up to mOctaves
+   repeat with tOctaveCounter from mLowOctave up to mHighOctave
       put element tOctaveCounter of mOctaveList into tOctave
 
       put tOctave["OctaveBlackKeysList"] into tBlackKeysList
       repeat with tIndex from 1 up to 5
          put element tIndex of tBlackKeysList into tBlackKey
+         if tBlackKey["KeyNumber"] > 127 then
+            exit repeat
+         end if
          put tBlackKey["KeyPath"] into tPath
          if hitTestPath( the mouse position, tPath, 0, true) then
          -- if (the mouse position is within the bounding box of tPath) then
@@ -473,6 +518,9 @@ public handler OnMouseDown()
       put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
       repeat with tIndex from 1 up to 7
          put element tIndex of tWhiteKeysList into tWhiteKey
+         if tWhiteKey["KeyNumber"] > 127 then
+            exit repeat
+         end if
          put tWhiteKey["KeyPath"] into tPath
          if hitTestPath( the mouse position, tPath, 0, true) then
             put highlightChordFormula(tWhiteKey["KeyNumber"]) into tChordNotes
@@ -545,11 +593,15 @@ public handler OnMouseMove()
          end if
       end if
       if not tSameSelectedKey then -- added
-         repeat with tOctaveCounter from 1 up to mOctaves
+         repeat with tOctaveCounter from mLowOctave up to mHighOctave
             put element tOctaveCounter of mOctaveList into tOctave
+
             put tOctave["OctaveBlackKeysList"] into tBlackKeysList
             repeat with tIndex from 1 up to 5
                put element tIndex of tBlackKeysList into tBlackKey
+               if tBlackKey["KeyNumber"] > 127 then
+                  exit repeat
+               end if
                put tBlackKey["KeyPath"] into tPath
                if hitTestPath( the mouse position, tPath, 0, true) then
                -- if (the mouse position is within the bounding box of tPath) then --- causes potentialy multiple positive results (hiliting multiple keys for one point)
@@ -571,6 +623,9 @@ public handler OnMouseMove()
             put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
             repeat with tIndex from 1 up to 7
                put element tIndex of tWhiteKeysList into tWhiteKey
+               if tWhiteKey["KeyNumber"] > 127 then
+                  exit repeat
+               end if
                put tWhiteKey["KeyPath"] into tPath
                if hitTestPath( the mouse position, tPath, 0, true) then
                   put highlightChordFormula(tWhiteKey["KeyNumber"]) into tChordNotes
@@ -798,6 +853,36 @@ end handler
 -----------------------------------------------------------------------------------------------  Creating & Drawing --------------------------------------------------------------------------------------
 --- called when widget is created
 public handler OnCreate()
+   ------------------ Initialize Properties --------------------
+	put stringToColor("0,255,0") into mHiliteColor
+   put 4 into mOctaves
+   put "1" into mLowOctaveStr
+   put 3 into mLowOctave
+   put "4" into mHighOctaveStr
+   put 6 into mHighOctave
+   put 1 into mStrokeSize
+   put nothing into mSelectedKey
+   put false into mPianoMouseButtonDown
+   --------------------------------------------------------------
+
+   variable tBlackKeysList as List
+   variable tWhiteKeysList as List
+   variable tArray as Array
+   variable tBlackKeyPath as Path
+   put path "M0,0v81.841C0,81.841,0,84,2.679,84h8.642c0,0,2.679,0,2.679-2.159V0H0z" into tBlackKeyPath -- BlackKeys all have identical shape
+   variable tPath as Path
+	variable tWhiteKey as Array
+	variable tBlackKey as Array
+
+   variable tOctaveWidth as Number
+   variable tWhiteKeySpacing as Number
+   variable tBlackKeySpacing as Number
+   variable tOctaveIteration as Number
+   variable tOctaveShift as Number
+   variable tHalfStrokeOffset as Number
+   variable tMyWidthMinusStroke as Number
+   variable tMyHeightMinusStroke as Number
+
    -- OctaveList
    --    OctaveName
    --    OctaveNumber
@@ -814,30 +899,6 @@ public handler OnCreate()
    --       KeyPath
    --       KeyHighlighted
 
-	put stringToColor("0,255,0") into mHiliteColor
-   put 11 into mOctaves
-   put 1 into mStrokeSize
-   put nothing into mSelectedKey
-   put false into mPianoMouseButtonDown
-   variable tBlackKeysList as List
-   variable tWhiteKeysList as List
-   variable tArray as Array
-   variable tBlackKeyPath as Path
-   put path "M0,0v81.841C0,81.841,0,84,2.679,84h8.642c0,0,2.679,0,2.679-2.159V0H0z" into tBlackKeyPath -- BlackKeys all have identical shape
-   variable tPath as Path
-	variable tWhiteKey as Array
-	variable tBlackKey as Array
-
-   variable tOctaveWidth as Number
-   variable tWhiteKeySpacing as Number
-   variable tBlackKeySpacing as Number
-   variable tOctaveIteration as Number
-
-   variable tHalfStrokeOffset as Number
-   variable tMyWidthMinusStroke as Number
-   variable tMyHeightMinusStroke as Number
-
-   -- put 1 into mStrokeSize
    put mStrokeSize / 2 into tHalfStrokeOffset
    put my width - (mStrokeSize) into tMyWidthMinusStroke
    put my height - (mStrokeSize) into tMyHeightMinusStroke
@@ -845,6 +906,7 @@ public handler OnCreate()
    put tMyWidthMinusStroke / mOctaves into tOctaveWidth
    put tMyWidthMinusStroke /7 / mOctaves into tWhiteKeySpacing
    put tMyWidthMinusStroke /12 / mOctaves into tBlackKeySpacing
+   put (mLowOctave * tOctaveWidth) - tOctaveWidth into tOctaveShift
 
    repeat with tOctaveIteration from 0 up to 10
       ----------------------------------------------------------------------------------------------------------------Octave 0----------------------------------------------------------------------------------------
@@ -855,7 +917,7 @@ public handler OnCreate()
    	put "C" into tArray["KeyName"]
    	put path "M16.679,84C14,84,14,81.841,14,81.841V0H0v126.897c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103 V84H16.679z" into tPath
       scale tPath by [(tOctaveWidth /7) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [0 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [0 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 0 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -863,7 +925,7 @@ public handler OnCreate()
    	put "D" into tArray["KeyName"]
    	put path "M20.679,84C18,84,18,81.841,18,81.841V0H4v81.841C4,84,1.321,84,1.321,84H0v42.897c0,0,0,3.103,3.827,3.103	h16.346c0,0,3.827,0,3.827-3.103V84H20.679z" into tPath
       scale tPath by [(tOctaveWidth /7) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 2 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -871,7 +933,7 @@ public handler OnCreate()
    	put "E" into tArray["KeyName"]
    	put path "M8,0v81.841C8,84,5.321,84,5.321,84H0v42.897c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103V0H8z" into tPath
       scale tPath by [(tOctaveWidth /7) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing*2  + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing*2  + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 4 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -879,7 +941,7 @@ public handler OnCreate()
    	put "F" into tArray["KeyName"]
    	put path "M23.321,84h-8.642C12,84,12,81.841,12,81.841V0H0v126.897c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103V83.922C23.612,83.998,23.321,84,23.321,84z" into tPath
       scale tPath by [(tOctaveWidth /7) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing*3  + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing*3  + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 5 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -887,7 +949,7 @@ public handler OnCreate()
    	put "G" into tArray["KeyName"]
    	put path "M18.679,84C16,84,16,81.841,16,81.841V0H2v81.841c0,1.45-1.206,1.924-2,2.081v42.975c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103V84H18.679z" into tPath
       scale tPath by [(tOctaveWidth /7)/ the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing*4  + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing*4  + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 7 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -895,7 +957,7 @@ public handler OnCreate()
    	put "A" into tArray["KeyName"]
    	put path "M22.679,84C20,84,20,81.841,20,81.841V0H6v81.841C6,84,3.321,84,3.321,84H0v42.897c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103V84H22.679z" into tPath
       scale tPath by [(tOctaveWidth /7)/ the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing*5  + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing*5  + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 9 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -903,7 +965,7 @@ public handler OnCreate()
    	put "B" into tArray["KeyName"]
    	put path "M10,0v81.841C10,84,7.321,84,7.321,84H0v42.897c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103V0H10z" into tPath
       scale tPath by [(tOctaveWidth /7)/ the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing*6 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing*6 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 11 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -914,7 +976,7 @@ public handler OnCreate()
    	put "C#Db" into tArray["KeyName"]
    	put tBlackKeyPath into tPath
       scale tPath by [(tOctaveWidth /12)/ the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)*0.64615384615385]
-      translate tPath by [tBlackKeySpacing + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tBlackKeySpacing + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 1 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -922,7 +984,7 @@ public handler OnCreate()
    	put "D#Eb" into tArray["KeyName"]
    	put tBlackKeyPath into tPath
       scale tPath by [(tOctaveWidth /12)/ the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)*0.64615384615385]
-      translate tPath by [tBlackKeySpacing*3 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tBlackKeySpacing*3 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 3 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -930,7 +992,7 @@ public handler OnCreate()
    	put "F#Gb" into tArray["KeyName"]
    	put tBlackKeyPath into tPath
       scale tPath by [(tOctaveWidth /12) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)*0.64615384615385]
-      translate tPath by [tBlackKeySpacing*6 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tBlackKeySpacing*6 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 6 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -938,7 +1000,7 @@ public handler OnCreate()
    	put "G#Ab" into tArray["KeyName"]
    	put tBlackKeyPath into tPath
       scale tPath by [(tOctaveWidth /12) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)*0.64615384615385]
-      translate tPath by [tBlackKeySpacing*8 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tBlackKeySpacing*8 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 8 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -946,7 +1008,7 @@ public handler OnCreate()
    	put "A#Bb" into tArray["KeyName"]
    	put tBlackKeyPath into tPath
       scale tPath by [(tOctaveWidth /12) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)*0.64615384615385]
-      translate tPath by [tBlackKeySpacing*10 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tBlackKeySpacing*10 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tArray["KeyPath"]
    	put false into tArray["KeyHighlighted"]
    	put 10 + (tOctaveIteration * 12) into tArray["KeyNumber"]
@@ -978,6 +1040,8 @@ public handler OnGeometryChanged()
 
    variable tOctaveIteration as Number
    variable tOctaveWidth as Number
+   variable tOctaveShift as Number
+
    variable tWhiteKeySpacing as Number
    variable tBlackKeySpacing as Number
    variable tHalfStrokeOffset as Number
@@ -991,8 +1055,9 @@ public handler OnGeometryChanged()
    put tMyWidthMinusStroke / mOctaves into tOctaveWidth
    put tMyWidthMinusStroke /7 / mOctaves into tWhiteKeySpacing
    put tMyWidthMinusStroke /12 / mOctaves into tBlackKeySpacing
+   put (mLowOctave * tOctaveWidth) - tOctaveWidth into tOctaveShift
 
-   repeat with tOctaveIteration from 0 up to 10 -- mOctaves-1
+   repeat with tOctaveIteration from 0 up to 10
       put element (tOctaveIteration+1) of mOctaveList into tOctave
    	------------------------------------------------------------------------------------------ WhiteKeys ------------------------------------------------------------------------------------------
       put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
@@ -1000,49 +1065,49 @@ public handler OnGeometryChanged()
    	put element 1 of tWhiteKeysList into tWhiteKey
       put path "M16.679,84C14,84,14,81.841,14,81.841V0H0v126.897c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103 V84H16.679z" into tPath
       scale tPath by [(tOctaveWidth /7) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [0 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [0 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tWhiteKey["KeyPath"]
       put tWhiteKey into element 1 of tWhiteKeysList
    	----------------------0-------------------------------------------------------------------------------------------- D
    	put element 2 of tWhiteKeysList into tWhiteKey
       put path "M20.679,84C18,84,18,81.841,18,81.841V0H4v81.841C4,84,1.321,84,1.321,84H0v42.897c0,0,0,3.103,3.827,3.103	h16.346c0,0,3.827,0,3.827-3.103V84H20.679z" into tPath
       scale tPath by [(tOctaveWidth /7) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tWhiteKey["KeyPath"]
       put tWhiteKey into element 2 of tWhiteKeysList
    	--------------------------------------------------------------------------------------------------- --------------- E
    	put element 3 of tWhiteKeysList into tWhiteKey
       put path "M8,0v81.841C8,84,5.321,84,5.321,84H0v42.897c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103V0H8z" into tPath
       scale tPath by [(tOctaveWidth /7) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing*2  + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing*2  + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tWhiteKey["KeyPath"]
       put tWhiteKey into element 3 of tWhiteKeysList
    	------------------------------------------------------------------------------------------------------------------ F
    	put element 4 of tWhiteKeysList into tWhiteKey
       put path "M23.321,84h-8.642C12,84,12,81.841,12,81.841V0H0v126.897c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103V83.922C23.612,83.998,23.321,84,23.321,84z" into tPath
       scale tPath by [(tOctaveWidth /7) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing*3  + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing*3  + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tWhiteKey["KeyPath"]
       put tWhiteKey into element 4 of tWhiteKeysList
    	------------------------------------------------------------------------------------------------------------------ G
    	put element 5 of tWhiteKeysList into tWhiteKey
       put path "M18.679,84C16,84,16,81.841,16,81.841V0H2v81.841c0,1.45-1.206,1.924-2,2.081v42.975c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103V84H18.679z" into tPath
       scale tPath by [(tOctaveWidth /7)/ the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing*4  + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing*4  + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tWhiteKey["KeyPath"]
       put tWhiteKey into element 5 of tWhiteKeysList
    	------------------------------------------------------------------------------------------------------------------ A
    	put element 6 of tWhiteKeysList into tWhiteKey
       put path "M22.679,84C20,84,20,81.841,20,81.841V0H6v81.841C6,84,3.321,84,3.321,84H0v42.897c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103V84H22.679z" into tPath
       scale tPath by [(tOctaveWidth /7)/ the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing*5  + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing*5  + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tWhiteKey["KeyPath"]
       put tWhiteKey into element 6 of tWhiteKeysList
    	------------------------------------------------------------------------------------------------------------------ B
    	put element 7 of tWhiteKeysList into tWhiteKey
       put path "M10,0v81.841C10,84,7.321,84,7.321,84H0v42.897c0,0,0,3.103,3.827,3.103h16.346c0,0,3.827,0,3.827-3.103V0H10z" into tPath
       scale tPath by [(tOctaveWidth /7)/ the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)]
-      translate tPath by [tWhiteKeySpacing*6 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tWhiteKeySpacing*6 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tWhiteKey["KeyPath"]
       put tWhiteKey into element 7 of tWhiteKeysList
    	------------------------------------------------------------------------------------------ Black Keys ------------------------------------------------------------------------------------------
@@ -1051,35 +1116,35 @@ public handler OnGeometryChanged()
    	put element 1 of tBlackKeysList into tBlackKey
    	put tBlackKeyPath into tPath
       scale tPath by [(tOctaveWidth /12)/ the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)*0.64615384615385]
-      translate tPath by [tBlackKeySpacing + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tBlackKeySpacing + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tBlackKey["KeyPath"]
    	put tBlackKey into element 1 of tBlackKeysList
    	------------------------------------------------------------------------------------------------------------------ D#Eb
    	put element 2 of tBlackKeysList into tBlackKey
    	put tBlackKeyPath into tPath
       scale tPath by [(tOctaveWidth /12)/ the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)*0.64615384615385]
-      translate tPath by [tBlackKeySpacing*3 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tBlackKeySpacing*3 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tBlackKey["KeyPath"]
    	put tBlackKey into element 2 of tBlackKeysList
    	------------------------------------------------------------------------------------------------------------------ F#Gb
    	put element 3 of tBlackKeysList into tBlackKey
    	put tBlackKeyPath into tPath
       scale tPath by [(tOctaveWidth /12) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)*0.64615384615385]
-      translate tPath by [tBlackKeySpacing*6 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tBlackKeySpacing*6 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tBlackKey["KeyPath"]
       put tBlackKey into element 3 of tBlackKeysList
    	------------------------------------------------------------------------------------------------------------------ G#Ab
    	put element 4 of tBlackKeysList into tBlackKey
    	put tBlackKeyPath into tPath
       scale tPath by [(tOctaveWidth /12) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)*0.64615384615385]
-      translate tPath by [tBlackKeySpacing*8 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tBlackKeySpacing*8 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tBlackKey["KeyPath"]
       put tBlackKey into element 4 of tBlackKeysList
    	------------------------------------------------------------------------------------------------------------------ A#Bb
    	put element 5 of tBlackKeysList into tBlackKey
    	put tBlackKeyPath into tPath
       scale tPath by [(tOctaveWidth /12) / the width of the bounding box of tPath, (tMyHeightMinusStroke / the height of the bounding box of tPath)*0.64615384615385]
-      translate tPath by [tBlackKeySpacing*10 + (tOctaveIteration * tOctaveWidth) +tHalfStrokeOffset, tHalfStrokeOffset]
+      translate tPath by [tBlackKeySpacing*10 + (tOctaveIteration * tOctaveWidth) - tOctaveShift +tHalfStrokeOffset, tHalfStrokeOffset]
       put tPath into tBlackKey["KeyPath"]
       put tBlackKey into element 5 of tBlackKeysList
        ----------------------------------------- replace elements in octave -------------------------------------------------
@@ -1103,7 +1168,7 @@ public handler OnPaint()
    variable tOctaveIteration as Number
    set the antialias of this canvas to true
    set the stroke width of this canvas to mStrokeSize
-   repeat with tOctaveIteration from 1 up to mOctaves
+   repeat with tOctaveIteration from mLowOctave up to mHighOctave
       put element (tOctaveIteration) of mOctaveList into tOctave
    	------------------------------------------------------------------------------------------ WhiteKeys ------------------------------------------------------------------------------------------
       put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
