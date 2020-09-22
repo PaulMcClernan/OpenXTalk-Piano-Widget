@@ -1,6 +1,12 @@
 # LCB_PianoWidget
 A LiveCode Builder Graphical Piano Keyboard Widget 
 
+NOTE: 
+
+This Widget is a graphical GUI element only. It produces no sound on it's own and is meant to be attached to a MIDI play back engine.
+
+See my other Repo's for playback engine's for Apple devices.
+ 
 Video Demo Here:
 
 https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
