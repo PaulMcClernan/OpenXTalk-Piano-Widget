@@ -24,6 +24,7 @@ https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 ## Planned features :
 
 ### Version 1.0
+- Documentation for all properties
 - Implement ability to script the colorizing of the Piano keys (beyond basic hilighting)
 - Implement strokeColor property
 
