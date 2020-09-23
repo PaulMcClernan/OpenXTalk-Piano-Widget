@@ -114,9 +114,8 @@ private handler setHilightedNotes(pHilightNotes) returns nothing
       put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
       put tOctave into element tOctaveIteration of mOctaveList
    end repeat
-
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
    split pHilightNotes by "," into tKeysList
-   -- log tKeysList
    repeat for each element tKey in tKeysList
       --- check if it's a sharp without flat or flat
       if the number of chars in tKey > 1 then
@@ -133,7 +132,6 @@ private handler setHilightedNotes(pHilightNotes) returns nothing
             end if
             put getSharpOrFlatToSharpAndFlat(tKey) into tKey
             put tKey & tNumStr into tKey
-            -- log tKey
          end if
       end if
       repeat with tOctaveIteration from 1 up to 11
@@ -233,21 +231,9 @@ private handler getHilightedNotes() returns String
    return tNoteNumsString &"\n"& tNamesString
 end handler
 
-property octaves  get getOctaveAmount  -- set setOctaveAmount
---metadata octaves.editor is "com.livecode.pi.enum"
---metadata octaves.options is "1,2,3,4,5,6,7,8,9,10,11"
---metadata octaves.default is "4"
---metadata octaves.label is "Octaves Amount"
---private variable mOctavesStr as String
+property octaves  get getOctaveAmount
 private variable mOctaves as Integer
---public handler setOctaveAmount(in pOctavesStr as String) returns nothing
---   put pOctavesStr into mOctavesStr
---	put (pOctavesStr parsed as number) into mOctaves
---   OnGeometryChanged()
---   redraw all
---end handler
-public handler getOctaveAmount() returns Integer -- String
-   -- return mOctavesStr
+public handler getOctaveAmount() returns Integer
    return mOctaves
 end handler
 
@@ -259,14 +245,16 @@ metadata lowOctave.label is "Low Octave"
 private variable mLowOctaveStr as String
 private variable mLowOctave as Integer
 public handler setLowOctave(in pLowOctaveStr as String) returns nothing
-   put pLowOctaveStr into mLowOctaveStr
-	put (pLowOctaveStr parsed as number) + 2 into mLowOctave
-   if mLowOctave > mHighOctave then
-      setHighOctave((mLowOctave -2) formatted as string)
+   if (pLowOctaveStr parsed as number) > -2 and (pLowOctaveStr parsed as number) < 10 then
+      put pLowOctaveStr into mLowOctaveStr
+   	put (pLowOctaveStr parsed as number) + 2 into mLowOctave
+      if mLowOctave > mHighOctave then
+         setHighOctave((mLowOctave -2) formatted as string)
+      end if
+      put mHighOctave - mLowOctave + 1 into mOctaves
+      OnGeometryChanged()
+      redraw all
    end if
-   put mHighOctave - mLowOctave + 1 into mOctaves
-   OnGeometryChanged()
-   redraw all
 end handler
 public handler getLowOctave() returns String
    return mLowOctaveStr
@@ -280,14 +268,16 @@ metadata highOctave.label is "High Octave"
 private variable mHighOctaveStr as String
 private variable mHighOctave as Integer
 public handler setHighOctave(in pHighOctaveStr as String) returns nothing
-   put pHighOctaveStr into mHighOctaveStr
-	put (pHighOctaveStr parsed as number) + 2 into mHighOctave
-   if mLowOctave > mHighOctave then
-      setLowOctave((mHighOctave -2) formatted as string)
+   if (pHighOctaveStr parsed as number) > -2 and (pHighOctaveStr parsed as number) < 10 then
+      put pHighOctaveStr into mHighOctaveStr
+   	put (pHighOctaveStr parsed as number) + 2 into mHighOctave
+      if mLowOctave > mHighOctave then
+         setLowOctave((mHighOctave -2) formatted as string)
+      end if
+      put mHighOctave - mLowOctave + 1 into mOctaves
+      OnGeometryChanged()
+      redraw all
    end if
-   put mHighOctave - mLowOctave + 1 into mOctaves
-   OnGeometryChanged()
-   redraw all
 end handler
 public handler getHighOctave() returns String
    return mHighOctaveStr
@@ -307,18 +297,30 @@ metadata chordPreset.label is "Chord Presets"
 public variable mChordPreset as String
 
 private handler setChordFormula(in pChordFormula as String) returns nothing
-   put pChordFormula into mChordFormula
-   if mChordPreset is not "..." then
-      put "..." into mChordPreset
+   variable tNoteOffsetList as List
+   variable tGoodFormula as String
+   variable tElement as any
+   split pChordFormula by "," into tNoteOffsetList
+   -- log tNoteOffsetList
+   repeat for each element tElement in tNoteOffsetList
+      -- log tElement
+      if (tElement parsed as number is not nothing) and (tElement is not "0") and (not (tElement contains ".")) then -- Ensure list is only numbers but not zero
+         -- log "good"
+         put tElement & "," after tGoodFormula
+      end if
+   end repeat
+   if tGoodFormula is not the empty string then
+      if the last char of tGoodFormula is "," then
+          delete the last char of tGoodFormula
+      end if
    end if
-   OnGeometryChanged()
-   redraw all
+   put tGoodFormula into mChordFormula
 end handler
 public handler getChordFormula() returns String
    return mChordFormula
 end handler
 private handler setChordPreset(in pChordPreset as String) returns nothing
-   if pChordPreset is "..." then
+   if pChordPreset is "..." or pChordPreset is "" then
       put pChordPreset into mChordPreset
       setChordFormula("")
    end if
@@ -354,8 +356,6 @@ private handler setChordPreset(in pChordPreset as String) returns nothing
       put pChordPreset into mChordPreset
       setChordFormula("3,7,11")
    end if
-   OnGeometryChanged()
-   redraw all
 end handler
 public handler getChordPreset() returns String
    return mChordPreset
@@ -388,7 +388,6 @@ public handler getStroke() returns Number
 end handler
 
 public handler OnStopEditing()
-   trigger all
    OnGeometryChanged()
    redraw all
 end handler
@@ -861,19 +860,17 @@ public handler OnCreate()
    put "4" into mHighOctaveStr
    put 6 into mHighOctave
    put 1 into mStrokeSize
+   put "..." into mChordPreset
    put nothing into mSelectedKey
    put false into mPianoMouseButtonDown
    --------------------------------------------------------------
-
    variable tBlackKeysList as List
    variable tWhiteKeysList as List
    variable tArray as Array
    variable tBlackKeyPath as Path
-   put path "M0,0v81.841C0,81.841,0,84,2.679,84h8.642c0,0,2.679,0,2.679-2.159V0H0z" into tBlackKeyPath -- BlackKeys all have identical shape
    variable tPath as Path
 	variable tWhiteKey as Array
 	variable tBlackKey as Array
-
    variable tOctaveWidth as Number
    variable tWhiteKeySpacing as Number
    variable tBlackKeySpacing as Number
@@ -882,7 +879,6 @@ public handler OnCreate()
    variable tHalfStrokeOffset as Number
    variable tMyWidthMinusStroke as Number
    variable tMyHeightMinusStroke as Number
-
    -- OctaveList
    --    OctaveName
    --    OctaveNumber
@@ -898,7 +894,6 @@ public handler OnCreate()
    --       KeyNumber
    --       KeyPath
    --       KeyHighlighted
-
    put mStrokeSize / 2 into tHalfStrokeOffset
    put my width - (mStrokeSize) into tMyWidthMinusStroke
    put my height - (mStrokeSize) into tMyHeightMinusStroke
@@ -908,6 +903,7 @@ public handler OnCreate()
    put tMyWidthMinusStroke /12 / mOctaves into tBlackKeySpacing
    put (mLowOctave * tOctaveWidth) - tOctaveWidth into tOctaveShift
 
+   put path "M0,0v81.841C0,81.841,0,84,2.679,84h8.642c0,0,2.679,0,2.679-2.159V0H0z" into tBlackKeyPath -- BlackKeys all have identical shape
    repeat with tOctaveIteration from 0 up to 10
       ----------------------------------------------------------------------------------------------------------------Octave 0----------------------------------------------------------------------------------------
       put the empty array into tArray
@@ -1036,19 +1032,15 @@ public handler OnGeometryChanged()
 	variable tWhiteKey as Array
 	variable tPath as Path
    variable tBlackKeyPath as Path
-   put path "M0,0v81.841C0,81.841,0,84,2.679,84h8.642c0,0,2.679,0,2.679-2.159V0H0z" into tBlackKeyPath -- BlackKeys all have identical shape
-
    variable tOctaveIteration as Number
    variable tOctaveWidth as Number
    variable tOctaveShift as Number
-
    variable tWhiteKeySpacing as Number
    variable tBlackKeySpacing as Number
    variable tHalfStrokeOffset as Number
    variable tMyWidthMinusStroke as Number
    variable tMyHeightMinusStroke as Number
 
-   -- put 1 into mStrokeSize
    put mStrokeSize / 2 into tHalfStrokeOffset
    put my width - (mStrokeSize) into tMyWidthMinusStroke
    put my height - (mStrokeSize) into tMyHeightMinusStroke
@@ -1056,7 +1048,7 @@ public handler OnGeometryChanged()
    put tMyWidthMinusStroke /7 / mOctaves into tWhiteKeySpacing
    put tMyWidthMinusStroke /12 / mOctaves into tBlackKeySpacing
    put (mLowOctave * tOctaveWidth) - tOctaveWidth into tOctaveShift
-
+   put path "M0,0v81.841C0,81.841,0,84,2.679,84h8.642c0,0,2.679,0,2.679-2.159V0H0z" into tBlackKeyPath -- BlackKeys all have identical shape
    repeat with tOctaveIteration from 0 up to 10
       put element (tOctaveIteration+1) of mOctaveList into tOctave
    	------------------------------------------------------------------------------------------ WhiteKeys ------------------------------------------------------------------------------------------
