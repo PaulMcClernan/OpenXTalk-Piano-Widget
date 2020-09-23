@@ -9,11 +9,11 @@ See my other Repos for playback engines for Apple devices. This is a work in pro
 ## Video Demo Here:
 https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 
-### Version 0.9
+### Version 0.8 thu 0.9
 - Changed rendering system (back to SVG paths but from more acurate drawing) and optimized method based on Bernd's code
 - Added the ability to set the key range via new lowOctave and highOctave properties
 
-### Version 0.7
+### Version 0.1 thu 0.7
 
 - Auto-hilighting chords via a chord formula property
 - Auto-hilighting chords via a chord presets property
@@ -21,6 +21,9 @@ https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 - Better graphics rendering with rounded rects instead of SVG Paths -- Thanks Bernd!
 
 ## Planned features :
+
+### Version 1.0
+- Implement colorizing keys beyond simple hilighting
 
 ### Version 2.0
 - Implement Multi-Touch for Mobile Devices
