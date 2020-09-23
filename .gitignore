@@ -1,2 +1,6 @@
 
 .DS_Store
+module.2.lcm
+*.lci
+api.lcdoc
+manifest.xml
