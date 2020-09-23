@@ -17,8 +17,8 @@ https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 
 ### Version 0.1 thu 0.7
 
-- Auto-hilighting chords via a chord formula property
-- Auto-hilighting chords via a chord presets property
+- Auto-hilighting chords via a chordFormula property
+- Auto-hilighting chords via a chordPreset property and created a basic set of chord presets
 - Setting and getting the highlights for individual keys on the piano via a hilightedNotes property
 - Better graphics rendering with rounded rects instead of SVG Paths -- Thanks Bernd!
 
