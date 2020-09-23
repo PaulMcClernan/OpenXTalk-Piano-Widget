@@ -26,7 +26,7 @@ https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 ### Version 1.0
 - Documentation for all properties
 - Implement ability to script the colorizing of the Piano keys (beyond basic hilighting)
-- Implement strokeColor property
+- Implement strokeColor, blackKeys and whiteKeys default color properties
 
 ### Version 2.0
 - Implement Multi-Touch for Mobile Devices
