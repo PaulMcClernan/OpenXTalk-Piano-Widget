@@ -11,13 +11,11 @@ https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 
 ### Version 0.8 thu 0.9
 - Changed rendering system (back to SVG paths but from more acurate drawing) and optimized method based on Bernd's code
-- Added the ability to set the key range via new lowOctave and highOctave properties
-- Added property to set the outline strokeWidth and account for additional required space in rendering
 - Allow for setting the keyboard range (-1 to 9) with new lowOctave and highOctave properties,
-changed "octaves" property to a read-only.
+- Added property to set the outline strokeWidth and account for additional required space in rendering
+- Changed "octaves" property to a read-only.
 
 ### Version 0.1 thu 0.7
-
 - Auto-hilighting chords via a chordFormula property
 - Auto-hilighting chords via a chordPreset property and created a basic set of chord presets
 - Setting and getting the highlights for individual keys on the piano via a hilightedNotes property
