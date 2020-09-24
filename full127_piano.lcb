@@ -84,6 +84,28 @@ Description:
 The <strokeWidth> property controls thickness of lines used to draw the
 widget's piano keys outlines.
 
+Name: hilitedNotes
+Type: property
+
+Syntax: set the hilitedNotes of <widget> to tCommaDelimitedStringList
+Syntax: get the hilitedNotes of <widget>
+
+Example:
+on mouseUp
+   -- hilight ALL C# keys, MIDI note number 60, D# (without flat) 4th Octave, and F#Gb4:
+   set the hilitedNotes of widget "Piano Widget" to "C#,60,D#4,F#Gb4" 
+	put the hilitedNotes of widget "Piano Widget"
+end mouseUp
+
+Summary: Get or set the hilighted piano keys specified with list of notes
+
+Description:
+The <hilitedNotes> property can be used to get of set the piano keys
+to hilite using a comma seperated list of keys, by MIDI number or Name. 
+If a note name is used without an octave number attached then that note is
+hilited on all octaves. THe property returns the list as two lines, 
+one for note numbers a second line with the same list as note names.
+
 */
 
 -- declaring extension as widget, followed by identifier
