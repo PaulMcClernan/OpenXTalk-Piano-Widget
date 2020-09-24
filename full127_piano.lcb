@@ -499,7 +499,7 @@ property chordPresets get getChordPresets
 private handler getChordPresets() returns String
    return "+Octave\n-Octave\n-Octave+Octave\nPowerChord\nMajor Triad\nMinor Triad\nMinor 7th\nMajor 7th"
 end handler
-property chordPreset set setChordPreset
+property chordPreset get mChordPreset set setChordPreset
 metadata chordPreset.editor is "com.livecode.pi.enum"
 metadata chordPreset.options is "...,+Octave,-Octave,-Octave+Octave,PowerChord,Major Triad,Minor Triad,Minor 7th,Major 7th"
 metadata chordPreset.default is "None"
