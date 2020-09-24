@@ -11,9 +11,9 @@ https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 
 ### Version 0.8 thu 0.9
 - Changed rendering system (back to SVG paths but from more acurate drawing) and optimized method based on Bernd's code
-- Allow for setting the keyboard range (-1 to 9) with new lowOctave and highOctave properties,
+- Allow for setting the keyboard range (-1 to 9) with new lowOctave and highOctave properties, changed "octaves" property to a read-only.
 - Added property to set the outline strokeWidth and account for additional required space in rendering
-- Changed "octaves" property to a read-only.
+- Implement blackKeys and whiteKeys default color properties
 
 ### Version 0.1 thu 0.7
 - Auto-hilighting chords via a chordFormula property
@@ -25,8 +25,8 @@ https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 
 ### Version 1.0
 - Documentation for all properties
+- Implement strokeColor
 - Implement ability to script the colorizing of the Piano keys (beyond basic hilighting)
-- Implement strokeColor, blackKeys and whiteKeys default color properties
 
 ### Version 2.0
 - Implement Multi-Touch for Mobile Devices
