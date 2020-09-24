@@ -2,7 +2,10 @@
 Widget is a virtual mouse piano
 
 Description:
-This widget allows for creation of scalable piano controls
+This widget allows for creation of scalable piano controls.
+Note that this is a purely graphical control that produces no
+sound on it's own. It is meant to be attached to a musical engine
+such as a MIDI playback library.
 
 Name: noteOn
 
@@ -66,7 +69,7 @@ Type: property
 Syntax: set the hiliteColor of <widget> to <color>
 Syntax: get the hiliteColor of <widget>
 
-Summary: Fill color for  when highlighting piano keys
+Summary: The fill color when piano keys are hilited
 
 Description:
 The <hiliteColor> property controls the color used to draw the
@@ -78,7 +81,7 @@ Type: property
 Syntax: set the strokeWidth of <widget> to <number>
 Syntax: get the strokeWidth of <widget>
 
-Summary: Width for piano keys outlines
+Summary: The stroke width for piano keys outlines
 
 Description:
 The <strokeWidth> property controls thickness of lines used to draw the
@@ -99,7 +102,7 @@ on mouseUp
   put the hilitedNotes of widget "Piano Widget"
 end mouseUp
 
-Summary: Get or set the hilighted piano keys specified with list of notes
+Summary: The hilighted piano keys as list of notes
 
 Description:
 The <hilitedNotes> property can be used to set the piano keys
@@ -122,7 +125,7 @@ on mouseUp
   set the chordFormula of widget "Piano Widget" -5,-8
 end mouseUp
 
-Summary: Get or set the chordFormula to specify additional keys each key should trigger
+Summary: Specifies additional keys that each key should trigger
 
 Description:
 The <chordFormula> property if optionally specified, can be set to a list
@@ -143,12 +146,14 @@ on mouseUp
   set the chordPreset of widget "Piano Widget" to "Minor Triad"
 end mouseUp
 
-Summary: chordPreset property can be set to a name from a list of premade <chordFormula>
+Summary: A name from a list of names of premade <chordFormula>
 
 Description:
 The <chordPreset> is a convience property that can be set to a chord
 name from a list of premade named <chordFormula>. Use the <chordPresets>
 property to retreive a line delimited list of valid chord names.
+<chordPreset> is a "write-only" property, after a <chordPreset> name is passed
+and the <chordFormula> is updated, getting this property returns empty.
 
 Name: chordPresets
 Type: property
@@ -160,7 +165,7 @@ on mouseUp
   put the chordPresets of widget "Piano Widget"
 end mouseUp
 
-Summary: chordPresets property gets a list of premade <chordFormula>
+Summary: Line delimited list of preset names of premade <chordFormula>
 
 Description:
 Use the <chordPresets> property to retreive a line delimited list of
@@ -181,7 +186,7 @@ on mouseUp
   get the octaves of of widget "Piano Widget" -- octave count containss 4
 end mouseUp
 
-Summary: Get or set the starting, left most octave for the piano's visible note range
+Summary: The starting, left most octave for the piano's visible note range
 
 Description:
 The <lowOctave> property is used in conjunction with <highOctave> to
@@ -207,7 +212,7 @@ on mouseUp
   get the octaveCount of of widget "Piano Widget" -- octaveCount containss 4
 end mouseUp
 
-Summary: Get or set the ending, right most octave for the piano's visible note range
+Summary: The ending, right most octave for the piano's visible note range
 
 Description:
 The <highOctave> property is used in conjunction with <lowOctave> to
@@ -232,7 +237,7 @@ on mouseUp
   get the octaveCount of of widget "Piano Widget" -- octaveCount containss 4
 end mouseUp
 
-Summary: Get the amount of octaves  in the piano's current visible note range.
+Summary: The amount of octaves in the piano's current visible note range.
 
 Description:
 The <octaveCount> is a read-only property that returns the amount of
