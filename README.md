@@ -11,7 +11,7 @@ https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 
 ### Version 0.8 thu 0.9
 - Changed rendering system (back to SVG paths but from more acurate drawing) and optimized method based on Bernd's code
-- Allow for setting the keyboard range (-1 to 9) with new lowOctave and highOctave properties, changed "octaves" property to a read-only.
+- Allow for setting the keyboard range (-1 to 9) with new lowOctave and highOctave properties, changed octavesCount property and made read-only.
 - Added property to set the outline strokeWidth and account for additional required space in rendering
 - Implement blackKeys and whiteKeys default color properties
 
