@@ -70,7 +70,7 @@ Summary: Fill color for  when highlighting piano keys
 
 Description:
 The <hiliteColor> property controls the color used to draw the
-widget's outline.
+widget's piano key fill color while hilighted.
 
 Name: strokeWidth
 Type: property
@@ -87,26 +87,160 @@ widget's piano keys outlines.
 Name: hilitedNotes
 Type: property
 
-Syntax: set the hilitedNotes of <widget> to tCommaDelimitedStringList
+Syntax: set the hilitedNotes of <widget> to <pHilightNotes>
 Syntax: get the hilitedNotes of <widget>
 
 Example:
 on mouseUp
-   -- hilight ALL C# keys, MIDI note number 60, D# (without flat) 4th Octave, and F#Gb4:
-   set the hilitedNotes of widget "Piano Widget" to "C#,60,D#4,F#Gb4" 
-	put the hilitedNotes of widget "Piano Widget"
+  -- clear all
+  set the hilitedNotes of widget "Piano Widget" to empty
+  -- hilte ALL C# keys, MIDI note 60, D#4 (same as Eb4), Gb 5th octave:
+  set the hilitedNotes of widget "Piano Widget" to "C#,60,D#4,F#Gb5"
+  put the hilitedNotes of widget "Piano Widget"
 end mouseUp
 
 Summary: Get or set the hilighted piano keys specified with list of notes
 
 Description:
-The <hilitedNotes> property can be used to get of set the piano keys
-to hilite using a comma seperated list of keys, by MIDI number or Name. 
-If a note name is used without an octave number attached then that note is
-hilited on all octaves. THe property returns the list as two lines, 
-one for note numbers a second line with the same list as note names.
+The <hilitedNotes> property can be used to set the piano keys
+to hilite using a comma seperated list of keys, by MIDI note number or note name.
+If a note name is used without an octave number then that note is
+hilited on all 10.5 octaves.
+Set to empty or pass an empty string to clear all key hilites.
+The property returns the list as two lines,
+Line one lists MIDI note numbers and the second line list same keys as note names.
+
+Name: chordFormula
+Type: property
+
+Syntax: set the chordFormula of <widget> to <pChordFormula>
+Syntax: get the chordFormula of <widget>
+
+Example:
+on mouseUp
+   -- keys will trigger a 1st-Inversion Major Triad Chord:
+  set the chordFormula of widget "Piano Widget" -5,-8
+end mouseUp
+
+Summary: Get or set the chordFormula to specify additional keys each key should trigger
+
+Description:
+The <chordFormula> property if optionally specified, can be set to a list
+of integers to indicate which additional piano key(s) should be triggered
+based on the half-step distance from the origin root key. For example,
+to trigger the same note name as the root key but 1 octave lower set
+this property to -12, for one octave lower and one octave higher set
+this property to -12,12. To clear the current <chordFormula> set it to empty.
+
+Name: chordPreset
+Type: property
+
+Syntax: set the chordPreset of <widget> to <pChordPresetName>
+
+Example:
+on mouseUp
+   -- the chordFormula will be set to "3,7":
+  set the chordPreset of widget "Piano Widget" to "Minor Triad"
+end mouseUp
+
+Summary: chordPreset property can be set to a name from a list of premade <chordFormula>
+
+Description:
+The <chordPreset> is a convience property that can be set to a chord
+name from a list of premade named <chordFormula>. Use the <chordPresets>
+property to retreive a line delimited list of valid chord names.
+
+Name: chordPresets
+Type: property
+
+Syntax: get the chordPresets of <widget>
+
+Example:
+on mouseUp
+  put the chordPresets of widget "Piano Widget"
+end mouseUp
+
+Summary: chordPresets property gets a list of premade <chordFormula>
+
+Description:
+Use the <chordPresets> property to retreive a line delimited list of
+valid names to use in conjunction with the <chordPreset> property.
+
+Name: lowOctave
+Type: property
+
+Syntax: set the lowOctave of <widget> to <number>
+Syntax: get the lowOctave of <widget>
+
+Example:
+on mouseUp
+  -- set the left most octave to start at MIDI Note Number 0 (C-1)
+  set the lowOctave of widget "Piano Widget" to -1
+  -- set the right most octave to start at MIDI Note Number 36 (C2)
+  set the highOctave of widget "Piano Widget" to 2
+  get the octaves of of widget "Piano Widget" -- octave count containss 4
+end mouseUp
+
+Summary: Get or set the starting, left most octave for the piano's visible note range
+
+Description:
+The <lowOctave> property is used in conjunction with <highOctave> to
+specify the visible note range of the piano's keyboard by specifying the
+starting octave and ending octave between -1 (which starts at MIDI note 0 C)
+to 9 (Which starts at MIDI number 120 C and is actually 7/12th of an octave
+ending at the MIDI Note 127 G). If lowOctave is greater than highOctave or
+highOctave is less than lowOctave then the opposite property will
+automatically be ajusted to match, resulting in a single octave range.
+
+Name: highOctave
+Type: property
+
+Syntax: set the highOctave of <widget> to <number>
+Syntax: get the highOctave of <widget>
+
+Example:
+on mouseUp
+  -- set the left most octave to start at MIDI Note Number 0 (C-1)
+  set the lowOctave of widget "Piano Widget" to -1
+  -- set the right most octave to start at MIDI Note Number 36 (C2)
+  set the highOctave of widget "Piano Widget" to 2
+  get the octaveCount of of widget "Piano Widget" -- octaveCount containss 4
+end mouseUp
+
+Summary: Get or set the ending, right most octave for the piano's visible note range
+
+Description:
+The <highOctave> property is used in conjunction with <lowOctave> to
+specify the visible note range of the piano's keyboard by specifying the
+starting octave and ending octave between -1 (which starts at MIDI note 0 C)
+to 9 (Which starts at MIDI number 120 C and is actually 7/12th of an octave
+ending at the MIDI Note 127 G). If lowOctave is greater than highOctave or
+highOctave is less than lowOctave then the opposite property will
+automatically be ajusted to match, resulting in a single octave range.
+
+Name: octaveCount
+Type: property
+
+Syntax: get the octaveCount of <widget>
+
+Example:
+on mouseUp
+  -- set the left most octave to start at MIDI Note Number 0 (C-1)
+  set the lowOctave of widget "Piano Widget" to -1
+  -- set the right most octave to start at MIDI Note Number 36 (C2)
+  set the highOctave of widget "Piano Widget" to 2
+  get the octaveCount of of widget "Piano Widget" -- octaveCount containss 4
+end mouseUp
+
+Summary: Get the amount of octaves  in the piano's current visible note range.
+
+Description:
+The <octaveCount> is a read-only property that returns the amount of
+octaves  that are currently visible on the Piano's keyboard. It is the
+same as the count from <lowOctave> to <highOctave>.
 
 */
+
 
 -- declaring extension as widget, followed by identifier
 widget community.livecode.widget.piano
@@ -277,7 +411,7 @@ private handler getHilitedNotes() returns String
    return tNoteNumsString &"\n"& tNamesString
 end handler
 
-property octaves  get getOctaveAmount
+property octaveCount  get getOctaveAmount
 private variable mOctaves as Integer
 public handler getOctaveAmount() returns Integer
    return mOctaves
@@ -335,13 +469,6 @@ metadata chordFormula.default is ""
 metadata chordFormula.label is "Chord Formula"
 public variable mChordFormula as String
 
-property chordPreset get getChordPreset set setChordPreset
-metadata chordPreset.editor is "com.livecode.pi.enum"
-metadata chordPreset.options is "...,+Octave,-Octave,-Octave+Octave,PowerChord,Major Triad,Minor Triad,Minor 7th,Major 7th"
-metadata chordPreset.default is "None"
-metadata chordPreset.label is "Chord Presets"
-public variable mChordPreset as String
-
 private handler setChordFormula(in pChordFormula as String) returns nothing
    variable tNoteOffsetList as List
    variable tGoodFormula as String
@@ -361,10 +488,24 @@ private handler setChordFormula(in pChordFormula as String) returns nothing
       end if
    end if
    put tGoodFormula into mChordFormula
+   put the empty string into mChordPreset
+   trigger all
 end handler
 public handler getChordFormula() returns String
    return mChordFormula
 end handler
+
+property chordPresets get getChordPresets
+private handler getChordPresets() returns String
+   return "+Octave\n-Octave\n-Octave+Octave\nPowerChord\nMajor Triad\nMinor Triad\nMinor 7th\nMajor 7th"
+end handler
+property chordPreset set setChordPreset
+metadata chordPreset.editor is "com.livecode.pi.enum"
+metadata chordPreset.options is "...,+Octave,-Octave,-Octave+Octave,PowerChord,Major Triad,Minor Triad,Minor 7th,Major 7th"
+metadata chordPreset.default is "None"
+metadata chordPreset.label is "Chord Presets"
+public variable mChordPreset as String
+
 private handler setChordPreset(in pChordPreset as String) returns nothing
    if pChordPreset is "..." or pChordPreset is "" then
       put pChordPreset into mChordPreset
@@ -402,9 +543,6 @@ private handler setChordPreset(in pChordPreset as String) returns nothing
       put pChordPreset into mChordPreset
       setChordFormula("3,7,11")
    end if
-end handler
-public handler getChordPreset() returns String
-   return mChordPreset
 end handler
 
 property blackKeysColor   get getSharpsFlatsColor  set setSharpsFlatsColor
