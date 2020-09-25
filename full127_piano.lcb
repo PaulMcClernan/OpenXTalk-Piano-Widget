@@ -7,6 +7,7 @@ Note that this is a purely graphical control that produces no
 sound on it's own. It is meant to be attached to a musical engine
 such as a MIDI playback library.
 
+------------------------------------------------------------------------------------------------------------------------------------
 Name: noteOn
 
 Type: message
@@ -62,7 +63,84 @@ Description:
 Handle the <noteOff> message in the widget's object script to respond to
 'note release' messages from the piano's individual note keys.
 
+------------------------------------------------------------------------------------------------------------------------------------
+Name: borderWidth
+Type: property
 
+Syntax: set the borderWidth of <widget> to <number>
+Syntax: get the borderWidth of <widget>
+
+Summary: The stroke width for piano keys outlines
+
+Description:
+The <borderWidth> property controls thickness of lines used to draw the
+widget's piano keys outlines.
+
+Name: borderColor
+Type: property
+
+Syntax: get the borderColor of widget
+Syntax: set the borderColor of widget to pColor
+
+Summary: The color used to draw the outlinnes of the piano keys
+
+Description:
+The <borderColor> property controls the color used to draw the outlinnes of the piano keys.
+
+------------------------------------------------------------------------------------------------------------------------------------
+Name: sharpsFlatsColor
+Type: property
+Synonyms: blackKeysColors
+
+Syntax: set the sharpsFlatsColor of <widget> to <color>
+Syntax: get the sharpsFlatsColor of <widget>
+
+Summary: The fill color for accidentals (black) keys
+
+Description:
+The <sharpsFlatsColor> property controls the default color used to fill
+the piano's accidentals (black) keys. This property is the same as <blackKeysColors>
+
+Name: blackKeysColor
+Type: property
+Synonyms: sharpsFlatsColor
+
+Syntax: set the blackKeysColor of <widget> to <color>
+Syntax: get the blackKeysColor of <widget>
+
+Summary: The fill color for accidentals (black) keys
+
+Description:
+The <blackKeysColor> property controls the default color used to fill
+the piano's accidentals (black) keys. This property is the same as <sharpsFlatsColor>
+
+Name: whiteKeysColor
+Type: property
+Synonyms: naturalsColor
+
+Syntax: set the whiteKeysColor of <widget> to <color>
+Syntax: get the whiteKeysColor of <widget>
+
+Summary: The fill color for naturals (white) keys
+
+Description:
+The <whiteKeysColor> property controls the default color used to fill
+the piano's naturals (white) keys. This property is the same as <naturalsColor>
+
+Name: naturalsColor
+Type: property
+Synonyms: whiteKeysColors
+
+Syntax: set the naturalsColor of <widget> to <color>
+Syntax: get the naturalsColor of <widget>
+
+Summary: The fill color for naturals (white) keys
+
+Description:
+The <naturalsColor> property controls the default color used to fill
+the piano's naturals (white) keys. This property is the same as <whiteKeysColors>
+
+------------------------------------------------------------------------------------------------------------------------------------
 Name: hiliteColor
 Type: property
 
@@ -75,17 +153,6 @@ Description:
 The <hiliteColor> property controls the color used to draw the
 widget's piano key fill color while hilighted.
 
-Name: strokeWidth
-Type: property
-
-Syntax: set the strokeWidth of <widget> to <number>
-Syntax: get the strokeWidth of <widget>
-
-Summary: The stroke width for piano keys outlines
-
-Description:
-The <strokeWidth> property controls thickness of lines used to draw the
-widget's piano keys outlines.
 
 Name: hilitedNotes
 Type: property
@@ -153,7 +220,7 @@ The <chordPreset> is a convience property that can be set to a chord
 name from a list of premade named <chordFormula>. Use the <chordPresets>
 property to retreive a line delimited list of valid chord names.
 <chordPreset> is a "write-only" property, after a <chordPreset> name is passed
-and the <chordFormula> is updated, getting this property returns empty.
+and the <chordFormula> is updated, this property is reset and returns "...".
 
 Name: chordPresets
 Type: property
@@ -171,6 +238,7 @@ Description:
 Use the <chordPresets> property to retreive a line delimited list of
 valid names to use in conjunction with the <chordPreset> property.
 
+------------------------------------------------------------------------------------------------------------------------------------
 Name: lowOctave
 Type: property
 
@@ -183,7 +251,7 @@ on mouseUp
   set the lowOctave of widget "Piano Widget" to -1
   -- set the right most octave to start at MIDI Note Number 36 (C2)
   set the highOctave of widget "Piano Widget" to 2
-  get the octaves of of widget "Piano Widget" -- octave count containss 4
+  get the octaveCount of of widget "Piano Widget" -- octaveCount containss 4
 end mouseUp
 
 Summary: The starting, left most octave for the piano's visible note range
@@ -246,7 +314,7 @@ same as the count from <lowOctave> to <highOctave>.
 
 */
 
-
+------------------------------------------------------------------------------------------------------------------------------------
 -- declaring extension as widget, followed by identifier
 widget community.livecode.widget.piano
 
@@ -417,6 +485,7 @@ private handler getHilitedNotes() returns String
 end handler
 
 property octaveCount  get getOctaveAmount
+metadata octaveCount.label is "Octave Count"
 private variable mOctaves as Integer
 public handler getOctaveAmount() returns Integer
    return mOctaves
@@ -482,8 +551,7 @@ private handler setChordFormula(in pChordFormula as String) returns nothing
    -- log tNoteOffsetList
    repeat for each element tElement in tNoteOffsetList
       -- log tElement
-      if (tElement parsed as number is not nothing) and (tElement is not "0") and (not (tElement contains ".")) then -- Ensure list is only numbers but not zero
-         -- log "good"
+      if (tElement parsed as number is not nothing) and (tElement is not "0") and (not (tElement contains ".")) then -- Ensure elements are only numbers but not zero
          put tElement & "," after tGoodFormula
       end if
    end repeat
@@ -493,7 +561,7 @@ private handler setChordFormula(in pChordFormula as String) returns nothing
       end if
    end if
    put tGoodFormula into mChordFormula
-   put the empty string into mChordPreset
+   put "..." into mChordPreset
    trigger all
 end handler
 public handler getChordFormula() returns String
@@ -501,13 +569,14 @@ public handler getChordFormula() returns String
 end handler
 
 property chordPresets get getChordPresets
+metadata chordPresets.user_visible is "false"
 private handler getChordPresets() returns String
    return "+Octave\n-Octave\n-Octave+Octave\nPowerChord\nMajor Triad\nMinor Triad\nMinor 7th\nMajor 7th"
 end handler
 property chordPreset get mChordPreset set setChordPreset
 metadata chordPreset.editor is "com.livecode.pi.enum"
 metadata chordPreset.options is "...,+Octave,-Octave,-Octave+Octave,PowerChord,Major Triad,Minor Triad,Minor 7th,Major 7th"
-metadata chordPreset.default is "None"
+metadata chordPreset.default is "..."
 metadata chordPreset.label is "Chord Presets"
 public variable mChordPreset as String
 
@@ -588,19 +657,25 @@ metadata hiliteColor.section is "Colors"
 metadata hiliteColor.label   is "Hilite fill"
 metadata hiliteColor.default is ""
 
-property strokeWidth   get getStroke   set setStroke
-metadata strokeWidth.editor is "com.livecode.pi.number"
-metadata strokeWidth.label is "Stroke Width"
-private variable mStrokeSizeStr as Number
-private variable mStrokeSize as Number
-public handler setStroke(in pStrokeSize as Number) returns nothing
-   put pStrokeSize into mStrokeSize
+private variable mBorderWidth as Number
+property borderWidth get mBorderWidth  set setBorderWidth
+metadata borderWidth.editor is "com.livecode.pi.number"
+metadata borderWidth.label is "Border width"
+metadata borderWidth.step is "0.5"
+metadata borderWidth.default is "0.5"
+metadata borderWidth.min is "0.5"
+metadata borderWidth.max is "25"
+public handler setBorderWidth(in pBorderWidth as Number) returns nothing
+   put pBorderWidth into mBorderWidth
    OnGeometryChanged()
    redraw all
 end handler
-public handler getStroke() returns Number
-	return mStrokeSize
-end handler
+
+private variable mStrokeColor as Color
+metadata borderColor.editor  is "com.livecode.pi.color"
+metadata borderColor.section is "Colors"
+metadata borderColor.label   is "Borders fill"
+metadata borderColor.default is ""
 
 public handler OnStopEditing()
    OnGeometryChanged()
@@ -609,11 +684,15 @@ end handler
 -- this handler is called when the widget is saved
 public handler OnSave(out rProperties as Array)
 	put colorToString(mHiliteColor, true) into rProperties["hiliteColor"]
-   log mHiliteColor
+   put colorToString(mStrokeColor, true) into rProperties["borderColor"]
+   put mBorderWidth into rProperties["borderWidth"]
 end handler
 -- this handler is called when the widget is loaded
 public handler OnLoad(in pProperties as Array)
+   --log pProperties --> logging this doesn't seem to work!
    put stringToColor(pProperties["hiliteColor"]) into mHiliteColor
+   put stringToColor(pProperties["borderWidth"]) into mStrokeColor
+   put pProperties["borderWidth"] into mBorderWidth
 end handler
 
 private variable mBlackKeysList as List
@@ -1075,13 +1154,13 @@ end handler
 public handler OnCreate()
    ------------------ Initialize Properties --------------------
    put the color of my highlight paint into mHiliteColor
-   -- log mHiliteColor
+   put the color of my border paint into mStrokeColor
+   put 0.5 into mBorderWidth
    put 4 into mOctaves
    put "1" into mLowOctaveStr
    put 3 into mLowOctave
    put "4" into mHighOctaveStr
    put 6 into mHighOctave
-   put 1 into mStrokeSize
    put "..." into mChordPreset
    put nothing into mSelectedKey
    put false into mPianoMouseButtonDown
@@ -1116,9 +1195,9 @@ public handler OnCreate()
    --       KeyNumber
    --       KeyPath
    --       KeyHilited
-   put mStrokeSize / 2 into tHalfStrokeOffset
-   put my width - (mStrokeSize) into tMyWidthMinusStroke
-   put my height - (mStrokeSize) into tMyHeightMinusStroke
+   put mBorderWidth / 2 into tHalfStrokeOffset
+   put my width - (mBorderWidth) into tMyWidthMinusStroke
+   put my height - (mBorderWidth) into tMyHeightMinusStroke
 
    put tMyWidthMinusStroke / mOctaves into tOctaveWidth
    put tMyWidthMinusStroke /7 / mOctaves into tWhiteKeySpacing
@@ -1274,9 +1353,9 @@ public handler OnGeometryChanged()
    variable tMyWidthMinusStroke as Number
    variable tMyHeightMinusStroke as Number
 
-   put mStrokeSize / 2 into tHalfStrokeOffset
-   put my width - (mStrokeSize) into tMyWidthMinusStroke
-   put my height - (mStrokeSize) into tMyHeightMinusStroke
+   put mBorderWidth / 2 into tHalfStrokeOffset
+   put my width - (mBorderWidth) into tMyWidthMinusStroke
+   put my height - (mBorderWidth) into tMyHeightMinusStroke
    put tMyWidthMinusStroke / mOctaves into tOctaveWidth
    put tMyWidthMinusStroke /7 / mOctaves into tWhiteKeySpacing
    put tMyWidthMinusStroke /12 / mOctaves into tBlackKeySpacing
@@ -1392,8 +1471,9 @@ public handler OnPaint()
 	variable tPath as Path
    variable tOctaveIteration as Number
    put the color of my highlight paint into mHiliteColor
+   put the color of my border paint into mStrokeColor
    set the antialias of this canvas to true
-   set the stroke width of this canvas to mStrokeSize
+   set the stroke width of this canvas to mBorderWidth
    repeat with tOctaveIteration from mLowOctave up to mHighOctave
       put element (tOctaveIteration) of mOctaveList into tOctave
    	------------------------------------------------------------------------------------------ WhiteKeys ------------------------------------------------------------------------------------------
@@ -1407,7 +1487,7 @@ public handler OnPaint()
    	end if
    	put tWhiteKey["KeyPath"] into tPath
    	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    	------------------------------------------------------------------------------------------------------------------ D
    	put element 2 of tWhiteKeysList into tWhiteKey
@@ -1418,7 +1498,7 @@ public handler OnPaint()
    	end if
    	put tWhiteKey["KeyPath"] into tPath
    	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    	------------------------------------------------------------------------------------------------------------------ E
    	put element 3 of tWhiteKeysList into tWhiteKey
@@ -1429,7 +1509,7 @@ public handler OnPaint()
    	end if
    	put tWhiteKey["KeyPath"] into tPath
    	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    	------------------------------------------------------------------------------------------------------------------ F
    	put element 4 of tWhiteKeysList into tWhiteKey
@@ -1440,7 +1520,7 @@ public handler OnPaint()
    	end if
    	put tWhiteKey["KeyPath"] into tPath
       fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    	------------------------------------------------------------------------------------------------------------------ G
    	put element 5 of tWhiteKeysList into tWhiteKey
@@ -1451,7 +1531,7 @@ public handler OnPaint()
    	end if
    	put tWhiteKey["KeyPath"] into tPath
    	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    	------------------------------------------------------------------------------------------------------------------ A
    	put element 6 of tWhiteKeysList into tWhiteKey
@@ -1462,7 +1542,7 @@ public handler OnPaint()
    	end if
    	put tWhiteKey["KeyPath"] into tPath
    	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    	------------------------------------------------------------------------------------------------------------------ B
    	put element 7 of tWhiteKeysList into tWhiteKey
@@ -1473,7 +1553,7 @@ public handler OnPaint()
    	end if
    	put tWhiteKey["KeyPath"] into tPath
    	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    	------------------------------------------------------------------------------------------ Black Keys ------------------------------------------------------------------------------------------
       put tOctave["OctaveBlackKeysList"] into tBlackKeysList
@@ -1486,7 +1566,7 @@ public handler OnPaint()
    	end if
    	put tBlackKey["KeyPath"] into tPath
    	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
       ------------------------------------------------------------------------------------------------------------------ D#Eb
    	put element 2 of tBlackKeysList into tBlackKey
@@ -1497,7 +1577,7 @@ public handler OnPaint()
    	end if
    	put tBlackKey["KeyPath"] into tPath
    	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    	------------------------------------------------------------------------------------------------------------------ F#Gb
    	put element 3 of tBlackKeysList into tBlackKey
@@ -1508,7 +1588,7 @@ public handler OnPaint()
    	end if
    	put tBlackKey["KeyPath"] into tPath
       fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    	------------------------------------------------------------------------------------------------------------------ G#Ab
    	put element 4 of tBlackKeysList into tBlackKey
@@ -1519,7 +1599,7 @@ public handler OnPaint()
    	end if
    	put tBlackKey["KeyPath"] into tPath
    	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    	------------------------------------------------------------------------------------------------------------------ A#Bb
    	put element 5 of tBlackKeysList into tBlackKey
@@ -1530,7 +1610,7 @@ public handler OnPaint()
    	end if
    	put tBlackKey["KeyPath"] into tPath
    	fill tPath on this canvas
-      set the paint of this canvas to solid paint with color [0,0,0,1]
+      set the paint of this canvas to solid paint with mStrokeColor
       stroke tPath on this canvas
    end repeat
 end handler
