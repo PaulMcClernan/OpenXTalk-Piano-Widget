@@ -941,10 +941,10 @@ public handler OnMouseMove()
    end if
 end handler
 
--- public handler OnMouseCancel()
---   put false into mPianoMouseButtonDown
---   OnMouseUp()
--- end handler
+public handler OnMouseCancel()
+   put false into mPianoMouseButtonDown
+   OnMouseUp()
+end handler
 --public handler OnMouseCancelHover()
 --   put false into mPianoMouseButtonDown
 --   OnMouseUp()
