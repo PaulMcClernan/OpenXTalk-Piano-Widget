@@ -88,22 +88,22 @@ Description:
 The <borderColor> property controls the color used to draw the outlinnes of the piano keys.
 
 ------------------------------------------------------------------------------------------------------------------------------------
-Name: sharpsFlatsColor
+Name: accidentalsColor
 Type: property
 Synonyms: blackKeysColors
 
-Syntax: set the sharpsFlatsColor of <widget> to <color>
-Syntax: get the sharpsFlatsColor of <widget>
+Syntax: set the accidentalsColor of <widget> to <color>
+Syntax: get the accidentalsColor of <widget>
 
 Summary: The fill color for accidentals (black) keys
 
 Description:
-The <sharpsFlatsColor> property controls the default color used to fill
+The <accidentalsColor> property controls the default color used to fill
 the piano's accidentals (black) keys. This property is the same as <blackKeysColors>
 
 Name: blackKeysColor
 Type: property
-Synonyms: sharpsFlatsColor
+Synonyms: accidentalsColor
 
 Syntax: set the blackKeysColor of <widget> to <color>
 Syntax: get the blackKeysColor of <widget>
@@ -112,7 +112,7 @@ Summary: The fill color for accidentals (black) keys
 
 Description:
 The <blackKeysColor> property controls the default color used to fill
-the piano's accidentals (black) keys. This property is the same as <sharpsFlatsColor>
+the piano's accidentals (black) keys. This property is the same as <accidentalsColor>
 
 Name: whiteKeysColor
 Type: property
@@ -616,20 +616,20 @@ private handler setChordPreset(in pChordPreset as String) returns nothing
    end if
 end handler
 
-property blackKeysColor   get getSharpsFlatsColor  set setSharpsFlatsColor
+property blackKeysColor   get getAccidentalsColor  set setAccidentalsColor
 metadata blackKeysColor.user_visible is "false"
-property sharpsFlatsColor   get getSharpsFlatsColor  set setSharpsFlatsColor
-metadata sharpsFlatsColor.editor is "com.livecode.pi.colorwithalpha"
-metadata sharpsFlatsColor.label   is "Sharps and Flats fill"
-metadata sharpsFlatsColor.section is "Colors"
-metadata sharpsFlatsColor.default is "0,0,0,255"
-private variable mSharpsFlatsColor as optional Color
-public handler setSharpsFlatsColor(in pColor as String) returns nothing
-   put stringToColor(pColor) into mSharpsFlatsColor
+property accidentalsColor   get getaccidentalsColor  set setaccidentalsColor
+metadata accidentalsColor.editor is "com.livecode.pi.colorwithalpha"
+metadata accidentalsColor.label   is "Sharps and Flats fill"
+metadata accidentalsColor.section is "Colors"
+metadata accidentalsColor.default is "0,0,0,255"
+private variable mAccidentalsColor as optional Color
+public handler setAccidentalsColor(in pColor as String) returns nothing
+   put stringToColor(pColor) into mAccidentalsColor
    redraw all
 end handler
-public handler getSharpsFlatsColor() returns String
-   return colorToString(mSharpsFlatsColor, true)
+public handler getAccidentalsColor() returns String
+   return colorToString(mAccidentalsColor, true)
 end handler
 
 property whiteKeysColor   get getNaturalsColor  set setNaturalsColor
@@ -680,6 +680,7 @@ public handler OnStopEditing()
 end handler
 -- this handler is called when the widget is saved
 public handler OnSave(out rProperties as Array)
+   put getHilitedNotes() into rProperties["hilitedNotes"]
    put mChordFormula into rProperties["chordFormula"]
    put mLowOctave into rProperties["lowOctave"]
    put mHighOctave into rProperties["highOctave"]
@@ -688,12 +689,13 @@ public handler OnSave(out rProperties as Array)
    put colorToString(mStrokeColor, true) into rProperties["borderColor"]
    put colorToString(mHiliteColor, true) into rProperties["hiliteColor"]
    put colorToString(mNaturalsColor, true) into rProperties["naturalsColor"]
-   put colorToString(mSharpsFlatsColor, true) into rProperties["sharpsFlatsColor"]
+   put colorToString(mAccidentalsColor, true) into rProperties["accidentalsColor"]
 end handler
 -- this handler is called when the widget is loaded
 public handler OnLoad(in pProperties as Array)
    --log pProperties --> logging this doesn't seem to work!
-   put pProperties["chordFormula"] into mChordFormula
+   setHilitedNotes( pProperties["hilitedNotes"])
+   setChordFormula( pProperties["chordFormula"])
    put pProperties["lowOctave"] into mLowOctave
    put pProperties["highOctave"] into mHighOctave
    put pProperties["octaveCount"] into mOctaves
@@ -701,7 +703,7 @@ public handler OnLoad(in pProperties as Array)
    put stringToColor(pProperties["borderColor"]) into mStrokeColor
    put stringToColor(pProperties["hiliteColor"]) into mHiliteColor
    put stringToColor(pProperties["naturalsColor"]) into mNaturalsColor
-   put stringToColor(pProperties["sharpsFlatsColor"]) into mSharpsFlatsColor
+   put stringToColor(pProperties["accidentalsColor"]) into mAccidentalsColor
    OnGeometryChanged()
    redraw all
 end handler
@@ -1374,8 +1376,8 @@ public handler OnGeometryChanged()
    if mNaturalsColor is nothing then
       put stringToColor("0,0,0,255") into mNaturalsColor
    end if
-   if mSharpsFlatsColor is nothing then
-      put stringToColor("255,255,255,255") into mSharpsFlatsColor
+   if mAccidentalsColor is nothing then
+      put stringToColor("255,255,255,255") into mAccidentalsColor
    end if
    put path "M0,0v81.841C0,81.841,0,84,2.679,84h8.642c0,0,2.679,0,2.679-2.159V0H0z" into tBlackKeyPath -- BlackKeys all have identical shape
    repeat with tOctaveIteration from 0 up to 10
@@ -1494,8 +1496,8 @@ public handler OnPaint()
    if mNaturalsColor is nothing then
       put stringToColor("255,255,255,255") into mNaturalsColor
    end if
-   if mSharpsFlatsColor is nothing then
-      put stringToColor("0,0,0,255") into mSharpsFlatsColor
+   if mAccidentalsColor is nothing then
+      put stringToColor("0,0,0,255") into mAccidentalsColor
    end if
    repeat with tOctaveIteration from mLowOctave up to mHighOctave
       put element (tOctaveIteration) of mOctaveList into tOctave
@@ -1585,7 +1587,7 @@ public handler OnPaint()
    	if tBlackKey["KeyHilited"] then
          set the paint of this canvas to solid paint with mHiliteColor
    	else
-   		set the paint of this canvas to solid paint with mSharpsFlatsColor
+   		set the paint of this canvas to solid paint with mAccidentalsColor
    	end if
    	put tBlackKey["KeyPath"] into tPath
    	fill tPath on this canvas
@@ -1596,7 +1598,7 @@ public handler OnPaint()
    	if tBlackKey["KeyHilited"] then
          set the paint of this canvas to solid paint with mHiliteColor
    	else
-   		set the paint of this canvas to solid paint with mSharpsFlatsColor
+   		set the paint of this canvas to solid paint with mAccidentalsColor
    	end if
    	put tBlackKey["KeyPath"] into tPath
    	fill tPath on this canvas
@@ -1607,7 +1609,7 @@ public handler OnPaint()
    	if tBlackKey["KeyHilited"] then
          set the paint of this canvas to solid paint with mHiliteColor
    	else
-   		set the paint of this canvas to solid paint with mSharpsFlatsColor
+   		set the paint of this canvas to solid paint with mAccidentalsColor
    	end if
    	put tBlackKey["KeyPath"] into tPath
       fill tPath on this canvas
@@ -1618,7 +1620,7 @@ public handler OnPaint()
    	if tBlackKey["KeyHilited"] then
          set the paint of this canvas to solid paint with mHiliteColor
    	else
-   		set the paint of this canvas to solid paint with mSharpsFlatsColor
+   		set the paint of this canvas to solid paint with mAccidentalsColor
    	end if
    	put tBlackKey["KeyPath"] into tPath
    	fill tPath on this canvas
@@ -1629,7 +1631,7 @@ public handler OnPaint()
    	if tBlackKey["KeyHilited"] then
          set the paint of this canvas to solid paint with mHiliteColor
    	else
-   		set the paint of this canvas to solid paint with mSharpsFlatsColor
+   		set the paint of this canvas to solid paint with mAccidentalsColor
    	end if
    	put tBlackKey["KeyPath"] into tPath
    	fill tPath on this canvas

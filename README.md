@@ -10,7 +10,7 @@ See my other Repos for playback engines for Apple devices. This is a work in pro
 https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 
 ### Version 0.8 thu 1.0
-- Changed rendering system (back to SVG paths but from more accurate drawing) and optimized method based on Bernd's code
+- Changed rendering system (back to SVG paths but from a more accurate drawing) and optimized method based on Bernd's code
 - Allow for setting the keyboard range (-1 to 9) with new lowOctave and highOctave properties, changed octavesCount property and made read-only.
 - Added property to set the outline strokeWidth and account for additional required space in rendering
 - Implemented blackKeysColor/sharpsFlatsColor and whiteKeysColor/naturalsColor properties
@@ -27,8 +27,10 @@ https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 ## Roadmap:
 
 ### Version 1.5
+- Shadow more of LiveCode's standard properties.
 - Implement ability to script the colors of individual piano keys (beyond basic hilighting)
 - Implement ability to show text labels of piano key names (exmp.C#-4) on each key, and add properties to adjust font, size, color of text
 
 ### Version 2.0
+- Implement ability to disable piano keys for doing things like restricting to a scale or mode
 - Implement Multi-Touch for Mobile Devices
