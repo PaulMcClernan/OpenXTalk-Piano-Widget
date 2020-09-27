@@ -484,12 +484,9 @@ private handler getHilitedNotes() returns String
    return tNoteNumsString &"\n"& tNamesString
 end handler
 
-property octaveCount  get getOctaveAmount
+property octaveCount  get mOctaves
 metadata octaveCount.label is "Octave Count"
 private variable mOctaves as Integer
-public handler getOctaveAmount() returns Integer
-   return mOctaves
-end handler
 
 property lowOctave  get getLowOctave  set setLowOctave
 metadata lowOctave.editor is "com.livecode.pi.enum"
@@ -626,7 +623,7 @@ metadata sharpsFlatsColor.editor is "com.livecode.pi.colorwithalpha"
 metadata sharpsFlatsColor.label   is "Sharps and Flats fill"
 metadata sharpsFlatsColor.section is "Colors"
 metadata sharpsFlatsColor.default is "0,0,0,255"
-private variable mSharpsFlatsColor as Color
+private variable mSharpsFlatsColor as optional Color
 public handler setSharpsFlatsColor(in pColor as String) returns nothing
    put stringToColor(pColor) into mSharpsFlatsColor
    redraw all
@@ -642,7 +639,7 @@ metadata naturalsColor.editor is "com.livecode.pi.colorwithalpha"
 metadata naturalsColor.label   is "Naturals fill"
 metadata naturalsColor.section is "Colors"
 metadata naturalsColor.default is "255,255,255,255"
-private variable mNaturalsColor as Color
+private variable mNaturalsColor as optional Color
 public handler setNaturalsColor(in pColor as String) returns nothing
    put stringToColor(pColor) into mNaturalsColor
    redraw all
@@ -683,16 +680,30 @@ public handler OnStopEditing()
 end handler
 -- this handler is called when the widget is saved
 public handler OnSave(out rProperties as Array)
-	put colorToString(mHiliteColor, true) into rProperties["hiliteColor"]
-   put colorToString(mStrokeColor, true) into rProperties["borderColor"]
+   put mChordFormula into rProperties["chordFormula"]
+   put mLowOctave into rProperties["lowOctave"]
+   put mHighOctave into rProperties["highOctave"]
+   put mOctaves into rProperties["octaveCount"]
    put mBorderWidth into rProperties["borderWidth"]
+   put colorToString(mStrokeColor, true) into rProperties["borderColor"]
+   put colorToString(mHiliteColor, true) into rProperties["hiliteColor"]
+   put colorToString(mNaturalsColor, true) into rProperties["naturalsColor"]
+   put colorToString(mSharpsFlatsColor, true) into rProperties["sharpsFlatsColor"]
 end handler
 -- this handler is called when the widget is loaded
 public handler OnLoad(in pProperties as Array)
    --log pProperties --> logging this doesn't seem to work!
-   put stringToColor(pProperties["hiliteColor"]) into mHiliteColor
-   put stringToColor(pProperties["borderWidth"]) into mStrokeColor
+   put pProperties["chordFormula"] into mChordFormula
+   put pProperties["lowOctave"] into mLowOctave
+   put pProperties["highOctave"] into mHighOctave
+   put pProperties["octaveCount"] into mOctaves
    put pProperties["borderWidth"] into mBorderWidth
+   put stringToColor(pProperties["borderColor"]) into mStrokeColor
+   put stringToColor(pProperties["hiliteColor"]) into mHiliteColor
+   put stringToColor(pProperties["naturalsColor"]) into mNaturalsColor
+   put stringToColor(pProperties["sharpsFlatsColor"]) into mSharpsFlatsColor
+   OnGeometryChanged()
+   redraw all
 end handler
 
 private variable mBlackKeysList as List
@@ -1360,6 +1371,12 @@ public handler OnGeometryChanged()
    put tMyWidthMinusStroke /7 / mOctaves into tWhiteKeySpacing
    put tMyWidthMinusStroke /12 / mOctaves into tBlackKeySpacing
    put (mLowOctave * tOctaveWidth) - tOctaveWidth into tOctaveShift
+   if mNaturalsColor is nothing then
+      put stringToColor("0,0,0,255") into mNaturalsColor
+   end if
+   if mSharpsFlatsColor is nothing then
+      put stringToColor("255,255,255,255") into mSharpsFlatsColor
+   end if
    put path "M0,0v81.841C0,81.841,0,84,2.679,84h8.642c0,0,2.679,0,2.679-2.159V0H0z" into tBlackKeyPath -- BlackKeys all have identical shape
    repeat with tOctaveIteration from 0 up to 10
       put element (tOctaveIteration+1) of mOctaveList into tOctave
@@ -1474,6 +1491,12 @@ public handler OnPaint()
    put the color of my border paint into mStrokeColor
    set the antialias of this canvas to true
    set the stroke width of this canvas to mBorderWidth
+   if mNaturalsColor is nothing then
+      put stringToColor("255,255,255,255") into mNaturalsColor
+   end if
+   if mSharpsFlatsColor is nothing then
+      put stringToColor("0,0,0,255") into mSharpsFlatsColor
+   end if
    repeat with tOctaveIteration from mLowOctave up to mHighOctave
       put element (tOctaveIteration) of mOctaveList into tOctave
    	------------------------------------------------------------------------------------------ WhiteKeys ------------------------------------------------------------------------------------------
