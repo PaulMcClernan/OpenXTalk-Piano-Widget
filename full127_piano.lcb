@@ -1374,10 +1374,10 @@ public handler OnGeometryChanged()
    put tMyWidthMinusStroke /12 / mOctaves into tBlackKeySpacing
    put (mLowOctave * tOctaveWidth) - tOctaveWidth into tOctaveShift
    if mNaturalsColor is nothing then
-      put stringToColor("0,0,0,255") into mNaturalsColor
+      put stringToColor("255,255,255,255") into mNaturalsColor
    end if
    if mAccidentalsColor is nothing then
-      put stringToColor("255,255,255,255") into mAccidentalsColor
+      put stringToColor("0,0,0,255") into mAccidentalsColor
    end if
    put path "M0,0v81.841C0,81.841,0,84,2.679,84h8.642c0,0,2.679,0,2.679-2.159V0H0z" into tBlackKeyPath -- BlackKeys all have identical shape
    repeat with tOctaveIteration from 0 up to 10
