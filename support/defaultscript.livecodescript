@@ -1,4 +1,4 @@
-script "community.livecode.widget.piano.__DefaultScript"
+script "community.livecode.paulmcclernan.pianowidget.__DefaultScript"
 
 on noteOn pNoteNum,pNoteName
 	-- Sent when a  pianokey is clicked
