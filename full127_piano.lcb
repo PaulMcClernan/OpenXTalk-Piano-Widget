@@ -80,7 +80,7 @@ Name: borderColor
 Type: property
 
 Syntax: get the borderColor of widget
-Syntax: set the borderColor of widget to pColor
+Syntax: set the borderColor of widget to <color>
 
 Summary: The color used to draw the outlinnes of the piano keys
 
@@ -152,6 +152,41 @@ Summary: The fill color when piano keys are hilited
 Description:
 The <hiliteColor> property controls the color used to draw the
 widget's piano key fill color while hilighted.
+
+
+Name: colorNotes
+Type: property
+
+Syntax: set the colorNotes of <widget> to <pColorsSpaceNotesPairedLineList>
+Syntax: get the colorNotes of <widget>
+
+Example:
+on mouseUp
+  -- clear all keys individual color settings:
+  set the colorNotes of widget "Piano Widget" to reset
+  -- set color white and 50% transparency for ALL C# keys, MIDI note 60, D#4 (same as Eb4), Gb 5th octave
+  -- and then also set color to 50% grey, no transparency, for all Ab/G# keys:
+  set the colorNotes of widget "Piano Widget" to "255,255,255,127 C#,60,D#4,F#Gb5" & \
+   cr & "127,127,127,255 G#"
+  put the colorNotes of widget "Piano Widget"
+end mouseUp
+
+Summary: The colorNotes piano keys as line list or colors and note pairs
+
+Description:
+The <colorNotes> property can be used to set colors for individual
+piano keys using the format R,G,B,A followed by a comma delimited list
+of keys, by MIDI note numbers or note names, seperated by a single space.
+If a note name is used without an octave number then that note is colorized
+on all 10.5 octaves. Set the <colorNotes> to empty, reset or pass an empty
+string to clear all key colorization, reverting key colors to those
+specified by the <accidentalsColor>/<blackKeysColor> and
+<naturalsColor>/<whiteKeysColor> properties.
+Multiple lines of color and note-lists can be set, any duplicates
+will ovewrite previously set colorKeys.
+The property returns a line delimited list of RGBA, blank space, with
+a note number-list, followed by a space, and then the same note list
+as note-names, for any keys that have been colorized.
 
 
 Name: hilitedNotes
