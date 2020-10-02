@@ -10,7 +10,7 @@ See my other Repos for playback engines for Apple devices. This is a work in pro
 https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 
 ### Version 1.2
-- New the colorNotes property for colorizing individual piano keys with the format "R,G,B,A N,NN,N#,etc." 
+- New 'the colorNotes' property for colorizing individual piano keys with the format "R,G,B,A N,NN,N#,etc." 
 (exp. set the colorNotes of widget 1 to "255,255,255,127 C,E5" -- sets C notes on all octaves and the sinlge E note on 5th octave to 50% transparent white)
 Passing multiple lines of colors _ notes pairs is peritted.
 
