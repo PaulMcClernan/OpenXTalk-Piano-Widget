@@ -33,7 +33,6 @@ Passing multiple lines of colors _ notes pairs is peritted.
 
 ### Version 1.5
 - Shadow more of LiveCode's standard properties.
-- Implement ability to script the colors of individual piano keys (beyond basic hilighting)
 - Implement ability to show text labels of piano key names (exmp.C#-4) on each key, and add properties to adjust font, size, color of text
 
 ### Version 2.0
