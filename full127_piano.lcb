@@ -633,14 +633,12 @@ private handler getColorNotes() returns String
       put "" into tCombineColoredKeyNames
       put "" into tCurrentColorString
       repeat with tCounter from 1 up to (the number of elements in tColoredKeysList)
-         -- log [element tCounter of tColoredKeysList]
          split (element tCounter of tColoredKeysList) by " " into tTEMPColoredKeysList
          -- log [element 1 of tTEMPColoredKeysList]
-         if element 1 of tTEMPColoredKeysList is tCurrentColorString then -- if it's not the same color as the previous loop iteration's color then ...
-            --- if it is still the same color as the last iteration then just tack on the new note names & note numbs to the same line
+         if element 1 of tTEMPColoredKeysList is tCurrentColorString then --- if it is still the same color as the last iteration then just tack on the new note names & note numbers to the same line element
             put element 2 of tTEMPColoredKeysList & "," after tCombineColoredKeyNums
             put element 3 of tTEMPColoredKeysList & "," after tCombineColoredKeyNames
-         else
+         else             -- if it's not the same color as the previous loop iteration's color then ...
             if tCurrentColorString is not "" then -- if it's not the first line then push the last line onto the combined list, reset variables, and start a new line
                delete the last char of tCombineColoredKeyNums --- delete trailing comma
                delete the last char of tCombineColoredKeyNames --- delete trailing comma
@@ -650,9 +648,7 @@ private handler getColorNotes() returns String
                put element 2 of tTEMPColoredKeysList & "," into tCombineColoredKeyNums
                put element 3 of tTEMPColoredKeysList & "," into tCombineColoredKeyNames
                next repeat
-            else -- if it is the first line just put it into the new line
-               -- push ( tCurrentColorString & " " & tCombineColoredKeyNums & " " & tCombineColoredKeyNames ) onto tCombinedColoredKeysList
-               -- log [( tCurrentColorString & " " & tCombineColoredKeyNums & " " & tCombineColoredKeyNames )]
+            else -- if it is the first line just put it into the new line element
                put element 1 of tTEMPColoredKeysList into tCurrentColorString
                put element 2 of tTEMPColoredKeysList & "," into tCombineColoredKeyNums
                put element 3 of tTEMPColoredKeysList & "," into tCombineColoredKeyNames
