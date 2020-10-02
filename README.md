@@ -6,8 +6,13 @@ A Graphical Piano Keyboard Widget written in LCB
 This Widget is a graphical UI element only. It produces no sound on it's own and is meant to be attached to a MIDI play back engine.
 See my other Repos for playback engines for Apple devices. This is a work in progress at the moment.
 
-## Video Demo Here:
+## Video Demo (outdated) Here:
 https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
+
+### Version 1.2
+- New the colorNotes property for colorizing individual piano keys with the format "R,G,B,A N,NN,N#,etc." 
+(exp. set the colorNotes of widget 1 to "255,255,255,127 C,E5" -- sets C notes on all octaves and the sinlge E note on 5th octave to 50% transparent white)
+Passing multiple lines of colors _ notes pairs is peritted.
 
 ### Version 0.8 thu 1.0
 - Changed rendering system (back to SVG paths but from a more accurate drawing) and optimized method based on Bernd's code
