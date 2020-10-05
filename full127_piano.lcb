@@ -1467,6 +1467,7 @@ public handler OnCreate()
       put false into tArray["keySharpFlat"]
       -- put stringToColor("255,0,0,255") into tArray["keyColor"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
       put 0 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tWhiteKeysList
    	put "D" into tArray["KeyName"]
@@ -1477,6 +1478,7 @@ public handler OnCreate()
    	put false into tArray["KeyHilited"]
       put false into tArray["keySharpFlat"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
    	put 2 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tWhiteKeysList
    	put "E" into tArray["KeyName"]
@@ -1487,6 +1489,7 @@ public handler OnCreate()
    	put false into tArray["KeyHilited"]
       put false into tArray["keySharpFlat"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
    	put 4 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tWhiteKeysList
    	put "F" into tArray["KeyName"]
@@ -1507,6 +1510,7 @@ public handler OnCreate()
    	put false into tArray["KeyHilited"]
       put false into tArray["keySharpFlat"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
    	put 7 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tWhiteKeysList
    	put "A" into tArray["KeyName"]
@@ -1517,6 +1521,7 @@ public handler OnCreate()
    	put false into tArray["KeyHilited"]
       put false into tArray["keySharpFlat"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
    	put 9 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tWhiteKeysList
    	put "B" into tArray["KeyName"]
@@ -1527,6 +1532,7 @@ public handler OnCreate()
    	put false into tArray["KeyHilited"]
       put false into tArray["keySharpFlat"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
    	put 11 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tWhiteKeysList
       --------------------------------------------Black Keys--------------------------------------------
@@ -1540,6 +1546,7 @@ public handler OnCreate()
    	put false into tArray["KeyHilited"]
       put true into tArray["keySharpFlat"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
    	put 1 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tBlackKeysList
    	put "D#Eb" into tArray["KeyName"]
@@ -1550,6 +1557,7 @@ public handler OnCreate()
    	put false into tArray["KeyHilited"]
       put true into tArray["keySharpFlat"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
    	put 3 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tBlackKeysList
    	put "F#Gb" into tArray["KeyName"]
@@ -1560,6 +1568,7 @@ public handler OnCreate()
    	put false into tArray["KeyHilited"]
       put true into tArray["keySharpFlat"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
    	put 6 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tBlackKeysList
    	put "G#Ab" into tArray["KeyName"]
@@ -1570,6 +1579,7 @@ public handler OnCreate()
    	put false into tArray["KeyHilited"]
       put true into tArray["keySharpFlat"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
    	put 8 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tBlackKeysList
    	put "A#Bb" into tArray["KeyName"]
@@ -1580,6 +1590,7 @@ public handler OnCreate()
    	put false into tArray["KeyHilited"]
       put true into tArray["keySharpFlat"]
       put nothing into tArray["keyColor"]
+      put false into tArray["keyLocked"]
    	put 10 + (tOctaveIteration * 12) into tArray["KeyNumber"]
    	push tArray onto tBlackKeysList
       --------------------------------------------- Octave --------------------------------------------
@@ -1587,14 +1598,31 @@ public handler OnCreate()
 
       put (tOctaveIteration -1) formatted as string into tArray["OctaveName"]
       put 1 +tOctaveIteration into tArray["OctaveNumber"]
-      put path "" into tArray["OctaveBackgroundPath"]
       put tBlackKeysList into tArray["OctaveBlackKeysList"]
       put tWhiteKeysList into tArray["OctaveWhiteKeysList"]
       put [1 + (tOctaveIteration * 12), 3 + (tOctaveIteration * 12), 6 + (tOctaveIteration * 12), 8 + (tOctaveIteration * 12), 10 + (tOctaveIteration * 12)] into tArray["OctaveBlackKeysIndex"]
       put [0 + (tOctaveIteration * 12), 2 + (tOctaveIteration * 12), 4 + (tOctaveIteration * 12), 5 + (tOctaveIteration * 12), 7 + (tOctaveIteration * 12), 9 + (tOctaveIteration * 12), 11 + (tOctaveIteration * 12)] into tArray["OctaveWhiteKeysIndex"]
       push tArray onto mOctaveList
    end repeat
-
+   --------- Lock Keys Over 127
+   put element 11 of mOctaveList into tOctave
+   put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+   put element 6 of tWhiteKeysList into tArray
+   put true into tArray["keyLocked"]
+   put tArray into element 6 of tWhiteKeysList
+   put element 7 of tWhiteKeysList into tArray
+   put true into tArray["keyLocked"]
+   put tArray into element 7 of tWhiteKeysList
+   put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+   put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+   put element 4 of tBlackKeysList into tArray
+   put true into tArray["keyLocked"]
+   put tArray into element 4 of tBlackKeysList
+   put element 5 of tBlackKeysList into tArray
+   put true into tArray["keyLocked"]
+   put tArray into element 5 of tBlackKeysList
+   put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+   put tOctave into element 11 of mOctaveList
 end handler
 
 public handler OnGeometryChanged()
