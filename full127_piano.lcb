@@ -357,6 +357,8 @@ widget community.livecode.paulmcclernan.pianowidget
 use com.livecode.canvas
 use com.livecode.string
 use com.livecode.char
+use com.livecode.array
+use com.livecode.list
 use com.livecode.widget
 use com.livecode.engine
 use com.livecode.library.widgetutils
@@ -375,6 +377,142 @@ private handler GetIconSVGPath() returns String
    return "M0,0v69.6c0,1.4,1.1,2.5,2.4,2.5h9.7c0.8,0,1.5-0.4,2-1.1c0.4,0.7,1.1,1.1,2,1.1h9.8c0.8,0,1.5-0.4,1.9-1.1 c0.4,0.6,1.1,1.1,1.9,1.1h9.8c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1h9.8c0.8,0,1.5-0.4,2-1.1c0.4,0.7,1.1,1.1,2,1.1h9.7 c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1h9.7c0.8,0,1.5-0.4,1.9-1.1c0.4,0.6,1.1,1.1,1.9,1.1H94c1.3,0,2.4-1.1,2.4-2.5V0H0z M95.4,69.6c0,0.8-0.6,1.5-1.4,1.5h-9.8c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h8.1L95.4,69.6z M80.4,71.1h-9.7 c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h3.6v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C81.8,70.4,81.2,71.1,80.4,71.1z M57,71.1c-0.8,0-1.4-0.7-1.4-1.5V46.9h2.5c1,0,1.9-0.9,1.9-2V1h3.7v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7c0,0.8-0.6,1.5-1.4,1.5 L57,71.1z M53.1,71.1h-9.8c-0.8,0-1.4-0.7-1.4-1.5V1H50v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C54.5,70.4,53.8,71.1,53.1,71.1z M28.3,69.6V46.9h2.5c1,0,1.9-0.9,1.9-2V1h8.1v68.6c0,0.8-0.6,1.5-1.4,1.5h-9.8C28.9,71.1,28.3,70.4,28.3,69.6z M14.7,69.6V46.9 h2.5c1,0,1.9-0.9,1.9-2V1h3.7v43.6l0,0v0.3c0,1.1,0.9,2,1.9,2h2.5v22.7c0,0.8-0.6,1.5-1.4,1.5H16C15.3,71.1,14.7,70.4,14.7,69.6z M12.1,71.1H2.4c-0.8,0-1.4-0.7-1.4-1.5V1h8.1v43.9c0,1.1,0.9,2,1.9,2h2.5v22.7C13.5,70.4,12.9,71.1,12.1,71.1z"
 end handler
 
+public handler getChromaticNumberForNoteName(in pKey as String) returns optional Number
+   variable tVarListA as List
+   variable tVarListB as List
+   variable tOffset as Number
+	put ["C","C#","C#Db","Db","D","D#","D#Eb","Eb","E","F","F#","F#Gb","Gb","G","G#","G#Ab","Ab","A","A#","A#Bb","Bb","B"] into tVarListA
+   put [1,   2,   2,     2,    3,  4,     4,   4,  5,  6,   7,    7,    7,   8,  9,    9,    9,  10,  11,    11,  11,  12 ] into tVarListB
+   put the index of pKey in tVarListA into tOffset
+   -- log tOffset
+   if tOffset > 0 then
+      return element tOffset of tVarListB
+   else
+      return -1
+   end if
+end handler
+
+-- constant kNoteNamesList is ["C","C#","C#Db","Db","D","D#","D#Eb","Eb","E","F","F#","F#Gb","Gb","G","G#","G#Ab","Ab","A","A#","A#Bb","Bb","B"]
+
+property lockToTonicWithScale get getLockToTonicWithScale set setLockToTonicWithScale
+metadata lockToTonicWithScale.user_visible is "false"
+private handler setLockToTonicWithScale(pTonicAndScale as String) returns nothing
+   variable tTonicStr as String
+   variable tNotesStr as String
+   variable tScaleStr as String
+   variable tTonicAndScale as List
+   variable tScale as List
+   variable tScaleOffset as Number
+   variable tScaleOffsets as List
+   variable tScaleGoodStr as String
+   variable tRootNumber as Number
+   variable tCtr as Number
+   variable tOffset as Number
+   variable tNoteNamesList as List
+   variable tNoteValidNamesList as List
+   variable tNoteValidOffsetsStrList as List
+
+   variable tStepList as List
+   variable tStepValues as List
+   variable tStepValue as Number
+   variable tStepTotal as List
+
+   if pTonicAndScale is the empty string then
+      unlockAllPianoKeys()
+   else
+      split pTonicAndScale by " " into tTonicAndScale
+      put element 1 of tTonicAndScale into tTonicStr
+      put ["C","C#","C#Db","Db","D","D#","D#Eb","Eb","E","F","F#","F#Gb","Gb","G","G#","G#Ab","Ab","A","A#","A#Bb","Bb","B"] into tNoteValidNamesList
+      put ["1","2","3","4","5","6","7","8","9","10","11"] into tNoteValidOffsetsStrList
+      put ["C","C#Db","D","D#Eb","E","F","F#Gb","G","G#Ab","A","A#Bb","B"] into tNoteNamesList
+      put ["H","h","W","w"] into tStepList
+      put [1,1,2,2] into tStepValues
+      if ( the index of tTonicStr in tNoteValidNamesList > 0 ) then
+         put element 2 of tTonicAndScale into tScaleStr
+         put getSharpOrFlatToSharpAndFlat(tTonicStr) into tTonicStr
+         put getChromaticNumberForNoteName(tTonicStr) into tRootNumber
+         log [tScaleStr,tTonicStr,tRootNumber]
+         put tTonicStr & "," into tScaleGoodStr
+         split tScaleStr by "," into tScale
+         if ((the index of (element 1 of tScale) in tStepList) > 0 ) then -- Do HalfSteps,WholeSteps formula
+            put 0 into tScaleOffset
+            repeat with tCtr from 1 up to (the number of elements in tScale)
+                put (the index of (element tCtr of tScale) in tStepList) into tOffset
+                if tOffset>0 then
+                   put (element tOffset of tStepValues) into tStepValue
+                   -- log tStepValue
+                   put tScaleOffset + tStepValue into tScaleOffset
+                   push tScaleOffset onto tScaleOffsets
+                end if
+            end repeat
+         else if ((the index of (element 1 of tScale) in tNoteValidOffsetsStrList) > 0 ) then
+            repeat with tCtr from 1 up to (the number of elements in tScale)
+                put (the index of (element tCtr of tScale) in tNoteValidOffsetsStrList) into tOffset
+                if tOffset>0 then
+                   put ((element tOffset of tNoteValidOffsetsStrList) parsed as number) into tStepValue
+                   push tStepValue onto tScaleOffsets
+                end if
+            end repeat
+         end if
+         if tScaleOffsets is not the empty list then
+            -- log tScaleGoodStr
+            repeat with tCtr from 1 up to (the number of elements in tScaleOffsets)
+               put tRootNumber+ (element tCtr of tScaleOffsets) into tOffset
+               repeat forever
+                  if tOffset > 12 then
+                     subtract 12 from tOffset
+                  else
+                     exit repeat
+                  end if
+               end repeat
+               put element tOffset of tNoteNamesList into tNotesStr
+               put tNotesStr & "," after tScaleGoodStr
+            end repeat
+            log tScaleGoodStr
+            setLockedToScale(tScaleGoodStr)
+         end if
+      end if
+   end if
+end handler
+
+private handler getLockToTonicWithScale( ) returns optional any
+   getLockedToScale()
+   return mScaleNotes
+end handler
+
+private handler unlockAllPianoKeys()
+   variable tOctave as Array
+   variable tBlackKeysList as List
+   variable tBlackKey as Array
+   variable tWhiteKeysList as List
+   variable tWhiteKey as Array
+   variable tKeyIteration as Number
+   variable tOctaveIteration as Number
+   repeat with tOctaveIteration from 1 up to 11
+      put element tOctaveIteration of mOctaveList into tOctave
+      put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+      repeat with tKeyIteration from 1 up to 5
+         put element tKeyIteration of tBlackKeysList into tBlackKey
+         if tBlackKey["KeyNumber"] <128 then
+            put false into tBlackKey["keyLocked"]
+            put tBlackKey into element tKeyIteration of tBlackKeysList
+         end if
+      end repeat
+      put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+      put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+      repeat with tKeyIteration from 1 up to 7
+         put element tKeyIteration of tWhiteKeysList into tWhiteKey
+         if tWhiteKey["KeyNumber"] <128 then
+            put false into tWhiteKey["keyLocked"]
+            put tWhiteKey into element tKeyIteration of tWhiteKeysList
+         end if
+      end repeat
+      put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+      put tOctave into element tOctaveIteration of mOctaveList
+   end repeat
+   put "" into mScaleNotes
+end handler
+
 property lockToScale get getLockedToScale set setLockedToScale
 metadata lockToScale.user_visible is "false"
 private variable mScaleNotes as String
@@ -391,30 +529,7 @@ private handler setLockedToScale(pScaleNotes as String) returns nothing
    variable tOctaveIteration as Number
    setHilitedNotes("") --- Clear hilities first so that there is no keys stuck on hilited
    if pScaleNotes is the empty string then
-      ------------------------------------------------------------------------ Set All Unlocked ------------------------------------------------------------------------
-      repeat with tOctaveIteration from 1 up to 11
-         put element tOctaveIteration of mOctaveList into tOctave
-         put tOctave["OctaveBlackKeysList"] into tBlackKeysList
-         repeat with tKeyIteration from 1 up to 5
-            put element tKeyIteration of tBlackKeysList into tBlackKey
-            if tBlackKey["KeyNumber"] <128 then
-               put false into tBlackKey["keyLocked"]
-               put tBlackKey into element tKeyIteration of tBlackKeysList
-            end if
-         end repeat
-         put tBlackKeysList into tOctave["OctaveBlackKeysList"]
-         put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
-         repeat with tKeyIteration from 1 up to 7
-            put element tKeyIteration of tWhiteKeysList into tWhiteKey
-            if tWhiteKey["KeyNumber"] <128 then
-               put false into tWhiteKey["keyLocked"]
-               put tWhiteKey into element tKeyIteration of tWhiteKeysList
-            end if
-         end repeat
-         put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
-         put tOctave into element tOctaveIteration of mOctaveList
-      end repeat
-      put "" into mScaleNotes
+      unlockAllPianoKeys()
    else
       ------------------------------------------------------------------------ Set All Locked First ------------------------------------------------------------------------
       repeat with tOctaveIteration from 1 up to 11
@@ -501,6 +616,21 @@ private handler setLockedToScale(pScaleNotes as String) returns nothing
 end handler
 
 private handler getLockedToScale() returns String
+   variable mScaleNotesList as List
+   variable mScaleNotesNewList as List
+   variable mScaleNote as String
+   variable tCtr as Number
+   put the empty list into mScaleNotesNewList
+   split mScaleNotes by "," into mScaleNotesList
+   repeat for each element mScaleNote in mScaleNotesList
+      if ((the index of (mScaleNote) in mScaleNotesNewList) > 0 ) then
+      -- if mScaleNote is among the elements of mScaleNotesNewList then
+         next repeat
+      else
+         push mScaleNote onto mScaleNotesNewList
+      end if
+   end repeat
+   combine mScaleNotesNewList with "," into mScaleNotes
    return mScaleNotes
 end handler
 
