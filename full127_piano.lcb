@@ -215,6 +215,33 @@ Set to empty or pass an empty string to clear all key hilites.
 The property returns the list as two lines,
 Line one lists MIDI note numbers and the second line list same keys as note names.
 
+Name: lockToScale
+Type: property
+
+Syntax: set the lockToScale of <widget> to <pNoteNamesList>
+Syntax: get the lockToScale of <widget>
+
+Example:
+on mouseUp
+  -- clear any previously set scale:
+  set the lockToScale of widget "Piano Widget" to empty
+  --  and then lock all piano keys that are NOT in the list of Note Names,
+  -- any octave number on the end of NoteNames will be ignored, and the full
+  -- Sharp AND Flat NoteName will appear in the returned list
+  set the lockToScale of widget "Piano Widget" to "C#,D#4,F#Gb,G#"
+  get the lockToScale of widget "Piano Widget"
+  -- 'it' now contains "C#Db,D#Eb,F#Gb,G#Ab"
+end mouseUp
+
+Summary: lockToScale are the  piano keys that are enabled or empty if no scale
+
+Description:
+The <lockToScale> property can be set to a comma delimited list of Note Names
+(ie C#,D,Eb,A#Bb,etc.) any piano keys with note names that are NOT in the list 
+will be disabled. Use this property to lock the Piano to a musical scale.
+Get the lockToScale property to see a list of notes that are currently enabled.
+If no scale has been applied then the property will contain empty.
+
 Name: chordFormula
 Type: property
 
@@ -411,12 +438,10 @@ private handler setLockToTonicWithScale(pTonicAndScale as String) returns nothin
    variable tNoteNamesList as List
    variable tNoteValidNamesList as List
    variable tNoteValidOffsetsStrList as List
-
    variable tStepList as List
    variable tStepValues as List
    variable tStepValue as Number
    variable tStepTotal as List
-
    if pTonicAndScale is the empty string then
       unlockAllPianoKeys()
    else
