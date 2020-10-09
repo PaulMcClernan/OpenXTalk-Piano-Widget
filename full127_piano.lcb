@@ -215,6 +215,42 @@ Set to empty or pass an empty string to clear all key hilites.
 The property returns the list as two lines,
 Line one lists MIDI note numbers and the second line list same keys as note names.
 
+lockToTonicWithScale
+Name: lockToTonicWithScale
+Type: property
+
+Syntax: set the lockToTonicWithScale of <widget> to <pRootAndScaleFormula>
+Syntax: get the lockToTonicWithScale of <widget>
+
+Example:
+on mouseUp
+  -- clear any previously set scale:
+  set the lockToTonicWithScale of widget "Piano Widget" to empty
+  -- the following form locks to a scale of the C,C#,D#,E keys enabled:
+  set the lockToTonicWithScale of widget "Piano Widget" to "C 1,3,4"
+
+  -- the following form sets to a same scale of the C,C#,D#,E keys enabled:
+  set the lockToTonicWithScale of widget "Piano Widget" to "C H,W,h"
+
+  get the lockToTonicWithScale of widget "Piano Widget"
+  -- 'it' now contains "C,C#,D#,E"
+end mouseUp
+
+Summary: lockToTonicWithScale are the  piano keys that are enabled or empty if no scale
+
+Description:
+The <lockToTonicWithScale> property can be set to Root Note as a NoteName followed
+by a space and then by a comma delimited list of either numeric offsets,
+between 1 and 11 that represent half-steps from the root note, or using the
+style H,W,WH (case insenstive) often used to describe musical scales or modes.
+H meaning Halfstep, W for Wholestep, and combining H and W for Halfstep+Wholestep.
+Piano keys that will be enabled are then determine from this root + formula pair
+and any keys that are not in the resulting note-name list will be locked.
+Set <lockToTonicWithScale> to empty to clear the scale and unlock all piano keys.
+Getting the <lockToTonicWithScale> returns a comma delimited list of notes in the
+scale, rather than the formula used, or empty. This returned list can then be
+used with the <lockToScale> property.
+
 Name: lockToScale
 Type: property
 
@@ -237,7 +273,7 @@ Summary: lockToScale are the  piano keys that are enabled or empty if no scale
 
 Description:
 The <lockToScale> property can be set to a comma delimited list of Note Names
-(ie C#,D,Eb,A#Bb,etc.) any piano keys with note names that are NOT in the list 
+(ie C#,D,Eb,A#Bb,etc.) any piano keys with note names that are NOT in the list
 will be disabled. Use this property to lock the Piano to a musical scale.
 Get the lockToScale property to see a list of notes that are currently enabled.
 If no scale has been applied then the property will contain empty.
