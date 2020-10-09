@@ -455,7 +455,7 @@ end handler
 
 -- constant kNoteNamesList is ["C","C#","C#Db","Db","D","D#","D#Eb","Eb","E","F","F#","F#Gb","Gb","G","G#","G#Ab","Ab","A","A#","A#Bb","Bb","B"]
 
-property lockToTonicWithScale get getLockToTonicWithScale set setLockToTonicWithScale
+property lockToTonicWithScale get mScaleNotes set setLockToTonicWithScale
 metadata lockToTonicWithScale.user_visible is "false"
 private handler setLockToTonicWithScale(pTonicAndScale as String) returns nothing
    variable tTonicStr as String
@@ -534,7 +534,7 @@ private handler setLockToTonicWithScale(pTonicAndScale as String) returns nothin
    end if
 end handler
 
-private handler getLockToTonicWithScale( ) returns optional any
+private handler getLockToTonicWithScale( ) returns String
    getLockedToScale()
    return mScaleNotes
 end handler
@@ -675,21 +675,21 @@ private handler setLockedToScale(pScaleNotes as String) returns nothing
 end handler
 
 private handler getLockedToScale() returns String
-   variable mScaleNotesList as List
-   variable mScaleNotesNewList as List
-   variable mScaleNote as String
+   variable tScaleNotesList as List
+   variable tScaleNotesNewList as List
+   variable tScaleNote as String
    variable tCtr as Number
-   put the empty list into mScaleNotesNewList
-   split mScaleNotes by "," into mScaleNotesList
-   repeat for each element mScaleNote in mScaleNotesList
-      if ((the index of (mScaleNote) in mScaleNotesNewList) > 0 ) then
+   put the empty list into tScaleNotesNewList
+   split mScaleNotes by "," into tScaleNotesList
+   repeat for each element tScaleNote in tScaleNotesList
+      if ((the index of (tScaleNote) in tScaleNotesNewList) > 0 ) then
       -- if mScaleNote is among the elements of mScaleNotesNewList then
          next repeat
       else
-         push mScaleNote onto mScaleNotesNewList
+         push tScaleNote onto tScaleNotesNewList
       end if
    end repeat
-   combine mScaleNotesNewList with "," into mScaleNotes
+   combine tScaleNotesNewList with "," into mScaleNotes
    return mScaleNotes
 end handler
 
@@ -1058,6 +1058,7 @@ public handler setLowOctave(in pLowOctaveStr as String) returns nothing
    end if
 end handler
 public handler getLowOctave() returns String
+   log mLowOctaveStr
    return mLowOctaveStr
 end handler
 
@@ -1232,9 +1233,9 @@ end handler
 public handler OnSave(out rProperties as Array)
    put getHilitedNotes() into rProperties["hilitedNotes"]
    put mChordFormula into rProperties["chordFormula"]
-   put mLowOctave into rProperties["lowOctave"]
-   put mHighOctave into rProperties["highOctave"]
-   -- put mOctaves into rProperties["octaveCount"]
+   put mLowOctaveStr into rProperties["lowOctave"]
+   put mHighOctaveStr into rProperties["highOctave"]
+   put mScaleNotes into rProperties["lockToScale"]
    put mBorderWidth into rProperties["borderWidth"]
    put colorToString(mStrokeColor, true) into rProperties["borderColor"]
    put colorToString(mHiliteColor, true) into rProperties["hiliteColor"]
@@ -1248,7 +1249,7 @@ public handler OnLoad(in pProperties as Array)
    setChordFormula( pProperties["chordFormula"])
    setLowOctave( pProperties["lowOctave"])
    setHighOctave( pProperties["highOctave"])
-   --put pProperties["octaveCount"] into mOctaves
+   setLockedToScale( pProperties["lockToScale"])
    put pProperties["borderWidth"] into mBorderWidth
    put stringToColor(pProperties["borderColor"]) into mStrokeColor
    put stringToColor(pProperties["hiliteColor"]) into mHiliteColor
@@ -1739,6 +1740,7 @@ public handler OnCreate()
    put "4" into mHighOctaveStr
    put 6 into mHighOctave
    put "..." into mChordPreset
+   put "" into mScaleNotes
    put nothing into mSelectedKey
    put false into mPianoMouseButtonDown
    --------------------------------------------------------------
