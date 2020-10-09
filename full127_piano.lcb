@@ -490,7 +490,7 @@ private handler setLockToTonicWithScale(pTonicAndScale as String) returns nothin
          put element 2 of tTonicAndScale into tScaleStr
          put getSharpOrFlatToSharpAndFlat(tTonicStr) into tTonicStr
          put getChromaticNumberForNoteName(tTonicStr) into tRootNumber
-         log [tScaleStr,tTonicStr,tRootNumber]
+         -- log [tScaleStr,tTonicStr,tRootNumber]
          put tTonicStr & "," into tScaleGoodStr
          split tScaleStr by "," into tScale
          if ((the index of (element 1 of tScale) in tStepList) > 0 ) then -- Do HalfSteps,WholeSteps formula
@@ -527,7 +527,7 @@ private handler setLockToTonicWithScale(pTonicAndScale as String) returns nothin
                put element tOffset of tNoteNamesList into tNotesStr
                put tNotesStr & "," after tScaleGoodStr
             end repeat
-            log tScaleGoodStr
+            -- log tScaleGoodStr
             setLockedToScale(tScaleGoodStr)
          end if
       end if
@@ -1058,7 +1058,7 @@ public handler setLowOctave(in pLowOctaveStr as String) returns nothing
    end if
 end handler
 public handler getLowOctave() returns String
-   log mLowOctaveStr
+   -- log mLowOctaveStr
    return mLowOctaveStr
 end handler
 
