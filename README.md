@@ -9,6 +9,9 @@ See my other Repos for playback engines for Apple devices. This is a work in pro
 ## Video Demo (outdated) Here:
 https://www.youtube.com/watch?v=xg7rBg8p2zQ&feature=youtu.be
 
+### Version 1.3
+- New lockToScale and lockToTonicWithScale properties for restricting to piano to a musical scale or mode
+
 ### Version 1.2
 - New 'the colorNotes' property for colorizing individual piano keys with the format "R,G,B,A N,NN,N#,etc."
 (exp. set the colorNotes of widget 1 to "255,255,255,127 C,E5" -- sets C notes on all octaves and the sinlge E note on 5th octave to 50% transparent white)
@@ -32,9 +35,8 @@ Sdetting to multiple lines of color _ note-list pairs is permitted.
 ## Roadmap:
 
 ### Version 1.5
-- Shadow more of LiveCode's standard properties.
+- Shadow more of LiveCode's standard properties such as focusBorder or fading colors for disabled look
 - Implement ability to show text labels of piano key names (exmp.C#-4) on each key, and add properties to adjust font, size, color of text
-- Implement ability to disable piano keys for doing things like restricting to a scale or mode
 
 ### Version 2.0
 - Implement Multi-Touch for Mobile Devices
