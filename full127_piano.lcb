@@ -484,8 +484,8 @@ private handler setLockToTonicWithScale(pTonicAndScale as String) returns nothin
       put ["C","C#","C#Db","Db","D","D#","D#Eb","Eb","E","F","F#","F#Gb","Gb","G","G#","G#Ab","Ab","A","A#","A#Bb","Bb","B"] into tNoteValidNamesList
       put ["1","2","3","4","5","6","7","8","9","10","11"] into tNoteValidOffsetsStrList
       put ["C","C#Db","D","D#Eb","E","F","F#Gb","G","G#Ab","A","A#Bb","B"] into tNoteNamesList
-      put ["H","h","W","w"] into tStepList
-      put [1,1,2,2] into tStepValues
+      put ["H","h",  "W","w","HW","WH","hw","wh","WH","hW","Hw","3H","3h","2W","2w","4h","4h"] into tStepList
+      put [1,    1,   2,   2, 3,   3,   3,    3,  3,    3,  3,   3,   3,    4,   4,   4,  4] into tStepValues
       if ( the index of tTonicStr in tNoteValidNamesList > 0 ) then
          put element 2 of tTonicAndScale into tScaleStr
          put getSharpOrFlatToSharpAndFlat(tTonicStr) into tTonicStr
