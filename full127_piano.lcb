@@ -884,7 +884,7 @@ end handler
 
 property unhiliteNotes get getUnhiliteNotes set setUnhiliteNotes
 metadata uhiliteNotes.user_visible is "false"
-private handler setUnhiliteNotes(in pHilightNotes as String) returns nothing
+private handler setUnhiliteNotes(in pHilightNotes as optional String) returns nothing
    variable tOctave as Array
    variable tBlackKeysList as List
    variable tBlackKey as Array
@@ -895,69 +895,72 @@ private handler setUnhiliteNotes(in pHilightNotes as String) returns nothing
    variable tKey as optional any
    variable tKeyIteration as Number
    variable tOctaveIteration as Number
-   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   split pHilightNotes by "," into tKeysList
-   repeat for each element tKey in tKeysList
-      --- add check if its a number first then do different lookup
+   if pHilightNotes is not nothing and pHilightNotes is not the empty string then
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      split pHilightNotes by "," into tKeysList
+      repeat for each element tKey in tKeysList
+         --- add check if its a number first then do different lookup
 
-      --- check if it's a sharp without flat or flat
-      if the number of chars in tKey > 1 then
-         if ((char 2 of tKey is "#") and (the number of chars in tKey < 4))  or (char 2 of tKey is "b") then
-            if (char -1 of tKey) parsed as number is not nothing then
-               repeat forever
-                  if the last char of tKey is in "-012356789" then
-                     put the last char of tKey before tNumStr
-                     delete the last char of tKey
-                  else
-                     exit repeat
-                  end if
-               end repeat
+         --- check if it's a sharp without flat or flat
+         if the number of chars in tKey > 1 then
+            if ((char 2 of tKey is "#") and (the number of chars in tKey < 4))  or (char 2 of tKey is "b") then
+               if (char -1 of tKey) parsed as number is not nothing then
+                  repeat forever
+                     if the last char of tKey is in "-012356789" then
+                        put the last char of tKey before tNumStr
+                        delete the last char of tKey
+                     else
+                        exit repeat
+                     end if
+                  end repeat
+               end if
+               put getSharpOrFlatToSharpAndFlat(tKey) into tKey
+               put tKey & tNumStr into tKey
             end if
-            put getSharpOrFlatToSharpAndFlat(tKey) into tKey
-            put tKey & tNumStr into tKey
          end if
-      end if
-      repeat with tOctaveIteration from 1 up to 11
-         put element tOctaveIteration of mOctaveList into tOctave
-         put tOctave["OctaveBlackKeysList"] into tBlackKeysList
-         repeat with tKeyIteration from 1 up to 5
-            put element tKeyIteration of tBlackKeysList into tBlackKey
-            if tBlackKey["KeyName"] is tKey then
-               put false into tBlackKey["KeyHilited"]
-               put tBlackKey into element tKeyIteration of tBlackKeysList
-            else if (tBlackKey["KeyName"] & tOctave["OctaveName"]) is tKey then
+         repeat with tOctaveIteration from 1 up to 11
+            put element tOctaveIteration of mOctaveList into tOctave
+            put tOctave["OctaveBlackKeysList"] into tBlackKeysList
+            repeat with tKeyIteration from 1 up to 5
+               put element tKeyIteration of tBlackKeysList into tBlackKey
+               if tBlackKey["KeyName"] is tKey then
                   put false into tBlackKey["KeyHilited"]
                   put tBlackKey into element tKeyIteration of tBlackKeysList
-            else if tBlackKey["KeyNumber"] is tKey parsed as number then
-               put false into tBlackKey["KeyHilited"]
-               put tBlackKey into element tKeyIteration of tBlackKeysList
-            end if
-         end repeat
-         put tBlackKeysList into tOctave["OctaveBlackKeysList"]
+               else if (tBlackKey["KeyName"] & tOctave["OctaveName"]) is tKey then
+                     put false into tBlackKey["KeyHilited"]
+                     put tBlackKey into element tKeyIteration of tBlackKeysList
+               else if tBlackKey["KeyNumber"] is tKey parsed as number then
+                  put false into tBlackKey["KeyHilited"]
+                  put tBlackKey into element tKeyIteration of tBlackKeysList
+               end if
+            end repeat
+            put tBlackKeysList into tOctave["OctaveBlackKeysList"]
 
-         put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
-         repeat with tKeyIteration from 1 up to 7
-            put element tKeyIteration of tWhiteKeysList into tWhiteKey
-            if tWhiteKey["KeyName"] is tKey then
-               put false into tWhiteKey["KeyHilited"]
-               put tWhiteKey into element tKeyIteration of tWhiteKeysList
-            else if tWhiteKey["KeyName"] & tOctave["OctaveName"] is tKey then
-               put false into tWhiteKey["KeyHilited"]
-               put tWhiteKey into element tKeyIteration of tWhiteKeysList
-            else if tWhiteKey["KeyNumber"] is tKey parsed as number then
-               put false into tWhiteKey["KeyHilited"]
-               put tWhiteKey into element tKeyIteration of tWhiteKeysList
-            end if
-         end repeat
-         put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
+            put tOctave["OctaveWhiteKeysList"] into tWhiteKeysList
+            repeat with tKeyIteration from 1 up to 7
+               put element tKeyIteration of tWhiteKeysList into tWhiteKey
+               if tWhiteKey["KeyName"] is tKey then
+                  put false into tWhiteKey["KeyHilited"]
+                  put tWhiteKey into element tKeyIteration of tWhiteKeysList
+               else if tWhiteKey["KeyName"] & tOctave["OctaveName"] is tKey then
+                  put false into tWhiteKey["KeyHilited"]
+                  put tWhiteKey into element tKeyIteration of tWhiteKeysList
+               else if tWhiteKey["KeyNumber"] is tKey parsed as number then
+                  put false into tWhiteKey["KeyHilited"]
+                  put tWhiteKey into element tKeyIteration of tWhiteKeysList
+               end if
+            end repeat
+            put tWhiteKeysList into tOctave["OctaveWhiteKeysList"]
 
-         put tOctave into element tOctaveIteration of mOctaveList
+            put tOctave into element tOctaveIteration of mOctaveList
+         end repeat
       end repeat
-   end repeat
-   if mHilitedNotesRefresh then
-      redraw all
+      if mHilitedNotesRefresh then
+         redraw all
+      end if
    end if
 end handler
+
 private handler getUnhiliteNotes() returns any
    return nothing
 end handler
@@ -1376,7 +1379,7 @@ public handler getNaturalsColor() returns String
 end handler
 
 private variable mHiliteColor as Color
-metadata hiliteColor.editor  is "com.livecode.pi.color"
+metadata hiliteColor.editor  is "com.livecode.pi.colorwithalpha" -- "com.livecode.pi.color"
 metadata hiliteColor.section is "Colors"
 metadata hiliteColor.label   is "Hilite fill"
 metadata hiliteColor.default is ""
