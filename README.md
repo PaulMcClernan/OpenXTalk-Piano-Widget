@@ -44,3 +44,4 @@ Sdetting to multiple lines of color _ note-list pairs is permitted.
 
 ### Version 2.0
 - Implement Multi-Touch for Mobile Devices
+- Vertical Oriented Piano Version
