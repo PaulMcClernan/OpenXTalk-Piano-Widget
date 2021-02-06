@@ -5,3 +5,8 @@ module.2.lcm
 api.lcdoc
 manifest.xml
 *.lce
+._.DS_Store
+._api.lcdoc
+._Piano-Widget-Demo-1-3-6.rev
+._Piano.png
+._PianoWidgetPalette.livecode
