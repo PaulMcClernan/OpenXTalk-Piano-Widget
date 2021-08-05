@@ -4,7 +4,7 @@ A Graphical Piano Keyboard Widget written in LCB
 ## NOTE:
 
 This Widget is a graphical UI element only. It produces no sound on it's own and is meant to be attached to a MIDI play back engine.
-See my other Repos for LCB Wrappers for playback engines for Apple devices, as well as the the cross-platform FluidSynth SoundFont engine. 
+See my other Repos for LCB Wrappers for playback engines for Apple devices, as well as the cross-platform FluidSynth SoundFont engine. 
 These are all a works in progress at the moment. I make no guarantee of their useablity.
 
 ## Video Demo (outdated) Here:
