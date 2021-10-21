@@ -1,10 +1,10 @@
-# LiveCode Builder Piano Widget
-A Graphical Piano Keyboard Widget written in LCB
+# OpenXTalk Builder Piano Widget
+A Graphical Piano Keyboard Widget
 
 ## NOTE:
 
 This Widget is a graphical UI element only. It produces no sound on it's own and is meant to be attached to a MIDI play back engine.
-See my other Repos for LCB Wrappers for playback engines for Apple devices, as well as the cross-platform FluidSynth SoundFont engine. 
+See my other Repos for Builder Wrappers for playback engines for Apple devices, as well as the cross-platform FluidSynth SoundFont engine. 
 These are all a works in progress at the moment. I make no guarantee of their useablity.
 
 ## Video Demo (outdated) Here:
@@ -39,7 +39,7 @@ Sdetting to multiple lines of color _ note-list pairs is permitted.
 ## Roadmap:
 
 ### Version 1.5
-- Shadow more of LiveCode's standard properties such as focusBorder or fading colors for disabled look
+- Shadow more of standard object properties such as focusBorder or fading colors for disabled look
 - Implement ability to show text labels of piano key names (exmp.C#-4) on each key, and add properties to adjust font, size, color of text
 
 ### Version 2.0
