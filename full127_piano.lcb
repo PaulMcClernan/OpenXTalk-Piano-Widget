@@ -413,7 +413,7 @@ same as the count from <lowOctave> to <highOctave>.
 */
 
 ------------------------------------------------------------------------------------------------------------------------------------
-widget org.oxt.paulmcclernan.pianowidget
+widget org.openxtalk.paulmcclernan.pianowidget
 
 -- dependancy declarations
 use com.livecode.canvas
