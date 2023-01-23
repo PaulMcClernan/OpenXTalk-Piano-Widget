@@ -1380,19 +1380,21 @@ public handler getNaturalsColor() returns String
    return colorToString(mNaturalsColor, true)
 end handler
 
-private variable mHiliteColor as Color
-metadata hiliteColor.editor  is "com.livecode.pi.colorwithalpha" -- "com.livecode.pi.color"
-metadata hiliteColor.section is "Colors"
-metadata hiliteColor.label   is "Hilite fill"
-metadata hiliteColor.default is "100,95,244,127"
+property clickedHiliteColor   get getClickedHiliteColor  set setClickedHiliteColor
+private variable mClickedHiliteColor as Color
+metadata clickedHiliteColor.editor  is "com.livecode.pi.colorwithalpha" -- "com.livecode.pi.color"
+metadata clickedHiliteColor.section is "Colors"
+metadata clickedHiliteColor.label   is "Clicked highlight fill"
+metadata clickedHiliteColor.default is "100,95,244,127"
 
-public handler setHiliteColor(in pColor as String) returns nothing
-	put stringToColor(pColor) into mHiliteColor
+public handler setClickedHiliteColor(in pColor as String) returns nothing
+	put stringToColor(pColor) into mClickedHiliteColor
+   -- set the paint of my highlight paint to mClickedHiliteColor
 	redraw all
 end handler
 
-public handler getHiliteColor() returns String
-	return colorToString(mHiliteColor, true)
+public handler getClickedHiliteColor() returns String
+	return colorToString(mClickedHiliteColor, true)
 end handler
 
 private variable mBorderWidth as Number
@@ -1428,7 +1430,7 @@ public handler OnSave(out rProperties as Array)
    put mScaleNotes into rProperties["lockToScale"]
    put mBorderWidth into rProperties["borderWidth"]
    put colorToString(mStrokeColor, true) into rProperties["borderColor"]
-   put colorToString(mHiliteColor, true) into rProperties["hiliteColor"]
+   put colorToString(mClickedHiliteColor, true) into rProperties["clickedHiliteColor"]
    put colorToString(mNaturalsColor, true) into rProperties["naturalsColor"]
    put colorToString(mAccidentalsColor, true) into rProperties["accidentalsColor"]
 end handler
@@ -1442,7 +1444,7 @@ public handler OnLoad(in pProperties as Array)
    setLockedToScale( pProperties["lockToScale"])
    put pProperties["borderWidth"] into mBorderWidth
    put stringToColor(pProperties["borderColor"]) into mStrokeColor
-   put stringToColor(pProperties["hiliteColor"]) into mHiliteColor
+   put stringToColor(pProperties["clickedHiliteColor"]) into mClickedHiliteColor
    put stringToColor(pProperties["naturalsColor"]) into mNaturalsColor
    put stringToColor(pProperties["accidentalsColor"]) into mAccidentalsColor
    OnGeometryChanged()
@@ -1921,7 +1923,7 @@ end handler
 --- called when widget is created
 public handler OnCreate()
    ------------------ Initialize Properties --------------------
-   -- put the color of my highlight paint into mHiliteColor
+   set the color of my highlight paint into mClickedHiliteColor
    put the color of my border paint into mStrokeColor
    put 0.5 into mBorderWidth
    put 4 into mOctaves
@@ -2291,7 +2293,7 @@ public handler OnPaint()
 	variable tWhiteKey as Array
 	variable tPath as Path
    variable tOctaveIteration as Number
-   -- put the color of my highlight paint into mHiliteColor
+   set the color of my highlight paint to solid paint with mClickedHiliteColor
    put the color of my border paint into mStrokeColor
    set the antialias of this canvas to true
    set the stroke width of this canvas to mBorderWidth
@@ -2308,7 +2310,7 @@ public handler OnPaint()
       ------------------------------------------------------------------------------------------------------------------ C
    	put element 1 of tWhiteKeysList into tWhiteKey
    	if tWhiteKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
    	else
          if tWhiteKey["keyColor"] is nothing then
    	      set the paint of this canvas to solid paint with mNaturalsColor
@@ -2323,7 +2325,7 @@ public handler OnPaint()
    	------------------------------------------------------------------------------------------------------------------ D
    	put element 2 of tWhiteKeysList into tWhiteKey
       if tWhiteKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tWhiteKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mNaturalsColor
@@ -2338,7 +2340,7 @@ public handler OnPaint()
    	------------------------------------------------------------------------------------------------------------------ E
    	put element 3 of tWhiteKeysList into tWhiteKey
       if tWhiteKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tWhiteKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mNaturalsColor
@@ -2353,7 +2355,7 @@ public handler OnPaint()
    	------------------------------------------------------------------------------------------------------------------ F
    	put element 4 of tWhiteKeysList into tWhiteKey
       if tWhiteKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tWhiteKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mNaturalsColor
@@ -2368,7 +2370,7 @@ public handler OnPaint()
    	------------------------------------------------------------------------------------------------------------------ G
    	put element 5 of tWhiteKeysList into tWhiteKey
       if tWhiteKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tWhiteKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mNaturalsColor
@@ -2383,7 +2385,7 @@ public handler OnPaint()
    	------------------------------------------------------------------------------------------------------------------ A
    	put element 6 of tWhiteKeysList into tWhiteKey
       if tWhiteKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tWhiteKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mNaturalsColor
@@ -2398,7 +2400,7 @@ public handler OnPaint()
    	------------------------------------------------------------------------------------------------------------------ B
    	put element 7 of tWhiteKeysList into tWhiteKey
       if tWhiteKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tWhiteKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mNaturalsColor
@@ -2415,7 +2417,7 @@ public handler OnPaint()
       ------------------------------------------------------------------------------------------------------------------ C#Db
    	put element 1 of tBlackKeysList into tBlackKey
       if tBlackKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tBlackKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mAccidentalsColor
@@ -2430,7 +2432,7 @@ public handler OnPaint()
       ------------------------------------------------------------------------------------------------------------------ D#Eb
    	put element 2 of tBlackKeysList into tBlackKey
       if tBlackKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tBlackKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mAccidentalsColor
@@ -2445,7 +2447,7 @@ public handler OnPaint()
    	------------------------------------------------------------------------------------------------------------------ F#Gb
    	put element 3 of tBlackKeysList into tBlackKey
       if tBlackKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tBlackKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mAccidentalsColor
@@ -2460,7 +2462,7 @@ public handler OnPaint()
    	------------------------------------------------------------------------------------------------------------------ G#Ab
    	put element 4 of tBlackKeysList into tBlackKey
       if tBlackKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tBlackKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mAccidentalsColor
@@ -2475,7 +2477,7 @@ public handler OnPaint()
    	------------------------------------------------------------------------------------------------------------------ A#Bb
    	put element 5 of tBlackKeysList into tBlackKey
       if tBlackKey["KeyHilited"] then
-         set the paint of this canvas to solid paint with mHiliteColor
+         set the paint of this canvas to solid paint with mClickedHiliteColor
       else
          if tBlackKey["keyColor"] is nothing then
             set the paint of this canvas to solid paint with mAccidentalsColor
