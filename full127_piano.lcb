@@ -427,7 +427,7 @@ use com.livecode.library.widgetutils
 
 metadata title is "Piano Widget"
 metadata author is "Paul McClernan, Bernd Niggemann"
-metadata version is "1.3.6"
+metadata version is "1.3.7"
 metadata preferredSize is "600,100"
 metadata _ide is "true" -- ? default load at startup
 metadata userVisible is "true" -- Show Widget in ... ?
@@ -575,7 +575,7 @@ private handler unlockAllPianoKeys()
 end handler
 
 property lockToScale get getLockedToScale set setLockedToScale
-metadata lockToScale.user_visible is "false"
+metadata lockToScale.user_visible is "true"
 private variable mScaleNotes as String
 private handler setLockedToScale(pScaleNotes as String) returns nothing
    variable tOctave as Array
@@ -1384,7 +1384,16 @@ private variable mHiliteColor as Color
 metadata hiliteColor.editor  is "com.livecode.pi.colorwithalpha" -- "com.livecode.pi.color"
 metadata hiliteColor.section is "Colors"
 metadata hiliteColor.label   is "Hilite fill"
-metadata hiliteColor.default is ""
+metadata hiliteColor.default is "100,95,244,127"
+
+public handler setHiliteColor(in pColor as String) returns nothing
+	put stringToColor(pColor) into mHiliteColor
+	redraw all
+end handler
+
+public handler getHiliteColor() returns String
+	return colorToString(mHiliteColor, true)
+end handler
 
 private variable mBorderWidth as Number
 property borderWidth get mBorderWidth  set setBorderWidth
@@ -1912,7 +1921,7 @@ end handler
 --- called when widget is created
 public handler OnCreate()
    ------------------ Initialize Properties --------------------
-   put the color of my highlight paint into mHiliteColor
+   -- put the color of my highlight paint into mHiliteColor
    put the color of my border paint into mStrokeColor
    put 0.5 into mBorderWidth
    put 4 into mOctaves
@@ -2282,7 +2291,7 @@ public handler OnPaint()
 	variable tWhiteKey as Array
 	variable tPath as Path
    variable tOctaveIteration as Number
-   put the color of my highlight paint into mHiliteColor
+   -- put the color of my highlight paint into mHiliteColor
    put the color of my border paint into mStrokeColor
    set the antialias of this canvas to true
    set the stroke width of this canvas to mBorderWidth
