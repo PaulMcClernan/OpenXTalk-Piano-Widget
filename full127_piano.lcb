@@ -1388,8 +1388,11 @@ metadata clickedHiliteColor.label   is "Clicked highlight fill"
 metadata clickedHiliteColor.default is "100,95,244,127"
 
 public handler setClickedHiliteColor(in pColor as String) returns nothing
-	put stringToColor(pColor) into mClickedHiliteColor
-   -- set the paint of my highlight paint to mClickedHiliteColor
+   if pColor is the empty string then
+      put the color of my highlight paint into mClickedHiliteColor
+   else
+	     put stringToColor(pColor) into mClickedHiliteColor
+   end if
 	redraw all
 end handler
 
@@ -1923,7 +1926,7 @@ end handler
 --- called when widget is created
 public handler OnCreate()
    ------------------ Initialize Properties --------------------
-   set the color of my highlight paint into mClickedHiliteColor
+   put the color of my highlight paint into mClickedHiliteColor
    put the color of my border paint into mStrokeColor
    put 0.5 into mBorderWidth
    put 4 into mOctaves
@@ -2293,7 +2296,7 @@ public handler OnPaint()
 	variable tWhiteKey as Array
 	variable tPath as Path
    variable tOctaveIteration as Number
-   set the color of my highlight paint to solid paint with mClickedHiliteColor
+   -- set the paint of my highlight paint to solid paint with mClickedHiliteColor
    put the color of my border paint into mStrokeColor
    set the antialias of this canvas to true
    set the stroke width of this canvas to mBorderWidth
